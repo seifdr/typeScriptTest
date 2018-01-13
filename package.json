@@ -1,0 +1,19 @@
+{
+  "name": "typescriptTest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "gulp": "^3.9.1"
+  },
+  "devDependencies": {
+    "gulp-cli": "^2.0.0",
+    "gulp-typescript": "^4.0.0-alpha.1",
+    "typescript": "^2.6.2"
+  }
+}
