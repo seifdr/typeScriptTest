@@ -1,10 +1,10 @@
 <html>
-<!-- <link rel="stylesheet" type="text/css" href="css/test.css"> -->
+<link rel="stylesheet" type="text/css" href="dist/css/flex-icons.min.css">
 <body>
 <h1>This is a test</h1>
 <?php 
 
-//include('/includes/news-index.php');
+include('includes/flex-icons.php');
 
 ?>
 

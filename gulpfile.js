@@ -92,23 +92,23 @@ options.sassmin = {
 
 // Sass
 gulp.task('sass', function() {
-    return gulp.src('./sass/style.scss')
+    return gulp.src('./sass/*.scss')
         .pipe(plumber())
         .pipe(sass(options.sass).on('error', sass.logError))
         .pipe(autoprefixer())
-        .pipe(gulp.dest('.'))
+        .pipe(gulp.dest('./dist/css'))
         .pipe(browserSync.reload({stream: true}))
         .pipe(notify({ title: 'Sass', message: 'sass task complete'  }));
 });
 
 // Sass-min - Release build minifies CSS after compiling Sass
 gulp.task('sass-min', function() {
-    return gulp.src('./sass/style.scss')
+    return gulp.src('./sass/*.scss')
         .pipe(plumber())
         .pipe(sass(options.sassmin).on('error', sass.logError))
         .pipe(autoprefixer())
         .pipe(rename( { suffix: '.min' } ) )
-        .pipe(gulp.dest('css'))
+        .pipe(gulp.dest('./dist/css'))
         .pipe(browserSync.reload({stream: true}))
         .pipe(notify({ title: 'Sass', message: 'sass-min task complete' }));
 });
