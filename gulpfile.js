@@ -92,7 +92,7 @@ options.sassmin = {
 
 // Sass
 gulp.task('sass', function() {
-    return gulp.src('./sass/*.scss')
+    return gulp.src('./sass/**/*.scss')
         .pipe(plumber())
         .pipe(sass(options.sass).on('error', sass.logError))
         .pipe(autoprefixer())
@@ -103,7 +103,7 @@ gulp.task('sass', function() {
 
 // Sass-min - Release build minifies CSS after compiling Sass
 gulp.task('sass-min', function() {
-    return gulp.src('./sass/*.scss')
+    return gulp.src('./sass/**/*.scss')
         .pipe(plumber())
         .pipe(sass(options.sassmin).on('error', sass.logError))
         .pipe(autoprefixer())
@@ -118,10 +118,13 @@ gulp.task('sass-min', function() {
 gulp.task( 'watch', function() {
  
   // don't listen to whole js folder, it'll create an infinite loop
-  gulp.watch( [ './js/**/*.js' ], [ 'scripts' ] );
+  //gulp.watch( [ './js/**/*.js' ], [ 'scripts' ] );
+
+  gulp.watch( './js/**/*.js' ).on('change', browserSync.reload);
+
 //   gulp.watch( [ './js/**/*.js', '!./js/dist/*.js' ], [ 'scripts' ] )
  
-  gulp.watch( './sass/**/**/**/*.scss', ['sass', 'sass-min'] );
+  gulp.watch( './sass/**/*.scss', ['sass', 'sass-min'] );
 
 //   gulp.watch( './images/**/*', ['images']);
  
