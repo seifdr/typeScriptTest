@@ -12,6 +12,14 @@ var autoprefixer = require('gulp-autoprefixer');
 var watch        = require( 'gulp-watch' );
 var plumber      = require( 'gulp-plumber' );
 
+gulp.task('tScripts', function () {
+  return gulp.src('ts/*.ts')
+      .pipe(ts({
+          noImplicitAny: true,
+          outFile: 'output.js'
+      }))
+      .pipe(gulp.dest('js'));
+});
 
   // Jshint outputs any kind of javascript problems you might have
 // Only checks javascript files inside /src directory
@@ -20,7 +28,7 @@ gulp.task( 'jshint', function() {
       .pipe( jshint() )
       .pipe( jshint.reporter( stylish ) )
       .pipe( jshint.reporter( 'fail' ) );
-  })
+});
  
 
 // Concatenates all files that it finds in the manifest
@@ -96,7 +104,7 @@ gulp.task('sass', function() {
         .pipe(plumber())
         .pipe(sass(options.sass).on('error', sass.logError))
         .pipe(autoprefixer())
-        .pipe(gulp.dest('./dist/css'))
+        .pipe(gulp.dest('./css'))
         .pipe(browserSync.reload({stream: true}))
         .pipe(notify({ title: 'Sass', message: 'sass task complete'  }));
 });
@@ -108,7 +116,7 @@ gulp.task('sass-min', function() {
         .pipe(sass(options.sassmin).on('error', sass.logError))
         .pipe(autoprefixer())
         .pipe(rename( { suffix: '.min' } ) )
-        .pipe(gulp.dest('./dist/css'))
+        .pipe(gulp.dest('./css'))
         .pipe(browserSync.reload({stream: true}))
         .pipe(notify({ title: 'Sass', message: 'sass-min task complete' }));
 });
@@ -117,10 +125,12 @@ gulp.task('sass-min', function() {
 // Start the livereload server and watch files for change
 gulp.task( 'watch', function() {
  
-  // don't listen to whole js folder, it'll create an infinite loop
-  //gulp.watch( [ './js/**/*.js' ], [ 'scripts' ] );
+  gulp.watch( [ './ts/**/*.ts' ], [ 'tScripts' ] );
 
-  gulp.watch( './js/**/*.js' ).on('change', browserSync.reload);
+  // don't listen to whole js folder, it'll create an infinite loop
+  gulp.watch( [ './js/**/*.js' ], [ 'scripts' ] );
+
+  // gulp.watch( './js/**/*.js' ).on('change', browserSync.reload);
 
 //   gulp.watch( [ './js/**/*.js', '!./js/dist/*.js' ], [ 'scripts' ] )
  
