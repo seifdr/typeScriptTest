@@ -18,16 +18,17 @@ gulp.task('tScripts', function () {
           noImplicitAny: true,
           outFile: 'output.js'
       }))
-      .pipe(gulp.dest('js'));
+      .pipe(gulp.dest('js'))
+      .pipe(browserSync.reload({stream: true}))
+      .pipe( notify({ message: 'scripts task complete' }));
 });
 
   // Jshint outputs any kind of javascript problems you might have
 // Only checks javascript files inside /src directory
 gulp.task( 'jshint', function() {
     return gulp.src( './js/src/*.js' )
-      .pipe( jshint() )
-      .pipe( jshint.reporter( stylish ) )
-      .pipe( jshint.reporter( 'fail' ) );
+      .pipe(jshint())
+      .pipe(jshint.reporter('jshint-stylish', {beep: true}) )
 });
  
 
