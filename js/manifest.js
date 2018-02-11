@@ -1,1 +1,1 @@
-//= include ../js/test.js
+//= include ../js/class.js
