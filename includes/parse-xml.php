@@ -8,44 +8,25 @@ function look( $var ){
     echo "<pre>". print_r( $var ) ."</pre>";
 }
 
-
-
 class RSS_Item
 {
-    var $title;
-    var $link;
-    var $pubDate;
-
-    var $description;
-
-    var $enclosure;
-
-    var $guid;
-
-    var $duration;
-
-    var $summary;
-
-    //try it without item image
-    //try it without keywords
-
-   var $explict = 'no';
-
-    function ifEcho( $str = "" ){
-        if( $str && !empty( $str ) ){
-            return $str;
-        }
-    }
-
     function makeItem(){
         $itemXML = '<item>';
 
+            foreach ($this as $key => $value) {
+                
+               $specialCases = ['enclosure', 'duration', 'summary'];
+               $iTunesCases  = ['duration', 'summary'];
 
+               if( !in_array( $key, $specialCases ) ){
+                    echo "<{$key}>{$value}</{$key}>";
+               } elseif( in_array( $key, $iTunesCases ) ) {
+                    echo "<itunes:{$key}>$value</itunes:{$key}>";
+               } elseif( $key == 'enclosure' ){
+                   echo '<enclosure url="'. $value['url'] .'" type="'. $value['type'] .'" length="'. $value['length'] .'" />';
+               }
 
-            $itemXML .= ifecho('<title>'. $this->title .'</title>');
-
-            $itemXML .= ifecho('<link>'. $this->link .'</link>');
-
+            }
 
         $itemXML .= '</item>';
     }
@@ -54,6 +35,7 @@ class RSS_Item
 
 class RSS_Feed
 {
+    var $header;
     var $items = array();
 
     function __construct($file_or_url)
@@ -62,38 +44,62 @@ class RSS_Feed
         if (!($x = simplexml_load_file($file_or_url)))
             return;
 
+        $c =& $x->channel;
+        $cc = $x->channel->children('http://www.itunes.com/dtds/podcast-1.0.dtd');
+
+        $xmlHeader = '
+            <channel>
+            <title>'. $c->title .'</title>
+            <link>'. $c->link .'</link>
+            <description>'. $c->description .'</description>
+            <copyright>'. $c->copyright .'</copyright>
+            <lastBuildDate>'. $c->lastBuildDate .'</lastBuildDate>
+            <generator>'. $c->generator .'</generator>
+            <a10:link rel="self" href="'. $c->link .'" />
+            <itunes:summary>'. $cc->summary .'</itunes:summary>
+            <itunes:author></itunes:author>
+            <pubDate>'. $c->pubDate .'</pubDate>
+        ';
+         
+        $this->header = $xmlHeader;
+
         foreach ($x->channel->item as $i )
         {
             //returns values as SIMPLE XML OBJECT, therefore you need to cast it to type
             // echo (string) $i->title;
 
-            look( $i );
+            // look( $i );
 
-            // $item = new RSS_Item();
+            $item = new RSS_Item();
 
-            // $item->title = (string) $i->title;
+            $iTunesNodes = $i->children('http://www.itunes.com/dtds/podcast-1.0.dtd'); 
 
-            // $item->link = (string) $i->link;
+            // look($iTunesNodes);
 
-            // $item->link = (string) $i->pubDate;
+            $item->title = (string) $i->title;
 
-            // $item->description = (string) $i->description;
+            $item->link = (string) $i->link;
 
-            // $item->enclosure = array( 
-            //     'url'       => (string) $i->enclosure['url'],
-            //     'length'    => (string) $i->enclosure['length'],
-            //     'type'      => (string) $i->enclosure['type']
-            // );
+            $item->pubDate = (string) $i->pubDate;
 
-            // $item->guid = (string) $i->guid;
+            $item->description = (string) $i->description;
 
-            // $item->duration = (string) $i->duration;
+            $item->enclosure = array( 
+                'url'       => (string) $i->enclosure['url'],
+                'length'    => (string) $i->enclosure['length'],
+                'type'      => (string) $i->enclosure['type']
+            ); 
 
-            // $post->pubDate  = (string) $item->pubDate;
-            // $post->ts    = strtotime($item->pubDate);
-            // $post->link  = (string) $item->link;
-            // $post->title = (string) $item->title;
-            // $post->text  = (string) $item->description;
+            $item->guid = (string) $i->guid;
+
+            $item->duration = (string) $iTunesNodes->duration;
+
+            $item->summary = (string) $iTunesNodes->summary;
+
+            //going to try it without an image 
+            //and without keywords
+
+            $item->explicit = 'no';
 
             // Create summary as a shortened body and remove images, 
             // extraneous line breaks, etc.
@@ -127,7 +133,10 @@ class RSS_Feed
 
 $rs = new RSS_Feed('test.xml');
 
-look( $rs->items[0] );
+// look( $rs->items[0] );
 
+// $rs->items[0]->makeItem();
+
+// look( $rs->header );
 
 ?>
