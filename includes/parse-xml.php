@@ -21,13 +21,15 @@ class RSS_Item
 
             foreach ($this as $key => $value) {
                 
-               $specialCases = ['enclosure', 'duration', 'summary', 'explicit'];
-               $iTunesCases  = ['duration', 'summary', 'explicit'];
+               $specialCases = ['enclosure', 'duration', 'summary', 'explicit', 'guid', 'subtitle'];
+               $iTunesCases  = ['duration', 'summary', 'explicit', 'subtitle'];
 
                if( !in_array( $key, $specialCases ) ){
                     $itemXML .= "<{$key}>{$value}</{$key}>";
                } elseif( in_array( $key, $iTunesCases ) ) {
-                    $itemXML .= "<itunes:{$key}>$value</itunes:{$key}>";
+                    $itemXML .= "<itunes:{$key}>". $value ."</itunes:{$key}>";
+               } elseif ( $key == 'guid' ){
+                    $itemXML .= '<guid isPermaLink="false">'. $value .'</guid>';
                } elseif( $key == 'enclosure' ){
                     $itemXML .= '<enclosure url="'. $value['url'] .'" type="'. $value['type'] .'" length="'. $value['length'] .'" />';
                }
@@ -47,6 +49,7 @@ class RSS_Feed
     var $itemsStr;
     var $footer;
     var $items = array();
+    var $dateFormat = 'D, d M Y G:i:s T';
 
     function __construct($file_or_url)
     {
@@ -58,7 +61,7 @@ class RSS_Feed
         $cc = $x->channel->children('http://www.itunes.com/dtds/podcast-1.0.dtd');
 
         $xmlHeader = '
-            <rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:rawvoice="http://www.rawvoice.com/rawvoiceRssModule/" version="2.0">
+        <rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" version="2.0">
             <channel>
             <title>'. $c->title .'</title>
             <link>'. $c->link .'</link>
@@ -70,20 +73,19 @@ class RSS_Feed
             <description>'. $c->description .'</description> 
             <language>en-us</language>
             <copyright>'. $c->copyright .'</copyright>
-            <lastBuildDate>'. $c->lastBuildDate .'</lastBuildDate>
+            <lastBuildDate>'. $this->formatDate( (string) $c->lastBuildDate ) .'</lastBuildDate>
             <generator>'. $c->generator .'</generator>
-            <a10:link rel="self" href="'. $c->link .'" />
             <itunes:summary>'. $cc->summary .'</itunes:summary>
             <itunes:author>Northwestern University Feinberg School of Medicine FAME</itunes:author> 
             <itunes:explicit>No</itunes:explicit>
             <itunes:image href="http://www.feinberg.northwestern.edu/sites/fame/images/do-not-delete-fame-podcast-artwork/FSM-FAME-Pod-artwork-1400px-1400px.png" />
-            <itunes:category text="Medicine" />
-            <pubDate>'. $c->pubDate .'</pubDate>
+            <itunes:category text="Science &amp; Medicine" />
+            <pubDate>'. $this->formatDate( (string) $c->pubDate ) .'</pubDate>
         ';
          
         $this->header = $xmlHeader;
 
-        $this->footer = '</footer></rss>';
+        $this->footer = '</channel></rss>';
 
         foreach ($x->channel->item as $i )
         {
@@ -102,9 +104,12 @@ class RSS_Feed
 
             $item->link = (string) $i->link;
 
-            $item->pubDate = (string) $i->pubDate;
+            $item->pubDate = $this->formatDate( (string) $i->pubDate );  
 
             $item->description = (string) $i->description;
+            //$item->description = (string) $iTunesNodes->summary;
+
+            //$item->description = $this->summarizeText( (string) $iTunesNodes->summary );
 
             $item->enclosure = array( 
                 'url'       => (string) $i->enclosure['url'],
@@ -113,10 +118,13 @@ class RSS_Feed
             ); 
 
             $item->guid = (string) $i->guid;
+            //$item->guid = (string) $i->enclosure['url'];
 
             $item->duration = (string) $iTunesNodes->duration;
 
             $item->summary = (string) $iTunesNodes->summary;
+
+            $items->subtitle = $this->summarizeText( (string) $iTunesNodes->summary );
 
             //going to try it without an image 
             //and without keywords
@@ -130,6 +138,16 @@ class RSS_Feed
             $this->items[] = $item;
 
             $this->itemsStr .= $item->makeItem();
+        }
+        
+        //Oldest pods are showing first. Reverse the array 
+        $this->items = array_reverse( $this->items );
+    }
+
+    private function formatDate( $incomingDate ){
+        if( !empty( $incomingDate ) ){
+            $d = new DateTime( $incomingDate, new DateTimeZone('America/Chicago'));
+            return $d->format('D, d M Y G:i:s') . " CST";  
         }
     }
 
@@ -159,7 +177,11 @@ class RSS_Feed
 $rs = new RSS_Feed('https://imswebcast.feinberg.northwestern.edu/Mediasite/FileServer/Podcast/02bc8330de9e42dd83e9814d194efe1b17/feed.xml');
 
 //create file
-$myfile = fopen("new.xml", "w"); 
+// $myfile = fopen("new.xml", "w"); 
+// fwrite($myfile, $rs->header . $rs->itemsStr . $rs->footer );
+// fclose($myfile); 
+
+// echo "hello";
 
 echo $rs->header . $rs->itemsStr . $rs->footer;
 
@@ -170,6 +192,6 @@ echo $rs->header . $rs->itemsStr . $rs->footer;
 
 // function look( $var ){
 //     echo "<pre>". print_r( $var ) ."</pre>";
-// }
+// } 
 
 ?>
