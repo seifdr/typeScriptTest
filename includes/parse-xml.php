@@ -60,8 +60,7 @@ class RSS_Feed
         $c =& $x->channel;
         $cc = $x->channel->children('http://www.itunes.com/dtds/podcast-1.0.dtd');
 
-        $xmlHeader = '
-        <rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" version="2.0">
+        $xmlHeader = '<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" version="2.0">
             <channel>
             <title>'. $c->title .'</title>
             <link>'. $c->link .'</link>
@@ -73,14 +72,14 @@ class RSS_Feed
             <description>'. $c->description .'</description> 
             <language>en-us</language>
             <copyright>'. $c->copyright .'</copyright>
-            <lastBuildDate>'. $this->formatDate( (string) $c->lastBuildDate ) .'</lastBuildDate>
+            <lastBuildDate>'. $this->formatDate( (string) $c->lastBuildDate, TRUE ) .'</lastBuildDate>
             <generator>'. $c->generator .'</generator>
             <itunes:summary>'. $cc->summary .'</itunes:summary>
             <itunes:author>Northwestern University Feinberg School of Medicine FAME</itunes:author> 
             <itunes:explicit>No</itunes:explicit>
             <itunes:image href="http://www.feinberg.northwestern.edu/sites/fame/images/do-not-delete-fame-podcast-artwork/FSM-FAME-Pod-artwork-1400px-1400px.png" />
             <itunes:category text="Science &amp; Medicine" />
-            <pubDate>'. $this->formatDate( (string) $c->pubDate ) .'</pubDate>
+            <pubDate>'. $this->formatDate( (string) $c->pubDate, TRUE ) .'</pubDate>
         ';
          
         $this->header = $xmlHeader;
@@ -106,7 +105,7 @@ class RSS_Feed
 
             $item->pubDate = $this->formatDate( (string) $i->pubDate );  
 
-            $item->description = (string) $i->description;
+            $item->description = $this->summarizeText( (string) $i->description );
             //$item->description = (string) $iTunesNodes->summary;
 
             //$item->description = $this->summarizeText( (string) $iTunesNodes->summary );
@@ -122,7 +121,7 @@ class RSS_Feed
 
             $item->duration = (string) $iTunesNodes->duration;
 
-            $item->summary = (string) $iTunesNodes->summary;
+            $item->summary = $this->summarizeText( (string) $iTunesNodes->summary );
 
             $items->subtitle = $this->summarizeText( (string) $iTunesNodes->summary );
 
@@ -144,10 +143,19 @@ class RSS_Feed
         $this->items = array_reverse( $this->items );
     }
 
-    private function formatDate( $incomingDate ){
+    //function accepts a date and an option subtraction 
+    private function formatDate( $incomingDate, $subtractHour = FALSE ){
         if( !empty( $incomingDate ) ){
             $d = new DateTime( $incomingDate, new DateTimeZone('America/Chicago'));
-            return $d->format('D, d M Y G:i:s') . " CST";  
+
+            if( $subtractHour ){
+                // 'PT12H30M' -- The P stands for Period. The T stands for Timespan.
+                // we are just subtracting an hour below.
+                $tosub = new DateInterval('PT1H');
+                $d->sub($tosub);
+            }   
+
+            return $d->format('D, d M Y H:i:s') . " CST";  
         }
     }
 
@@ -162,7 +170,7 @@ class RSS_Feed
     }
 
     private function summarizeText($summary) {
-        $summary = strip_tags($summary);
+        $summary = strip_tags( $this->removeAnyURLsFromText( $summary ) );
 
         // Truncate summary line to 100 characters
         $max_len = 100;
@@ -171,15 +179,23 @@ class RSS_Feed
 
         return $summary;
     }
+
+    //links in description were failing itunes validation, therefore this function will remove them.
+    private function removeAnyURLsFromText( $string ){
+        $regex = "@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@";
+        return preg_replace($regex, ' ', $string);
+    }
 }
 
 //$rs = new RSS_Feed('test.xml');
 $rs = new RSS_Feed('https://imswebcast.feinberg.northwestern.edu/Mediasite/FileServer/Podcast/02bc8330de9e42dd83e9814d194efe1b17/feed.xml');
 
 //create file
-// $myfile = fopen("new.xml", "w"); 
+// w+: Open for reading and writing; place the file pointer at the beginning of the file and truncate the file to zero length. If the file does not exist, attempt to create it.
+// a+: Open for reading and writing; place the file pointer at the end of the file. If the file does not exist, attempt to create it.
+// $myfile = fopen("new.xml", "wa+"); 
 // fwrite($myfile, $rs->header . $rs->itemsStr . $rs->footer );
-// fclose($myfile); 
+// fclose($myfile);    
 
 // echo "hello";
 
