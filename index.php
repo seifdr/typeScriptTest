@@ -1,6 +1,6 @@
 <html>
-<link rel="stylesheet" type="text/css" href="dist/css/flex-icons.min.css">
-<link rel="stylesheet" type="text/css" href="dist/css/news.css">
+<link rel="stylesheet" type="text/css" href="dist/css/fdl-tbl.css">
+<!-- <link rel="stylesheet" type="text/css" href="dist/css/news.css"> -->
 <script
   src="https://code.jquery.com/jquery-3.2.1.min.js"
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
@@ -18,5 +18,5 @@ include('includes/first-daily-life-funding-table.php');
 
 </body>
 <!-- <script type="text/javascript" src="js/output.js" ></script> -->
-<script type="text/javascript" src="js/news.js" ></script>
+<!-- <script type="text/javascript" src="js/news.js" ></script> -->
 </html>

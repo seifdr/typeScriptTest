@@ -53,7 +53,11 @@ var browserSyncWatchFiles = [
 // see: https://www.browsersync.io/docs/options/
 var browserSyncOptions = {
     watchTask: true,
-    proxy: "http://localhost/typeScript"
+    //PC Proxy
+    //proxy: "http://localhost/typeScript"
+    
+    //Mac Proxy
+    proxy: "http://localhost:8888/typeScript"
 }
 
 // Starts browser-sync task for starting the server.
