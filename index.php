@@ -11,7 +11,7 @@
 
 //include('includes/flex-icons.php');
 
-include('includes/news-index.php');
+include('includes/first-daily-life-funding-table.php');
 
 ?>
 
