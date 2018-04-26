@@ -1,0 +1,105 @@
+$break-responsive: 900px;
+
+$lightGrey: #f0f0f0;
+$nwPurple: #514689;
+
+$nwFontFam: 'Calibri,Helvetica,Arial,sans-serif';
+
+
+div#fundingTBL {
+    
+    div.f-row {
+        display: flex;
+        width: 100%;
+        background: $lightGrey;
+        // font-family: $nwFontFam;
+
+        & {
+            @media screen and ( max-width: $break-responsive ) {
+                display: block;
+                margin-bottom: 1em;
+                padding: 1em; 
+            }
+        }
+
+        & > div {
+            border: 1px solid #fff;
+            padding: 1em;
+            box-sizing: border-box; 
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+            
+            @media screen and ( max-width: $break-responsive ) {
+                width: 100%;
+                border: 0;
+                display: block;
+            }
+        }
+        
+        & > div > strong {
+            display: none;
+            font-weight: bold !important;
+
+            @media screen and ( max-width: $break-responsive ) {
+               display: inline; 
+            }
+        }
+
+        @media screen and ( min-width: $break-responsive ) {
+            & > div {
+               flex: 1;
+            }
+            
+            & > div:nth-child(1) {
+
+            }
+
+            & > div:nth-child(2) {
+                flex: 2;
+            }
+
+            & > div:nth-child(3) {
+                
+            }
+        }
+
+        &:after {
+            clear: both;
+            // content: "X";
+        }
+        
+
+    }
+
+    div.hd-row {
+        border-bottom: 3px solid #514689;
+
+        & {
+            @media screen and ( max-width: $break-responsive ) {
+                display: none;
+            }
+        }
+    }
+
+    div.hd-row > div {
+        display: flex;
+        font-weight: bold;
+        color: $nwPurple;
+        font-weight: bold !important;
+
+        & {
+            @media screen and ( max-width: $break-responsive ) {
+                display: none;
+            }
+        }
+
+    }
+
+
+}
+
+
+
