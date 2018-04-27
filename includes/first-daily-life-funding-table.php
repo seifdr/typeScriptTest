@@ -41,10 +41,21 @@ $dataArr = [
                 echo "<div><strong>Number:&nbsp;</strong>". $dataArr[$i][0] ."</div>";
                 echo "<div><strong>Title:&nbsp;</strong>". $dataArr[$i][1] ."</div>";
                 echo "<div><strong>Participating Org:&nbsp;</strong>". $dataArr[$i][2] ."</div>";
-                echo "<div><strong>Open Date:&nbsp;</strong></span>". $dataArr[$i][3] ."</div>";
+                echo "<div><strong>Open Date:&nbsp;</strong>". $dataArr[$i][3] ."</div>";
                 echo "<div><strong>Expiration Date:&nbsp;</strong>". $dataArr[$i][4] ."</div>";
             echo "</div>";
         }
+
+        echo "<div class='f-row' >" ;
+        echo "<div><strong>Number:&nbsp;</strong>PAR-18-307</div>";
+        echo "<div><strong>Title:&nbsp;</strong><a href='#'>Developing Interventions for Health-Enhancing Physical Activity (R21/R33 - Clinical Trial Optional)
+        </a><a href='#'>[Notice of Change to Instructions]</a></div>";
+        echo "<div><strong>Participating Org:&nbsp;</strong>NIA, NIAAA, ODP, NCCIH, etc</div>";
+        echo "<div><strong>Open Date:&nbsp;</strong>1/17/2018</div>";
+        echo "<div><strong>Expiration Date:&nbsp;</strong>1/8/2021</div>";
+        echo "</div>";
+
+        
 
     ?>
     <!-- <div class="f-row hd-row">
