@@ -1,0 +1,34 @@
+div.medSpecProfiles {
+    border: 1px solid red;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-content: center;
+    
+    
+}
+
+div.specImg {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+div.medSpecProfile {
+
+    width: 31%;
+    margin-bottom: 1em;
+    // justify-content: space-evenly;
+
+    border: 1px solid green;
+
+    display: flex;
+    align-content: center;
+
+    & > div.specContent {
+        margin: .5em;
+        border: 1px solid blue;
+    }
+}
+
