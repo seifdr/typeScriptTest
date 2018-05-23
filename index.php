@@ -1,7 +1,7 @@
 <html>
 <!-- <link rel="stylesheet" type="text/css" href="dist/css/flex-icons.min.css">
 <link rel="stylesheet" type="text/css" href="dist/css/news.css"> -->
-<link rel="stylesheet" type="text/css" href="dist/css/applePod.css">
+<link rel="stylesheet" type="text/css" href="dist/css/medSpecFaculty.css">
 <script
   src="https://code.jquery.com/jquery-3.2.1.min.js"
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
@@ -12,7 +12,7 @@
 
 //include('includes/flex-icons.php');
 
-include('includes/applePod.php');
+include('includes/medSpecFaculty.php');
 
 ?>
 
