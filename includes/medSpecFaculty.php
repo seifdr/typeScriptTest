@@ -13,7 +13,7 @@
             <img src="img/animals.jpeg" />
         </div>
         <div class="specContent">
-            <h4>Duncan Seif</h4>
+            <h4><?php echo $i; ?> -- Duncan Seif</h4>
             <p>Web Developer<br />Medical Director, Autopsy</p>
             <ul>
                 <li>Phone: XXX-XXX-XXXX</li>

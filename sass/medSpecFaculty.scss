@@ -1,17 +1,30 @@
+$firstBreakPoint: 1100px;
+$secondBreakPoint: 850px;
+$thirdBreakPoint: 500px;
+
+
 div.medSpecProfiles {
-    border: 1px solid red;
     display: flex;
     flex-flow: row wrap;
     justify-content: space-between;
     align-content: center;
-    
-    
 }
 
 div.specImg {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    // justify-content: center;
+    flex: .5 .5 auto;
+
+    img {
+        max-width: 150px;
+        width: 100%;
+        height: auto;
+    }
+
+    @media screen and (max-width: $firstBreakPoint) { 
+        flex: 1 1 auto;
+    }
 }
 
 
@@ -19,16 +32,38 @@ div.medSpecProfile {
 
     width: 31%;
     margin-bottom: 1em;
-    // justify-content: space-evenly;
-
-    border: 1px solid green;
+    background-color: #ccc;
+    padding: .5em;
 
     display: flex;
+    flex: 1 1 1;
     align-content: center;
 
     & > div.specContent {
-        margin: .5em;
-        border: 1px solid blue;
+        margin: 0 .5em .5em .5em;
+
+        h4 {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        p {
+            // padding-top: .25em;
+            margin-top: .25em;
+        }
+    }
+
+    @media screen and (max-width: $firstBreakPoint) { 
+        flex-direction: column;
+        align-items: center;
+     }
+
+    @media screen and (max-width: $secondBreakPoint) { 
+        width: 47%;
+    }
+
+    @media screen and (max-width: $secondBreakPoint) { 
+        width: 100%;
     }
 }
 
