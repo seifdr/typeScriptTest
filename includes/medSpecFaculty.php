@@ -1,4 +1,4 @@
-<div class="medSpecProfiles">
+<div class="specProfiles">
 
 <?php
 
@@ -8,7 +8,7 @@
        
 ?>
 
-    <div class="medSpecProfile">
+    <article class="specProfile">
         <div class="specImg">
             <img src="img/animals.jpeg" />
         </div>
@@ -21,7 +21,7 @@
             </ul>  
         </div>
           
-    </div>
+    </article>
 
 
 <?php 
