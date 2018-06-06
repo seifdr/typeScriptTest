@@ -1,0 +1,74 @@
+
+/* Using SCSS variables to store breakpoints */
+$breakpoint: 875px;
+
+@media ( min-width: $breakpoint ) {
+
+    div.pseudoTblContainer{
+        max-width: 836px;
+    }
+
+    div.pseudoTbl-5col {
+        display: flex;
+        flex-wrap:wrap;
+        flex-direction:column;
+        height: 350px;
+        align-content: flex-start;
+
+        div.p-cell {
+            border-bottom: .5px solid #ccc;
+            max-width: 19%;
+            display: flex;
+            flex: 1 1 19%;
+            justify-content: center;
+            align-items: center;
+            text-align: center; 
+            padding: .5em;
+            box-sizing: border-box;
+        }
+    
+        div.header-cell {
+            flex: 1 1 10%;
+        }
+    }
+}
+
+div.pseudoTbl-5col {
+    div.header-cell {
+        color: #514689;
+        border-bottom: 3px solid #514689;
+        font-size: 1.2em !important;
+        font-weight: bold !important;
+        letter-spacing: 0.05em;
+        line-height: 1.2em;
+    }
+}
+
+
+
+@media ( max-width: $breakpoint ) {
+
+    div.pseudoTbl-5col {
+        max-width: 400px;
+        text-align: center;
+
+        div.p-cell {
+            padding: .5em;
+            border-bottom: .5px solid #ccc;
+        }
+    
+        div.header-cell {
+            margin-top: 1em;
+            color: #514689;
+            border-bottom: 3px solid #514689;
+        }
+    
+        div.header-cell:first{
+            margin-top: 0;
+        }
+    
+        div.p-cell:empty {
+            display: none;
+        }
+    }
+}

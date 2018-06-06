@@ -1,6 +1,5 @@
 <html>
-<link rel="stylesheet" type="text/css" href="dist/css/flex-icons.min.css">
-<link rel="stylesheet" type="text/css" href="dist/css/news.css">
+<link rel="stylesheet" type="text/css" href="dist/css/table5col.min.css">
 <script
   src="https://code.jquery.com/jquery-3.2.1.min.js"
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
