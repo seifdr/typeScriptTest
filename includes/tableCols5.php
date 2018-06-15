@@ -7,6 +7,12 @@
             <div class="p-cell">CP resident cases</div>
             <div class="p-cell"></div>
 
+            <div class="p-cell header-cell">Tuesday</div>
+            <div class="p-cell">Surgical pathology unknowns</div>
+            <div class="p-cell"></div>
+            <div class="p-cell"></div>
+            <div class="p-cell"></div>
+
             <div class="p-cell header-cell">Wednesday</div>
             <div class="p-cell">AP or CP Didactics</div>
             <div class="p-cell">Journal club</div>
