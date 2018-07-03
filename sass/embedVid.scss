@@ -1,0 +1,22 @@
+body {
+    // border: 1px solid green;
+    background-color: #fff;
+}
+
+div.hero-image {
+
+    a.button {
+        position: absolute;
+        top:40%;
+        left: 45%;
+        right: 45%;
+        border: 1px solid red;
+        min-width: 10%;
+        text-align: center;
+    }
+}
+
+iframe {
+    width: 1440px;
+    height: 400px;
+}
