@@ -1,1 +1,1 @@
-//= include ../js/test.js
+//= include ./dist/js/output.js

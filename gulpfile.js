@@ -18,11 +18,9 @@ var plumber      = require( 'gulp-plumber' );
 gulp.task( 'jshint', function() {
     return gulp.src( './js/src/*.js' )
       .pipe( jshint() )
-      .pipe( jshint.reporter( stylish ) )
       .pipe( jshint.reporter( 'fail' ) );
   })
  
-
 // Concatenates all files that it finds in the manifest
 // and creates two versions: normal and minified.
 // It's dependent on the jshint task to succeed.
@@ -30,17 +28,30 @@ gulp.task( 'scripts', ['jshint'], function() {
     return gulp.src( './js/manifest.js' )
       .pipe( include() )
       .pipe( rename( { basename: 'scripts' } ) )
-      .pipe( gulp.dest( './js/dist' ) )
+      .pipe( gulp.dest( './dist/js' ) )
       // Normal done, time to create the minified javascript (scripts.min.js)
       // remove the following 3 lines if you don't want it
       .pipe( uglify() )
       .pipe( rename( { suffix: '.min' } ) )
-      .pipe( gulp.dest( './js/dist' ) )
+      .pipe( gulp.dest( './dist/js' ) )
       .pipe(browserSync.reload({stream: true}))
       .pipe( notify({ message: 'scripts task complete' }));
   } );
 
 
+  gulp.task('typeScripts', function () {
+    return gulp.src('js/**/*.ts')
+        .pipe(ts({
+            noImplicitAny: true,
+            outFile: 'output.js'
+        }))
+        .pipe(gulp.dest('dist/js'))    
+        .pipe( uglify() )
+        .pipe( rename( { suffix: '.min' } ) )
+        .pipe( gulp.dest( 'dist/js' ) )
+        .pipe(browserSync.reload({stream: true}))
+        .pipe( notify({ message: 'ts min task complete' }));
+});
 
 
 // automatically reloads the page when files changed
@@ -53,7 +64,7 @@ var browserSyncWatchFiles = [
 // see: https://www.browsersync.io/docs/options/
 var browserSyncOptions = {
     watchTask: true,
-    proxy: "http://localhost/typeScript"
+    proxy: "http://localhost:8888/typeScript"
 }
 
 // Starts browser-sync task for starting the server.
@@ -118,11 +129,12 @@ gulp.task('sass-min', function() {
 gulp.task( 'watch', function() {
  
   // don't listen to whole js folder, it'll create an infinite loop
-  //gulp.watch( [ './js/**/*.js' ], [ 'scripts' ] );
+  gulp.watch( [ './js/**/*.ts' ], [ 'typeScripts' ] );
+  gulp.watch( [ './dist/js/*.js' ], [ 'scripts' ] );
 
-  gulp.watch( './js/**/*.js' ).on('change', browserSync.reload);
+  // gulp.watch( './js/**/*.*' ).on('change', browserSync.reload);
 
-//   gulp.watch( [ './js/**/*.js', '!./js/dist/*.js' ], [ 'scripts' ] )
+  // gulp.watch( [ './js/**/*.js', '!./js/dist/*.js' ], [ 'scripts' ] )
  
   gulp.watch( './sass/**/*.scss', ['sass', 'sass-min'] );
 
