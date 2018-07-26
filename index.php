@@ -9,7 +9,12 @@
 <body>
 <h1>This is a test</h1>
 
-<div class="hero-image" href="https://placeholder.com"><img src="http://via.placeholder.com/1440x400"><a class="button" href="https://www.youtube.com/embed/4OZJi1nOiHk?rel=0&enablejsapi=1&autoplay=1">Click Me!</a></div>
+<section class="hero">
+    <div class="hero-image" href="https://placeholder.com">
+        <img src="http://via.placeholder.com/1440x400">
+            <a class="button" href="https://www.youtube.com/embed/4OZJi1nOiHk?rel=0&enablejsapi=1&autoplay=1">Click Me!</a>
+    </div>
+</section>
 
 <?php 
 
