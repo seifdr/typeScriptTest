@@ -129,8 +129,8 @@ gulp.task('sass-min', function() {
 gulp.task( 'watch', function() {
  
   // don't listen to whole js folder, it'll create an infinite loop
-  gulp.watch( [ './js/**/*.ts' ], [ 'typeScripts' ] );
-  gulp.watch( [ './dist/js/*.js' ], [ 'scripts' ] );
+//   gulp.watch( [ './js/**/*.ts' ], [ 'typeScripts' ] );
+  gulp.watch( [ './js/*.js' ], [ 'scripts' ] );
 
   // gulp.watch( './js/**/*.*' ).on('change', browserSync.reload);
 

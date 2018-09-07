@@ -11,14 +11,12 @@
 
 <?php 
 
-include('includes/cehs-spots.php');
-
-// include('includes/news-index.php');
+include('includes/duncanLabNews.php');
 
 ?>
 
 
 </body>
 <!-- <script type="text/javascript" src="js/output.js" ></script> -->
-<script type="text/javascript" src="dist/js/output.js" ></script>
+<script type="text/javascript" src="dist/js/scripts.js" ></script>
 </html>

@@ -1,1 +1,5 @@
-//= include ./dist/js/output.js
+alert("hello from the outside");
+
+document.addEventListener("DOMContentLoaded", function(event) { 
+    alert('hello from the inside');
+});
