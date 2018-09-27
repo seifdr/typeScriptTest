@@ -1,0 +1,38 @@
+$breakpointMobile: 800px;
+
+
+div.stud-test {
+    display: flex;
+    flex-direction: row;
+    margin-top: 1em;
+
+    &:first {
+        margin-top: 0;
+    }
+
+    div.st-leftCol img {
+        width: 180px;
+        max-width: 180px;
+    }
+
+    div.st-rightCol {
+        padding-left: 1em;
+    }
+
+    //smaller than 800px
+    @media screen and (max-width: $breakpointMobile) {
+        flex-direction: column;
+        flex: 1 0 1;
+        margin-top: 1.5em;
+
+        & div.st-leftCol {
+            text-align: center;
+        }
+
+        & div.st-rightCol {
+            padding-left: 0em;
+        }
+    }
+
+}
+
