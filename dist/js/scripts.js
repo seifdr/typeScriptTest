@@ -1,1 +1,1 @@
-//= include ./dist/js/output.js
+//= include opt-cards.js

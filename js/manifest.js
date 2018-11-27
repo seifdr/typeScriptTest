@@ -1,1 +1,1 @@
-//= include ./dist/js/output.js
+//= include cehs-curr.js
