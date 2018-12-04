@@ -129,7 +129,8 @@ div#databaseWrapper {
   div#databaseWrapper .card .cornea,
   div#databaseWrapper .card .glaucoma,
   div#databaseWrapper .card .retina,
-  div#databaseWrapper .card .visual_processing {
+  div#databaseWrapper .card .visual_processing,
+  div#databaseWrapper .card .health_services_and_outcomes_research {
     background-color: #de5826;
     color: #ffffff;
     text-align: right;
@@ -144,3 +145,5 @@ div#databaseWrapper {
     background-color: #00a144; }
   div#databaseWrapper .card .visual_processing {
     background-color: #514689; }
+  div#databaseWrapper .card .health_services_and_outcomes_research {
+    background-color: #E25822; }
