@@ -1,6 +1,6 @@
 <html>
 <link rel="stylesheet" type="text/css" href="dist/css/flex-icons.min.css">
-<link rel="stylesheet" type="text/css" href="dist/css/opt-cards.css">
+<link rel="stylesheet" type="text/css" href="dist/css/cehs-curr.css">
 <script
   src="https://code.jquery.com/jquery-3.2.1.min.js"
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
@@ -11,7 +11,7 @@
 
 <?php 
 
-  include('includes/cehs-cirr.php'); 
+  include('includes/cehs-curr.php'); 
 
 ?>
 

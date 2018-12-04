@@ -1,0 +1,16 @@
+div.feature-rowbox {
+  border: 1px solid red;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex; }
+
+div.feature-rowbox > div {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 0px;
+          flex: 1 1 0;
+  border: 1px solid blue; }
+
+div.feature-rowbox > div.col2, div.feature-rowbox > div.col3 {
+  -webkit-box-flex: 2;
+      -ms-flex: 2 1 0px;
+          flex: 2 1 0; }
