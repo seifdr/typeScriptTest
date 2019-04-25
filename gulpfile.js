@@ -11,6 +11,7 @@ var include     = require( 'gulp-include' );
 var autoprefixer = require('gulp-autoprefixer');
 var watch        = require( 'gulp-watch' );
 var plumber      = require( 'gulp-plumber' );
+var babel        = require('gulp-babel');
 
 
   // Jshint outputs any kind of javascript problems you might have
@@ -31,6 +32,9 @@ gulp.task( 'scripts', ['jshint'], function() {
       .pipe( gulp.dest( './dist/js' ) )
       // Normal done, time to create the minified javascript (scripts.min.js)
       // remove the following 3 lines if you don't want it
+      .pipe(babel({
+        presets: ['@babel/env']
+      }))
       .pipe( uglify() )
       .pipe( rename( { suffix: '.min' } ) )
       .pipe( gulp.dest( './dist/js' ) )
@@ -44,6 +48,9 @@ gulp.task( 'scripts', ['jshint'], function() {
         .pipe(ts({
             noImplicitAny: true,
             outFile: 'output.js'
+        }))
+        .pipe(babel({
+          presets: ['@babel/env']
         }))
         .pipe(gulp.dest('dist/js'))    
         .pipe( uglify() )

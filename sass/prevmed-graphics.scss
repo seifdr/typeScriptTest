@@ -1,4 +1,33 @@
-body { 
-    color: blue;
-    background-color: red;
+.contain-1120 {
+    margin: 0 auto;
+    max-width: 1120px;
+    box-sizing: content-box;
+    // border: 1px solid red;
+}
+
+img#prevMedRing {
+    // max-height: 550px;
+    // max-height: 550px;
+    // z-index: 0;
+}
+
+div.column {
+    border: 1px solid blue;
+    flex: 1 0 0;
+}
+
+section#prevMedRingMod {
+    display: flex;
+    // flex-direction: row;
+    // border: 1px solid blue;
+}
+
+section#prevMedRingMod div:first-of-type {
+    margin-right: 2em;
+    // border: 1px solid green;
+    // background-image: url("../../assets/png/prev-med-ring-jewel-550sq.png");
+}
+
+svg g#Behavioral_Medicine icon {
+    fill: red;
 }

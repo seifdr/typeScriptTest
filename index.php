@@ -7,8 +7,6 @@
   crossorigin="anonymous"></script>
  
 <body>
-<h1>Opt Cards</h1>
-
 <?php 
 
   include('includes/prevmed-graphic.php'); 
