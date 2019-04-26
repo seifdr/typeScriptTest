@@ -3,11 +3,18 @@
 // var pmg = document.body.querySelector('g#Layer_1');
 // var svg = document.getElementById('prevMedJewel');
 window.onload = function () {
+  makeSVGdynamic();
+  window.addEventListener("resize", function (e) {
+    makeSVGdynamic();
+  });
+};
+
+function makeSVGdynamic() {
   // Get the Object by ID
   var a = document.getElementById("prevMedJewel"); // Get the SVG document inside the Object tag
 
   var svgDoc = a.contentDocument;
-  console.log(svgDoc); // Get one of the SVG items by ID;
+  // console.log(svgDoc); // Get one of the SVG items by ID;
 
   var svgItem = svgDoc.getElementById("Public_Health"); // Set the colour to something else
 
@@ -69,4 +76,4 @@ window.onload = function () {
     } catch (_a) {//do nothing
     }
   });
-};
+}

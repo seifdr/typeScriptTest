@@ -2,9 +2,19 @@
 // var pmg = document.body.querySelector('g#Layer_1');
 // var svg = document.getElementById('prevMedJewel');
 
-
 window.onload=function() {
-	// Get the Object by ID
+
+    makeSVGdynamic();
+
+    window.addEventListener("resize", e => {
+        makeSVGdynamic();
+    });
+
+};
+
+
+function makeSVGdynamic() {
+    // Get the Object by ID
 	var a = document.getElementById("prevMedJewel");
 	// Get the SVG document inside the Object tag
 	var svgDoc = a.contentDocument;
@@ -85,7 +95,4 @@ window.onload=function() {
             //do nothing
         }
     });
-
-};
-
-
+}
