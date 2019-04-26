@@ -28,6 +28,15 @@ section#prevMedRingMod div:first-of-type {
     // background-image: url("../../assets/png/prev-med-ring-jewel-550sq.png");
 }
 
-svg g#Behavioral_Medicine icon {
+#Public_Health path {
+    fill: red !important; 
+    border: 1px solid red;
+}
+
+path.st10 {
+    fill: red !important; 
+}
+
+#Public_Health_Text path#st1 {
     fill: red;
 }

@@ -18,5 +18,12 @@ section#prevMedRingMod {
 section#prevMedRingMod div:first-of-type {
   margin-right: 2em; }
 
-svg g#Behavioral_Medicine icon {
+#Public_Health path {
+  fill: red !important;
+  border: 1px solid red; }
+
+path.st10 {
+  fill: red !important; }
+
+#Public_Health_Text path#st1 {
   fill: red; }
