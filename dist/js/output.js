@@ -14,7 +14,7 @@ function makeSVGdynamic() {
   var a = document.getElementById("prevMedJewel"); // Get the SVG document inside the Object tag
 
   var svgDoc = a.contentDocument;
-  // console.log(svgDoc); // Get one of the SVG items by ID;
+  console.log(svgDoc); // Get one of the SVG items by ID;
 
   var svgItem = svgDoc.getElementById("Public_Health"); // Set the colour to something else
 
@@ -33,7 +33,7 @@ function makeSVGdynamic() {
   }, {
     'selector': 'Behavioral_Intervention_Technology',
     'icon_selector': '#Behavioral_Intervention_Technology_Icon',
-    'url': '#'
+    'url': 'http://cbits.northwestern.edu/'
   }, {
     'selector': 'Biostatistics',
     'icon_selector': '#Biostatistics_Icon',

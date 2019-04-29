@@ -44,7 +44,7 @@ function makeSVGdynamic() {
             {
                 'selector'      : 'Behavioral_Intervention_Technology',
                 'icon_selector' : '#Behavioral_Intervention_Technology_Icon',
-                'url'           : '#'
+                'url'           : 'http://cbits.northwestern.edu/'
             },
             {
                 'selector'      : 'Biostatistics',
