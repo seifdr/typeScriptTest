@@ -23,7 +23,7 @@ function makeSVGdynamic() {
     'icon_selector': '#Behavioral_Medicine_Icon',
     'url': 'https://feinberg-dev.fsm.northwestern.edu/sites/prevmed/divisions/behavioral-medicine/index.html'
   }, {
-    'selector': 'Epidemiology_1_',
+    'selector': 'Epidemiology',
     'icon_selector': '#Epidemiology_Icon',
     'url': 'https://feinberg-dev.fsm.northwestern.edu/sites/prevmed/divisions/epidemiology/index.html'
   }, {

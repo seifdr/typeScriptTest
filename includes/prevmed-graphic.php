@@ -1,9 +1,9 @@
 <section class="contain-1120">
   <section id="prevMedRingMod">
-    <h1> Hello there </h1>
+    <h1> Hello there? </h1>
     <div class="column">
         <!-- <img alt="Preventive Medicine Ring" id="prevMedRing" src="assets/svg/prev-med-ring-jewel.svg" width="550"> -->
-        <object data="assets/svg/prev-med-ring-jewel.svg" type="image/svg+xml" id="prevMedJewel" width="100%" height="100%"></object>
+        <object data="assets/svg/prev-med-ring-7-overlap.svg" type="image/svg+xml" id="prevMedJewel" width="100%" height="100%"></object>
     </div>
     
     <div class="column">
