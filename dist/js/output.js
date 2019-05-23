@@ -18,38 +18,35 @@ function makeSVGdynamic() {
 
   var svgItem = svgDoc.getElementById("Public_Health"); // Set the colour to something else
 
+  var baseURL = 'https://www.preventivemedicine.northwestern.edu';
   var allowedClicks = [{
     'selector': 'Behavioral_Medicine',
     'icon_selector': '#Behavioral_Medicine_Icon',
-    'url': 'https://feinberg-dev.fsm.northwestern.edu/sites/prevmed/divisions/behavioral-medicine/index.html'
+    'url': baseURL + '/divisions/behavioral-medicine/index.html'
   }, {
     'selector': 'Epidemiology',
     'icon_selector': '#Epidemiology_Icon',
-    'url': 'https://feinberg-dev.fsm.northwestern.edu/sites/prevmed/divisions/epidemiology/index.html'
+    'url': baseURL + '/divisions/epidemiology/index.html'
   }, {
     'selector': 'Nutrition',
     'icon_selector': '#Nutrition_Icon',
-    'url': 'https://feinberg-dev.fsm.northwestern.edu/sites/prevmed/divisions/nutrition/index.html'
-  }, {
-    'selector': 'Behavioral_Intervention_Technology',
-    'icon_selector': '#Behavioral_Intervention_Technology_Icon',
-    'url': 'http://cbits.northwestern.edu/'
+    'url': baseURL + '/divisions/nutrition/index.html'
   }, {
     'selector': 'Biostatistics',
     'icon_selector': '#Biostatistics_Icon',
-    'url': 'https://feinberg-dev.fsm.northwestern.edu/sites/prevmed/divisions/biostatistics/index.html'
+    'url': baseURL + '/divisions/biostatistics/index.html'
   }, {
     'selector': 'Cancer_Epidemiology_and_Prevention',
     'icon_selector': '#Cancer_Epidemiology_and_Prevention_Icon',
-    'url': 'https://feinberg-dev.fsm.northwestern.edu/sites/prevmed/divisions/cancer-epidemiology-and-prevention/index.html'
+    'url': baseURL + '/divisions/cancer-epidemiology-and-prevention/index.html'
   }, {
     'selector': 'Health_and_Biomedical_Informatics',
     'icon_selector': '#Health_and_Biomedical_Informatics_Icon',
-    'url': 'https://feinberg-dev.fsm.northwestern.edu/sites/prevmed/divisions/health-and-biomedical-informatics/index.html'
+    'url': baseURL + '/divisions/health-and-biomedical-informatics/index.html'
   }, {
     'selector': 'Public_Health',
     'icon_selector': '#Public_Health_Icon',
-    'url': 'https://feinberg-dev.fsm.northwestern.edu/sites/prevmed/divisions/public-health-practice/index.html'
+    'url': baseURL + '/divisions/public-health-practice/index.html'
   }];
   allowedClicks.forEach(function (row) {
     try {
@@ -73,7 +70,7 @@ function makeSVGdynamic() {
       elem.addEventListener("mouseleave", function (e) {
         icon_1.style.opacity = .5;
       });
-    } catch (_a) {//do nothing
+    } catch (_a) {//do nothing 
     }
   });
 }
