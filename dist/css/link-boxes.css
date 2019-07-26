@@ -4472,6 +4472,7 @@ div.container h3 {
     content: " "; }
 
 section#mainBox {
+  padding-top: 2em;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
