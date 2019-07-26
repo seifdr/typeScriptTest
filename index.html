@@ -2,10 +2,24 @@
 <!-- <link rel="stylesheet" type="text/css" href="dist/css/flex-icons.min.css"> -->
 <link rel="stylesheet" type="text/css" href="dist/css/link-boxes.css">
 <body>
-  <h1>This is a test.</h1>
-  <section id="mainBox">
-
-  </section>
+  <div class="headingWrapper container">
+    <div>
+        <div>
+            
+            <a alt="Feinberg Homepage" href="https://www.feinberg.northwestern.edu" ><span>Feinberg School of Medicine</span><div id="NMLogoNew"></div></a>
+        </div>
+        <div>
+          <!-- Silence is golden -->
+          <div class="otherLinks"><a data-ga-region="banner-link-NM" href="http://www.nm.org">Northwestern Medicine</a> | <a data-ga-region="banner-link-NU" href="http://www.northwestern.edu" >Northwestern University</a></div>
+          <div class="fsmLinks"><a class="upper" data-ga-region="banner-link-NewsCenter" href="https://news.feinberg.northwestern.edu" >News Center</a> | <a class="upper" data-ga-region="banner-link-Faculty" href="http://www.feinberg.northwestern.edu/faculty-profiles/index.html" >Faculty Profiles</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <h3>Helpful Links</h3>
+    <section id="mainBox"></section>
+  </div>
 </body>
 <!-- <script type="text/javascript" src="js/output.js" ></script> -->
 <!-- <script type="text/javascript" src="dist/js/output.js" ></script> -->
@@ -58,7 +72,7 @@ window.addEventListener('load', () => {
 
     let box = document.createElement('article');
 
-    let boxCode = `<div class="box">`;
+    let boxCode = `<a href="${ row.link }"><div class="box">`;
     
       if( row.icon ){
       boxCode += row.icon;
@@ -66,7 +80,7 @@ window.addEventListener('load', () => {
       boxCode += `<img src="${ imgDir + row.image }" alt="${ row.title + '-logo' }" />`;
     }
 
-    boxCode += `</div><p><a href="${ row.link }">${ row.title }</a></p>`;
+    boxCode += `</div><p>${ row.title }</p></a>`;
 
     box.innerHTML = boxCode;
 
