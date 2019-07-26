@@ -65,7 +65,8 @@ gulp.task( 'scripts', ['jshint'], function() {
 var browserSyncWatchFiles = [
     './css/*.min.css',
     './js/**/*.min.js',
-    './**/*.php'
+    './**/*.php',
+    './**/*.html'
 ];
 
 // see: https://www.browsersync.io/docs/options/

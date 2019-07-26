@@ -1,0 +1,71 @@
+@import "sass/fa/fontawesome.scss";
+@import "sass/fa/regular.scss";
+@import "sass/fa/solid.scss";
+
+$lightGrey: #f0f0f0;
+$darkerGrey: #54585a;
+$fsmPurple: #514689;
+
+
+h1, h2, h3, h4, h5, p, li, a {
+    font-family: Calibri,Helvetica,Arial,sans-serif;
+}
+
+p {
+    color: $darkerGrey;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+}
+
+section#mainBox {
+    border: 1px solid red;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    max-width: 1200px;
+
+    & > article {
+        flex: 1 1 40%;
+        // flex-basis: 32.35%;
+        margin: 1em;
+
+       display: flex;
+       flex-direction: column;
+       text-align: center;
+       justify-content: center;
+       padding: 1em;
+       border: 1px solid purple;
+        // background-color: purple;
+    }
+
+    div.box { 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: $lightGrey;
+        height: 300px;
+        border-radius: 1em;
+        
+        & > i {
+            
+            padding: 1em;
+
+            &::before { 
+                font-size: 8em;
+                color: #514689;
+            }
+        }
+
+        & > img {
+            max-width: 250px;
+            max-height: 140px;
+        }
+    }
+}
+
