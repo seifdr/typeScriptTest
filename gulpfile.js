@@ -50,7 +50,7 @@ gulp.task( 'scripts', ['jshint'], function() {
             outFile: 'output.js'
         }))
         .pipe(babel({
-          presets: ['@babel/env']
+          presets: ['@babel/env', 'es2015']
         }))
         .pipe(gulp.dest('dist/js'))    
         .pipe( uglify() )
@@ -132,7 +132,6 @@ gulp.task('sass-min', function() {
         .pipe(notify({ title: 'Sass', message: 'sass-min task complete' }));
 });
  
- 
 // Start the livereload server and watch files for change
 gulp.task( 'watch', function() {
  
@@ -149,6 +148,7 @@ gulp.task( 'watch', function() {
 //   gulp.watch( './images/**/*', ['images']);
  
   gulp.watch( './**/*.php' ).on('change', browserSync.reload);
+  gulp.watch( './**/*.html' ).on('change', browserSync.reload);
    
 } );
  

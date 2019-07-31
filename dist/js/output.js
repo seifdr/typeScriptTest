@@ -1,88 +1,225 @@
 "use strict";
 
-// var pmg = document.body.querySelector('g#Layer_1');
-// var svg = document.getElementById('prevMedJewel');
-window.onload = function () {
-  makeSVGdynamic();
-  window.addEventListener("resize", function (e) {
-    makeSVGdynamic();
+var __awaiter = void 0 && (void 0).__awaiter || function (thisArg, _arguments, P, generator) {
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function step(result) {
+      result.done ? resolve(result.value) : new P(function (resolve) {
+        resolve(result.value);
+      }).then(fulfilled, rejected);
+    }
+
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
   });
 };
 
-function makeSVGdynamic() {
-  // Get the Object by ID
-  var a = document.getElementById("prevMedJewel"); // Get the SVG document inside the Object tag
+var __generator = void 0 && (void 0).__generator || function (thisArg, body) {
+  var _ = {
+    label: 0,
+    sent: function sent() {
+      if (t[0] & 1) throw t[1];
+      return t[1];
+    },
+    trys: [],
+    ops: []
+  },
+      f,
+      y,
+      t,
+      g;
+  return g = {
+    next: verb(0),
+    "throw": verb(1),
+    "return": verb(2)
+  }, typeof Symbol === "function" && (g[Symbol.iterator] = function () {
+    return this;
+  }), g;
 
-  var svgDoc = a.contentDocument;
-  console.log(svgDoc); // // Get one of the SVG items by ID;
-  // var svgItem = svgDoc.getElementById("Public_Health");
-  // // Set the colour to something else
+  function verb(n) {
+    return function (v) {
+      return step([n, v]);
+    };
+  }
 
-  var baseURL = 'https://www.preventivemedicine.northwestern.edu';
-  var allowedClicks = [{
-    'selector': 'Behavioral_Medicine',
-    'icon_selector': '#Behavioral_Medicine_Icon',
-    'url': baseURL + '/divisions/behavioral-medicine/index.html',
-    'title': 'Behavior Medicine Division'
-  }, {
-    'selector': 'Epidemiology',
-    'icon_selector': '#Epidemiology_Icon',
-    'url': baseURL + '/divisions/epidemiology/index.html',
-    'title': 'Epidemiology Division'
-  }, {
-    'selector': 'Nutrition',
-    'icon_selector': '#Nutrition_Icon',
-    'url': baseURL + '/divisions/nutrition/index.html',
-    'title': 'Nutrition Division'
-  }, {
-    'selector': 'Biostatistics',
-    'icon_selector': '#Biostatistics_Icon',
-    'url': baseURL + '/divisions/biostatistics/index.html',
-    'title': 'Biostatistics Division'
-  }, {
-    'selector': 'Cancer_Epidemiology_and_Prevention',
-    'icon_selector': '#Cancer_Epidemiology_and_Prevention_Icon',
-    'url': baseURL + '/divisions/cancer-epidemiology-and-prevention/index.html',
-    'title': 'Cancer Epidemiology and Prevention Division'
-  }, {
-    'selector': 'Health_and_Biomedical_Informatics',
-    'icon_selector': '#Health_and_Biomedical_Informatics_Icon',
-    'url': baseURL + '/divisions/health-and-biomedical-informatics/index.html',
-    'title': 'Health and Biomedical Informatics Division'
-  }, {
-    'selector': 'Public_Health',
-    'icon_selector': '#Public_Health_Icon',
-    'url': baseURL + '/divisions/public-health-practice/index.html',
-    'title': 'Public Health Division'
-  }]; //get a reference to SVG title
+  function step(op) {
+    if (f) throw new TypeError("Generator is already executing.");
 
-  var titleElem = svgDoc.getElementById("Layer_1").getElementsByTagName("title")[0];
-  titleElem.innerHTML = 'Preventive Medicine Jewel';
-  allowedClicks.forEach(function (row) {
-    try {
-      //get a reference to jewel prong path
-      var elem = svgDoc.getElementById(row.selector); //set prong cursor hover to pointer
+    while (_) {
+      try {
+        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+        if (y = 0, t) op = [op[0] & 2, t.value];
 
-      elem.style.cursor = 'pointer'; //setup click event
+        switch (op[0]) {
+          case 0:
+          case 1:
+            t = op;
+            break;
 
-      elem.addEventListener("click", function (e) {
-        return window.location.href = row.url;
-      }); //grab a reference to the icon
+          case 4:
+            _.label++;
+            return {
+              value: op[1],
+              done: false
+            };
 
-      var icon_1 = svgDoc.querySelector(row.icon_selector); //set transition easing
+          case 5:
+            _.label++;
+            y = op[1];
+            op = [0];
+            continue;
 
-      icon_1.style.transition = 'all .4s ease';
-      icon_1.style['-webkit-transition'] = 'all .4s ease'; //change icon opacity one mouse enter and leave
+          case 7:
+            op = _.ops.pop();
 
-      elem.addEventListener("mouseenter", function (e) {
-        icon_1.style.opacity = 1;
-        titleElem.innerHTML = row.title;
-      });
-      elem.addEventListener("mouseleave", function (e) {
-        icon_1.style.opacity = .5;
-        titleElem.innerHTML = '';
-      });
-    } catch (_a) {//do nothing 
+            _.trys.pop();
+
+            continue;
+
+          default:
+            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+              _ = 0;
+              continue;
+            }
+
+            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+              _.label = op[1];
+              break;
+            }
+
+            if (op[0] === 6 && _.label < t[1]) {
+              _.label = t[1];
+              t = op;
+              break;
+            }
+
+            if (t && _.label < t[2]) {
+              _.label = t[2];
+
+              _.ops.push(op);
+
+              break;
+            }
+
+            if (t[2]) _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+        }
+
+        op = body.call(thisArg, _);
+      } catch (e) {
+        op = [6, e];
+        y = 0;
+      } finally {
+        f = t = 0;
+      }
     }
+
+    if (op[0] & 5) throw op[1];
+    return {
+      value: op[0] ? op[1] : void 0,
+      done: true
+    };
+  }
+};
+
+var imgDir = 'assets/icons/';
+var boxes = [];
+window.addEventListener('load', function () {
+  outputBoxes();
+});
+
+function getBoxData(url) {
+  //get list
+  return fetch(url).then(function (response) {
+    return response.json();
+  }).then(function (data) {
+    // console.log(data.results);
+    return data.results;
+  })["catch"](function (error) {
+    console.log('There was an error retreiving the data'); //only return this if the fetch fails
+
+    return [{
+      title: 'Nearpod',
+      image: 'nearpod.png',
+      link: 'https://nearpod.com/login/'
+    }, {
+      title: 'eMerg',
+      image: '#',
+      icon: '<i class="far fa-calendar-alt"></i>',
+      link: 'https://ads-fed.northwestern.edu/adfs/ls/?wtrealm=https%3a%2f%2feMerg.fsm.northwestern.edu&wctx=WsFedOwinState%3dAyxRTRcnTF93PJSMAcU2eFMjtC726GNwGxVE_j5jaZVWx5Kj7fKGTyGn3pGMIyS6tmrbhBuJQd-Y-nNtBwBcKsQZg5lRFLwWKoPjtPl37RbE-nN0yUR6I60IHsScMH_1c38uU0JzpgzkPm1TVr7YgA&wa=wsignin1.0&wreply=https%3a%2f%2femerg.fsm.northwestern.edu%2f'
+    }, {
+      title: 'NMH Web Paging',
+      image: '#',
+      icon: '<i class="fas fa-pager"></i>',
+      link: 'https://nmpaging.nm.org/cgi-bin/cgiip.exe/WService=webmessaging/webmessaging.html'
+    }, {
+      title: 'Path Presenter',
+      image: 'path-presenter.png',
+      link: 'https://www.pathpresenter.net/'
+    }, {
+      title: 'Google',
+      image: 'Google.png',
+      link: 'https://www.google.com'
+    }, {
+      title: 'NMH Access',
+      image: 'nm.png',
+      link: 'https://access.nmh.org'
+    }];
+  });
+}
+
+function outputBoxes() {
+  return __awaiter(this, void 0, void 0, function () {
+    var mainBox, i, row, box, boxCode;
+    return __generator(this, function (_a) {
+      switch (_a.label) {
+        case 0:
+          return [4
+          /*yield*/
+          , getBoxData('./assets/box-items.json')];
+
+        case 1:
+          //get json file
+          boxes = _a.sent();
+          mainBox = document.getElementById('mainBox');
+
+          for (i = 0; i < boxes.length; i++) {
+            row = boxes[i];
+            box = document.createElement('article');
+            boxCode = "<a href=\"" + row.link + "\"><div class=\"box\">";
+
+            if (row.icon) {
+              boxCode += row.icon;
+            } else {
+              boxCode += "<img src=\"" + (imgDir + row.image) + "\" alt=\"" + (row.title + '-logo') + "\" />";
+            }
+
+            boxCode += "</div><p>" + row.title + "</p></a>";
+            box.innerHTML = boxCode;
+            mainBox.appendChild(box);
+          }
+
+          return [2
+          /*return*/
+          ];
+      }
+    });
   });
 }
