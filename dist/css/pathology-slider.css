@@ -54,6 +54,7 @@ div#facultySpotlights {
       div#facultySpotlights div.facultySpotlight div.innerSpot > div.facultyText {
         width: 75%; }
         div#facultySpotlights div.facultySpotlight div.innerSpot > div.facultyText h4 {
+          font-size: 30px;
           margin-bottom: 0 !important;
           color: #514689;
           font-family: Calibri,Helvetica,Arial,sans-serif; }
