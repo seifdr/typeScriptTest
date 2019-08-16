@@ -170,6 +170,9 @@ function () {
   Store.prototype.stockTheShelves = function () {
     return __awaiter(this, void 0, void 0, function () {
       var result, shelves_1;
+
+      var _this = this;
+
       return __generator(this, function (_a) {
         switch (_a.label) {
           case 0:
@@ -183,7 +186,7 @@ function () {
             if (result) {
               shelves_1 = "<div class=\"block-wrapper\"><section class=\"shelves\"><div class=\"feature-three-col modBreakFour\">";
               this.items.forEach(function (item) {
-                shelves_1 += "<article class=\"feature-box\">\n                                    <center>\n                                        <img src=\"assets/png/300x200.png\" />\n                                    </center>\n                                    <div class=\"feature-copy\">\n                                        <h6>" + item.title + "</h6>\n                                    </div>\n                                    <a class=\"button\" href=\"publications/index.html\">Add To Cart</a>\n                                </article>";
+                shelves_1 += "<article class=\"feature-box\">\n                                    <center>\n                                        <img src=\"assets/png/300x200.png\" />\n                                    </center>\n                                    <div class=\"feature-copy\">\n                                        <h6>" + item.title + "</h6>\n                                        <p>$" + _this.numberWithCommas(item.price) + "</p>\n                                    </div>\n                                    <a class=\"button\" href=\"publications/index.html\">Add To Cart</a>\n                                </article>";
               });
               shelves_1 += "</div></section></div>";
               console.log(shelves_1);
@@ -196,6 +199,10 @@ function () {
         }
       });
     });
+  };
+
+  Store.prototype.numberWithCommas = function (x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
   return Store;

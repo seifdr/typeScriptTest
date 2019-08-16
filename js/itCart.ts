@@ -55,6 +55,7 @@ class Store {
                                     </center>
                                     <div class="feature-copy">
                                         <h6>${item.title}</h6>
+                                        <p>$${ this.numberWithCommas(item.price) }</p>
                                     </div>
                                     <a class="button" href="publications/index.html">Add To Cart</a>
                                 </article>`;
@@ -68,6 +69,9 @@ class Store {
         }
     }
 
+    numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
 
 }
 

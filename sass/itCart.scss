@@ -4,4 +4,10 @@ main#main-content {
 
 section.shelves {
     border: 1px solid green; 
+
+    article.feature-box {
+        div.feature-copy {
+            margin-bottom: 46px;
+        }
+    }
 }
