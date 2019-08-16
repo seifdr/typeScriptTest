@@ -130,6 +130,8 @@ class Store {
         oel.style.height = "100%";
         oel.style.display = "block";
 
+        document.body.classList.add('modal-open');
+
         // Close modal when X btn is clicked
         oel.getElementsByClassName('closebtn')[0].addEventListener('click', (e) => {
             this.closeOverlay(el, oel);
@@ -147,6 +149,7 @@ class Store {
         el.innerHTML = "";
         oel.style.height = "0%";
         oel.style.display = "none";
+        document.body.classList.remove('modal-open');
     }
 
     addOverlay() {

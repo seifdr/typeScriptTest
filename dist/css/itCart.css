@@ -19,10 +19,10 @@ div#overlayGuts {
   div#overlayGuts div#overlayPad {
     padding: 1em;
     height: 100%;
-    overflow-y: scroll; }
-    div#overlayGuts div#overlayPad div.overlayImg {
-      float: left;
-      padding: 0 2em 2em 0; }
+    overflow-y: scroll;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex; }
 
 body.modal-open {
   /*block scroll for mobile;

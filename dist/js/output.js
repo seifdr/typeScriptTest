@@ -251,7 +251,8 @@ function () {
     var selectedItem = new Item(this.items[num]);
     el.innerHTML = selectedItem.outputOverlay();
     oel.style.height = "100%";
-    oel.style.display = "block"; // Close modal when X btn is clicked
+    oel.style.display = "block";
+    document.body.classList.add('modal-open'); // Close modal when X btn is clicked
 
     oel.getElementsByClassName('closebtn')[0].addEventListener('click', function (e) {
       _this.closeOverlay(el, oel);
@@ -268,6 +269,7 @@ function () {
     el.innerHTML = "";
     oel.style.height = "0%";
     oel.style.display = "none";
+    document.body.classList.remove('modal-open');
   };
 
   Store.prototype.addOverlay = function () {

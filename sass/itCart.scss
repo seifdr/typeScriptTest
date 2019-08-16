@@ -34,10 +34,10 @@ div#overlayGuts {
         padding: 1em;
         height: 100%;
         overflow-y: scroll;
+        display: flex;
 
         div.overlayImg {
-            float: left;
-            padding: 0 2em 2em 0;
+
         }
 
     }
