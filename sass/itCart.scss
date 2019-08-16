@@ -14,6 +14,15 @@ section.shelves {
     }
 }
 
+div#overlay-content {
+    max-width: 750px;
+
+    a.closebtn i {
+        font-style: normal;
+    }
+
+}
+
 div#overlayGuts {
     position: relative;
     height: auto !important;

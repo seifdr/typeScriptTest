@@ -153,7 +153,7 @@ function () {
   }
 
   Item.prototype.outputOverlay = function () {
-    var output = "\n            <div id=\"overlayPad\">\n                <div class=\"overlayImg\">\n                    <img src=\"assets/png/300x200.png\" />\n                </div>\n                <div class=\"overlayText\">\n                    <h3>" + this.title + "</h3>\n                    <h6>$" + this.numberWithCommas(this.price) + "</h6>\n                    <div>" + this.desc + "</div>\n                </div>\n            </div>\n        ";
+    var output = "\n            <div id=\"overlayPad\">\n                <div class=\"overlayImg\">\n                    <img src=\"assets/png/300x200.png\" />\n                </div>\n                <div class=\"overlayText\">\n                    <h3>" + this.title + "</h3>\n                    <h6>$" + this.numberWithCommas(this.price) + "</h6>\n                    <div>" + this.desc + "</div>\n                    <br />\n                    <a class=\"button\" href=\"#\">Add To Cart</a>\n                </div>\n            </div>\n        ";
     return output;
   };
 
@@ -170,7 +170,6 @@ function () {
   function Store(containerID) {
     this.apiURL = 'https://feinberg-dev.fsm.northwestern.edu/it-new/ws/purchasing-api.php';
     this.items = [{}];
-    this.addOverlay();
     this.containerEL = document.getElementById(containerID);
     this.stockTheShelves();
   }
@@ -235,6 +234,7 @@ function () {
               }
             }
 
+            this.addOverlay();
             return [2
             /*return*/
             ];
@@ -272,7 +272,7 @@ function () {
 
   Store.prototype.addOverlay = function () {
     var overlay = "<div id=\"overlay\"><div id=\"overlay-content\"><a href=\"#\" class=\"closebtn\"><i class=\"fa fa-times\"> </i></a><div id=\"overlayGuts\" class=\"col1of1 responsive-container\"></div></div></div>";
-    document.body.insertAdjacentHTML('beforeend', overlay);
+    this.containerEL.insertAdjacentHTML('beforeend', overlay);
   };
 
   Store.prototype.numberWithCommas = function (x) {

@@ -40,6 +40,8 @@ class Item implements product {
                     <h3>${this.title}</h3>
                     <h6>$${ this.numberWithCommas( this.price ) }</h6>
                     <div>${this.desc}</div>
+                    <br />
+                    <a class="button" href="#">Add To Cart</a>
                 </div>
             </div>
         `;
@@ -58,7 +60,6 @@ class Store {
     private sortBy: string;
 
     constructor( containerID ) {
-        this.addOverlay();
         this.containerEL = document.getElementById( containerID );
         this.stockTheShelves();
     }
@@ -116,8 +117,8 @@ class Store {
                     e.preventDefault();
                 });
             }
-        
         }
+        this.addOverlay();
     }
     openOverlay( num ){
         let oel = document.getElementById('overlay');
@@ -137,9 +138,9 @@ class Store {
         // Close modal on ESC 
         document.addEventListener('keydown', (e) => {
             if(e.key === "Escape") {
-                this.closeOverlay(el, oel)
+                this.closeOverlay(el, oel);
             }
-        }
+        });
     }
 
     closeOverlay(el, oel){
@@ -150,7 +151,8 @@ class Store {
 
     addOverlay() {
         let overlay = `<div id="overlay"><div id="overlay-content"><a href="#" class="closebtn"><i class="fa fa-times"> </i></a><div id="overlayGuts" class="col1of1 responsive-container"></div></div></div>`;
-        document.body.insertAdjacentHTML('beforeend', overlay);
+        
+        this.containerEL.insertAdjacentHTML('beforeend', overlay);
     }
 
     numberWithCommas(x) {
