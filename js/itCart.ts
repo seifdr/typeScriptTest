@@ -19,6 +19,7 @@ class Item implements product {
     categories;
     price;
     desc;
+    inBasket = 0;
 
     constructor( item ){
         this.id = item.id;
@@ -53,6 +54,10 @@ class Item implements product {
     }
 }
 
+class Cart {
+    private basket = [<product>{}];
+}
+
 class Store {
     private apiURL = 'https://feinberg-dev.fsm.northwestern.edu/it-new/ws/purchasing-api.php';
     private containerEL:HTMLElement;
@@ -73,7 +78,12 @@ class Store {
             let result = myJson.items;
 
             if(result.length > 0){
-                this.items = myJson.items;
+                // this.items = myJson.items;
+
+                myJson.items.forEach( (row, i) => {
+                    this.items[i] = new Item( row );
+                });
+
                 return true;
             } else {
                 return false;

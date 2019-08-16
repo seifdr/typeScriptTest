@@ -143,6 +143,7 @@ var Item =
 /** @class */
 function () {
   function Item(item) {
+    this.inBasket = 0;
     this.id = item.id;
     this.title = item.title;
     this.element = item.element;
@@ -162,6 +163,16 @@ function () {
   };
 
   return Item;
+}();
+
+var Cart =
+/** @class */
+function () {
+  function Cart() {
+    this.basket = [{}];
+  }
+
+  return Cart;
 }();
 
 var Store =
@@ -184,7 +195,10 @@ function () {
       var result = myJson.items;
 
       if (result.length > 0) {
-        _this.items = myJson.items;
+        // this.items = myJson.items;
+        myJson.items.forEach(function (row, i) {
+          _this.items[i] = new Item(row);
+        });
         return true;
       } else {
         return false;
