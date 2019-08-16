@@ -19,6 +19,7 @@ class Store {
     private sortBy: string;
 
     constructor( containerID ) {
+        this.addOverlay();
         this.containerEL = document.getElementById( containerID );
         this.stockTheShelves();
     }
@@ -50,13 +51,16 @@ class Store {
 
                 this.items.forEach( ( item ) => {
                     shelves += `<article class="feature-box">
-                                    <center>
-                                        <img src="assets/png/300x200.png" />
-                                    </center>
-                                    <div class="feature-copy">
-                                        <h6>${item.title}</h6>
-                                        <p>$${ this.numberWithCommas(item.price) }</p>
-                                    </div>
+                                    <a href="#">
+                                        <center>
+                                            <img src="assets/png/300x200.png" />
+                                        </center>
+                                        <div class="feature-copy">
+                                            <h6>${item.title}</h6>
+                                            <p>$${ this.numberWithCommas(item.price) }</p>
+                                            <a class="specs" href="#">Read product specs</a>
+                                        </div>
+                                    </a>
                                     <a class="button" href="publications/index.html">Add To Cart</a>
                                 </article>`;
                 });
@@ -67,6 +71,11 @@ class Store {
 
             this.containerEL.insertAdjacentHTML('beforeend', shelves);
         }
+    }
+
+    addOverlay() {
+        let overlay = `<div id="overlay"><div id="overlay-content"><a href="#" class="closebtn"><i class="fa fa-times"> </i></a><div id="videoPlayer" class="col1of1 responsive-container"></div></div></div>`;
+        document.body.insertAdjacentHTML('beforeend', overlay);
     }
 
     numberWithCommas(x) {

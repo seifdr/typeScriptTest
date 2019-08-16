@@ -8,6 +8,14 @@ section.shelves {
     article.feature-box {
         div.feature-copy {
             margin-bottom: 46px;
+
+            a:hover {
+                text-decoration: none;
+            }
+
+            a.specs:hover {
+                text-decoration: underline;
+            }
         }
     }
 }

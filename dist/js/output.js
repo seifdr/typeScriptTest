@@ -145,6 +145,7 @@ function () {
   function Store(containerID) {
     this.apiURL = 'https://feinberg-dev.fsm.northwestern.edu/it-new/ws/purchasing-api.php';
     this.items = [{}];
+    this.addOverlay();
     this.containerEL = document.getElementById(containerID);
     this.stockTheShelves();
   }
@@ -186,7 +187,7 @@ function () {
             if (result) {
               shelves_1 = "<div class=\"block-wrapper\"><section class=\"shelves\"><div class=\"feature-three-col modBreakFour\">";
               this.items.forEach(function (item) {
-                shelves_1 += "<article class=\"feature-box\">\n                                    <center>\n                                        <img src=\"assets/png/300x200.png\" />\n                                    </center>\n                                    <div class=\"feature-copy\">\n                                        <h6>" + item.title + "</h6>\n                                        <p>$" + _this.numberWithCommas(item.price) + "</p>\n                                    </div>\n                                    <a class=\"button\" href=\"publications/index.html\">Add To Cart</a>\n                                </article>";
+                shelves_1 += "<article class=\"feature-box\">\n                                    <a href=\"#\">\n                                        <center>\n                                            <img src=\"assets/png/300x200.png\" />\n                                        </center>\n                                        <div class=\"feature-copy\">\n                                            <h6>" + item.title + "</h6>\n                                            <p>$" + _this.numberWithCommas(item.price) + "</p>\n                                            <a class=\"specs\" href=\"#\">Read product specs</a>\n                                        </div>\n                                    </a>\n                                    <a class=\"button\" href=\"publications/index.html\">Add To Cart</a>\n                                </article>";
               });
               shelves_1 += "</div></section></div>";
               console.log(shelves_1);
@@ -199,6 +200,11 @@ function () {
         }
       });
     });
+  };
+
+  Store.prototype.addOverlay = function () {
+    var overlay = "<div id=\"overlay\"><div id=\"overlay-content\"><a href=\"#\" class=\"closebtn\"><i class=\"fa fa-times\"> </i></a><div id=\"videoPlayer\" class=\"col1of1 responsive-container\"></div></div></div>";
+    document.body.insertAdjacentHTML('beforeend', overlay);
   };
 
   Store.prototype.numberWithCommas = function (x) {

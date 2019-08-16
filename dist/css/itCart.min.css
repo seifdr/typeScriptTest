@@ -1,1 +1,1 @@
-main#main-content{border:1px solid red}section.shelves{border:1px solid green}section.shelves article.feature-box div.feature-copy{margin-bottom:46px}
+main#main-content{border:1px solid red}section.shelves{border:1px solid green}section.shelves article.feature-box div.feature-copy{margin-bottom:46px}section.shelves article.feature-box div.feature-copy a:hover{text-decoration:none}section.shelves article.feature-box div.feature-copy a.specs:hover{text-decoration:underline}
