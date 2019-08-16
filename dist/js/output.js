@@ -139,6 +139,31 @@ var __generator = void 0 && (void 0).__generator || function (thisArg, body) {
   }
 };
 
+var Item =
+/** @class */
+function () {
+  function Item(item) {
+    this.id = item.id;
+    this.title = item.title;
+    this.element = item.element;
+    this.type = item.type;
+    this.categories = item.categories;
+    this.price = item.price;
+    this.desc = item.desc;
+  }
+
+  Item.prototype.outputOverlay = function () {
+    var output = "\n            <div id=\"overlayPad\">\n                <div class=\"overlayImg\">\n                    <img src=\"assets/png/300x200.png\" />\n                </div>\n                <div class=\"overlayText\">\n                    <h3>" + this.title + "</h3>\n                    <h6>$" + this.numberWithCommas(this.price) + "</h6>\n                    <div>" + this.desc + "</div>\n                </div>\n            </div>\n        ";
+    return output;
+  };
+
+  Item.prototype.numberWithCommas = function (x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  return Item;
+}();
+
 var Store =
 /** @class */
 function () {
@@ -170,28 +195,44 @@ function () {
 
   Store.prototype.stockTheShelves = function () {
     return __awaiter(this, void 0, void 0, function () {
-      var result, shelves_1;
+      var result, shelves_1, _loop_1, _i, _a, el;
 
       var _this = this;
 
-      return __generator(this, function (_a) {
-        switch (_a.label) {
+      return __generator(this, function (_b) {
+        switch (_b.label) {
           case 0:
             return [4
             /*yield*/
             , this.loadProducts()];
 
           case 1:
-            result = _a.sent();
+            result = _b.sent();
 
             if (result) {
               shelves_1 = "<div class=\"block-wrapper\"><section class=\"shelves\"><div class=\"feature-three-col modBreakFour\">";
-              this.items.forEach(function (item) {
-                shelves_1 += "<article class=\"feature-box\">\n                                    <a href=\"#\">\n                                        <center>\n                                            <img src=\"assets/png/300x200.png\" />\n                                        </center>\n                                        <div class=\"feature-copy\">\n                                            <h6>" + item.title + "</h6>\n                                            <p>$" + _this.numberWithCommas(item.price) + "</p>\n                                            <a class=\"specs\" href=\"#\">Read product specs</a>\n                                        </div>\n                                    </a>\n                                    <a class=\"button\" href=\"publications/index.html\">Add To Cart</a>\n                                </article>";
+              this.items.forEach(function (item, i) {
+                shelves_1 += "<article class=\"feature-box\">\n                                    <a class=\"overSpecs\" data-id=\"" + item.id + "\" data-num=\"" + i + "\" href=\"#\">\n                                        <center>\n                                            <img src=\"assets/png/300x200.png\" />\n                                        </center>\n                                        <div class=\"feature-copy\">\n                                            <h6>" + item.title + "</h6>\n                                            <p>$" + _this.numberWithCommas(item.price) + "</p>\n                                            <a class=\"specs\" href=\"#\">Read product specs</a>\n                                        </div>\n                                    </a>\n                                    <a class=\"button\" href=\"publications/index.html\">Add To Cart</a>\n                                </article>";
               });
               shelves_1 += "</div></section></div>";
-              console.log(shelves_1);
               this.containerEL.insertAdjacentHTML('beforeend', shelves_1);
+
+              _loop_1 = function _loop_1(el) {
+                el.addEventListener('click', function (e) {
+                  var num = el.getAttribute('data-num');
+
+                  _this.openOverlay(num);
+
+                  e.preventDefault();
+                });
+              }; //add event listener to all product item feature boxes
+
+
+              for (_i = 0, _a = document.getElementsByClassName('overSpecs'); _i < _a.length; _i++) {
+                el = _a[_i];
+
+                _loop_1(el);
+              }
             }
 
             return [2
@@ -202,8 +243,35 @@ function () {
     });
   };
 
+  Store.prototype.openOverlay = function (num) {
+    var _this = this;
+
+    var oel = document.getElementById('overlay');
+    var el = document.getElementById('overlayGuts');
+    var selectedItem = new Item(this.items[num]);
+    el.innerHTML = selectedItem.outputOverlay();
+    oel.style.height = "100%";
+    oel.style.display = "block"; // Close modal when X btn is clicked
+
+    oel.getElementsByClassName('closebtn')[0].addEventListener('click', function (e) {
+      _this.closeOverlay(el, oel);
+    }); // Close modal on ESC 
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === "Escape") {
+        _this.closeOverlay(el, oel);
+      }
+    });
+  };
+
+  Store.prototype.closeOverlay = function (el, oel) {
+    el.innerHTML = "";
+    oel.style.height = "0%";
+    oel.style.display = "none";
+  };
+
   Store.prototype.addOverlay = function () {
-    var overlay = "<div id=\"overlay\"><div id=\"overlay-content\"><a href=\"#\" class=\"closebtn\"><i class=\"fa fa-times\"> </i></a><div id=\"videoPlayer\" class=\"col1of1 responsive-container\"></div></div></div>";
+    var overlay = "<div id=\"overlay\"><div id=\"overlay-content\"><a href=\"#\" class=\"closebtn\"><i class=\"fa fa-times\"> </i></a><div id=\"overlayGuts\" class=\"col1of1 responsive-container\"></div></div></div>";
     document.body.insertAdjacentHTML('beforeend', overlay);
   };
 

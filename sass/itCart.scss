@@ -1,10 +1,4 @@
-main#main-content {
-    border: 1px solid red; 
-}
-
 section.shelves {
-    border: 1px solid green; 
-
     article.feature-box {
         div.feature-copy {
             margin-bottom: 46px;
@@ -19,3 +13,35 @@ section.shelves {
         }
     }
 }
+
+div#overlayGuts {
+    position: relative;
+    height: auto !important;
+    overflow: none !important;
+    padding-bottom: 0 !important;
+    background-color: white;
+
+    div#overlayPad {
+        padding: 1em;
+        height: 100%;
+        overflow-y: scroll;
+
+        div.overlayImg {
+            float: left;
+            padding: 0 2em 2em 0;
+        }
+
+    }
+}
+
+body.modal-open {
+    /*block scroll for mobile;
+    */
+    /*causes underlying page to jump to top;
+    */
+    /*prevents scrolling on all screens*/
+     overflow: hidden;
+     position: fixed;
+ }
+
+

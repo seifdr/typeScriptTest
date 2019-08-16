@@ -1,7 +1,7 @@
 
 // var pmg = document.body.querySelector('g#Layer_1');
 // var svg = document.getElementById('prevMedJewel');
-interface item {
+interface product {
     id: number;
     title: string;
     element: [];
@@ -11,11 +11,50 @@ interface item {
     desc: string;
 }
 
+class Item implements product {
+    id;
+    title;
+    element;
+    type;
+    categories;
+    price;
+    desc;
+
+    constructor( item ){
+        this.id = item.id;
+        this.title = item.title;
+        this.element = item.element;
+        this.type = item.type;
+        this.categories = item.categories;
+        this.price = item.price;
+        this.desc = item.desc;
+    }
+
+    outputOverlay(){
+        let output:string = `
+            <div id="overlayPad">
+                <div class="overlayImg">
+                    <img src="assets/png/300x200.png" />
+                </div>
+                <div class="overlayText">
+                    <h3>${this.title}</h3>
+                    <h6>$${ this.numberWithCommas( this.price ) }</h6>
+                    <div>${this.desc}</div>
+                </div>
+            </div>
+        `;
+        return output;
+    }
+
+    numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+}
 
 class Store {
     private apiURL = 'https://feinberg-dev.fsm.northwestern.edu/it-new/ws/purchasing-api.php';
     private containerEL:HTMLElement;
-    private items = [<item>{}];
+    private items = [<product>{}];
     private sortBy: string;
 
     constructor( containerID ) {
@@ -49,9 +88,9 @@ class Store {
 
             let shelves = `<div class="block-wrapper"><section class="shelves"><div class="feature-three-col modBreakFour">`;
 
-                this.items.forEach( ( item ) => {
+                this.items.forEach( ( item, i ) => {
                     shelves += `<article class="feature-box">
-                                    <a href="#">
+                                    <a class="overSpecs" data-id="${item.id}" data-num="${i}" href="#">
                                         <center>
                                             <img src="assets/png/300x200.png" />
                                         </center>
@@ -67,14 +106,50 @@ class Store {
 
             shelves += `</div></section></div>`;
 
-            console.log(shelves);
-
             this.containerEL.insertAdjacentHTML('beforeend', shelves);
+
+            //add event listener to all product item feature boxes
+            for( let el of document.getElementsByClassName('overSpecs') ){
+                el.addEventListener('click', (e) => {
+                    let num = el.getAttribute('data-num');
+                    this.openOverlay( num );
+                    e.preventDefault();
+                });
+            }
+        
+        }
+    }
+    openOverlay( num ){
+        let oel = document.getElementById('overlay');
+        let el = document.getElementById('overlayGuts');
+        
+        let selectedItem = new Item(this.items[num]);
+        el.innerHTML = selectedItem.outputOverlay();
+
+        oel.style.height = "100%";
+        oel.style.display = "block";
+
+        // Close modal when X btn is clicked
+        oel.getElementsByClassName('closebtn')[0].addEventListener('click', (e) => {
+            this.closeOverlay(el, oel);
+        });
+
+        // Close modal on ESC 
+        document.addEventListener('keydown', (e) => {
+            if(e.key === "Escape") {
+                this.closeOverlay(el, oel)
+            }
         }
     }
 
+    closeOverlay(el, oel){
+        el.innerHTML = "";
+        oel.style.height = "0%";
+        oel.style.display = "none";
+    }
+
     addOverlay() {
-        let overlay = `<div id="overlay"><div id="overlay-content"><a href="#" class="closebtn"><i class="fa fa-times"> </i></a><div id="videoPlayer" class="col1of1 responsive-container"></div></div></div>`;
+        let overlay = `<div id="overlay"><div id="overlay-content"><a href="#" class="closebtn"><i class="fa fa-times"> </i></a><div id="overlayGuts" class="col1of1 responsive-container"></div></div></div>`;
         document.body.insertAdjacentHTML('beforeend', overlay);
     }
 
