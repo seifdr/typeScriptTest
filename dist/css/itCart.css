@@ -23,6 +23,30 @@ div#overlayGuts {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex; }
+    div#overlayGuts div#overlayPad div.overlayImg {
+      padding-right: 1em; }
+    @media screen and (max-width: 875px) {
+      div#overlayGuts div#overlayPad {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+                flex-direction: column;
+        -webkit-box-pack: center;
+            -ms-flex-pack: center;
+                justify-content: center;
+        -ms-flex-line-pack: center;
+            align-content: center;
+        justify-items: center;
+        -webkit-box-align: center;
+            -ms-flex-align: center;
+                align-items: center; }
+        div#overlayGuts div#overlayPad div.overlayImg {
+          text-align: center;
+          padding-right: 0; }
+        div#overlayGuts div#overlayPad div.overlayText {
+          text-align: center; }
+          div#overlayGuts div#overlayPad div.overlayText div {
+            text-align: left; } }
 
 body.modal-open {
   /*block scroll for mobile;

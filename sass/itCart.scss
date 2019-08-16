@@ -1,3 +1,5 @@
+$break-large: 875px;
+
 section.shelves {
     article.feature-box {
         div.feature-copy {
@@ -37,9 +39,29 @@ div#overlayGuts {
         display: flex;
 
         div.overlayImg {
-
+            padding-right: 1em;
         }
 
+        @media screen and (max-width: $break-large) {
+            flex-direction: column;
+            justify-content: center;
+            align-content: center;
+
+            justify-items: center;
+            align-items:center;
+
+            div.overlayImg {
+                text-align: center;
+                padding-right: 0;
+            }
+
+            div.overlayText {
+                text-align:center;
+                div {
+                    text-align: left; 
+                }
+            }
+        }
     }
 }
 
