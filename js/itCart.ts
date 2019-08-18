@@ -19,9 +19,8 @@ class Item implements product {
     categories;
     price;
     desc;
-    inBasket = 0;
 
-    constructor( item ){
+    constructor( item:product ){
         this.id = item.id;
         this.title = item.title;
         this.element = item.element;
@@ -55,7 +54,87 @@ class Item implements product {
 }
 
 class Cart {
-    private basket = [<product>{}];
+    private basket = [];
+
+    addOrRemoveFromCart( item:product ){
+        
+        console.log('Incoming item:', item );
+
+        let mappedArr = [];
+        let positionInBasket:number;
+
+        if( this.basket.length > 0 ){
+    
+            this.basket.forEach( (basketItem, i ) => {
+                if ( basketItem.id === item.id ){
+                    positionInBasket = i;
+                }
+            });
+
+            if( positionInBasket === -1 || positionInBasket === undefined ){
+                return this.addToBasket(item);
+            } else {
+                console.log("Already in cart. Remove");
+                const deletedItem = this.basket.splice(positionInBasket, 1);
+                console.log( this.basket );
+                return false;
+            }
+
+        } else {
+            if( item.id != null || item.id != null ){
+                return this.addToBasket(item);
+            }
+        }
+    
+    }
+
+    addToBasket( item:product ){
+        this.basket.push( item );
+        console.log( "Basket: ", this.basket );
+        return true;
+    }
+
+    inBasket( incomingID ){
+        // let mappedArr = this.basket.map( ( x ) => {
+        //     return x['id'];
+        // });
+
+        this.basket.forEach( (basketItem, i ) => {
+            return ( basketItem.id === incomingID )? i : false;
+        });
+    }
+
+    totalCart(){
+        if( this.basket.length > 0 ){
+
+            let cartTotal = 0;
+
+            this.basket.forEach( (item) => {
+                cartTotal += item.price;
+            });
+
+            return cartTotal;
+        }
+    }
+
+    countCart(){
+        return this.basket.length;
+    }
+
+    setCookie(name, value, days){
+        let d = new Date;
+        d.setTime(d.getTime() + 24*60*60*1000*days);
+        document.cookie = name + "=" + value + ";path=/;expires=" + d.toUTCString();
+    }
+
+    getCookie(name) {
+        let v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+        return v ? v[2] : null;
+    }
+
+    deleteCookie(name){
+        this.setCookie(name, '', -1);
+    }
 }
 
 class Store {
@@ -63,8 +142,10 @@ class Store {
     private containerEL:HTMLElement;
     private items = [<product>{}];
     private sortBy: string;
+    private cart:Cart;
 
-    constructor( containerID ) {
+    constructor( containerID, cart ) {
+        this.cart = cart;
         this.containerEL = document.getElementById( containerID );
         this.stockTheShelves();
     }
@@ -80,7 +161,7 @@ class Store {
             if(result.length > 0){
                 // this.items = myJson.items;
 
-                myJson.items.forEach( (row, i) => {
+                myJson.items.forEach( (row:product, i) => {
                     this.items[i] = new Item( row );
                 });
 
@@ -100,18 +181,16 @@ class Store {
             let shelves = `<div class="block-wrapper"><section class="shelves"><div class="feature-three-col modBreakFour">`;
 
                 this.items.forEach( ( item, i ) => {
-                    shelves += `<article class="feature-box">
-                                    <a class="overSpecs" data-id="${item.id}" data-num="${i}" href="#">
-                                        <center>
-                                            <img src="assets/png/300x200.png" />
-                                        </center>
-                                        <div class="feature-copy">
-                                            <h6>${item.title}</h6>
-                                            <p>$${ this.numberWithCommas(item.price) }</p>
-                                            <a class="specs" href="#">Read product specs</a>
-                                        </div>
-                                    </a>
-                                    <a class="button" href="publications/index.html">Add To Cart</a>
+                    shelves += `<article class="feature-box prodBox" data-id="${item.id}" data-num="${i}">   
+                                    <center>
+                                        <img src="assets/png/300x200.png" />
+                                    </center>
+                                    <div class="feature-copy">
+                                        <h6>${item.title}</h6>
+                                        <p>$${ this.numberWithCommas(item.price) }</p>
+                                        <a class="specs" data-id="${item.id}" href="#">Read product specs</a>
+                                    </div>
+                                    <a class="button atcBtn" data-num="${i}" href="publications/index.html">Add To Cart</a>
                                 </article>`;
                 });
 
@@ -120,21 +199,42 @@ class Store {
             this.containerEL.insertAdjacentHTML('beforeend', shelves);
 
             //add event listener to all product item feature boxes
-            for( let el of document.getElementsByClassName('overSpecs') ){
+            for( let el of document.getElementsByClassName('prodBox') ){
                 el.addEventListener('click', (e) => {
                     let num = el.getAttribute('data-num');
                     this.openOverlay( num );
                     e.preventDefault();
                 });
             }
+
+            for( let elBtn of document.getElementsByClassName('atcBtn') ){
+                elBtn.addEventListener('click', (e) => {
+                    
+                    let num = elBtn.getAttribute('data-num');
+                    let cartResult = this.cart.addOrRemoveFromCart( this.items[num] );
+
+                    if( cartResult ){
+                        elBtn.classList.add('onCart');
+                        elBtn.textContent = 'Remove From Cart';
+                    } else {
+                        elBtn.classList.remove('onCart');
+                        elBtn.textContent = 'Add to Cart';
+                    }
+
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                });
+            }    
         }
         this.addOverlay();
     }
     openOverlay( num ){
         let oel = document.getElementById('overlay');
         let el = document.getElementById('overlayGuts');
-        
+
         let selectedItem = new Item(this.items[num]);
+
         el.innerHTML = selectedItem.outputOverlay();
 
         oel.style.height = "100%";
@@ -176,7 +276,11 @@ class Store {
 
 
 window.onload=function() {
-    let store = new Store('main-content');
+    let cart = new Cart();
+
+    console.log( cart.basket )
+
+    let store = new Store('main-content', cart );
 };
 
 

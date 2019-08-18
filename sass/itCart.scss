@@ -1,7 +1,11 @@
 $break-large: 875px;
 
+$fsmOrange: #df6426;
+
 section.shelves {
-    article.feature-box {
+    article.prodBox {
+        cursor: pointer;
+
         div.feature-copy {
             margin-bottom: 46px;
 
@@ -13,6 +17,11 @@ section.shelves {
                 text-decoration: underline;
             }
         }
+    
+    a.onCart {
+        background-color: $fsmOrange !important;
+    }
+
     }
 }
 

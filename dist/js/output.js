@@ -143,7 +143,6 @@ var Item =
 /** @class */
 function () {
   function Item(item) {
-    this.inBasket = 0;
     this.id = item.id;
     this.title = item.title;
     this.element = item.element;
@@ -169,8 +168,79 @@ var Cart =
 /** @class */
 function () {
   function Cart() {
-    this.basket = [{}];
+    this.basket = [];
   }
+
+  Cart.prototype.addOrRemoveFromCart = function (item) {
+    console.log('Incoming item:', item);
+    var mappedArr = [];
+    var positionInBasket;
+
+    if (this.basket.length > 0) {
+      this.basket.forEach(function (basketItem, i) {
+        if (basketItem.id === item.id) {
+          positionInBasket = i;
+        }
+      });
+
+      if (positionInBasket === -1 || positionInBasket === undefined) {
+        return this.addToBasket(item);
+      } else {
+        console.log("Already in cart. Remove");
+        var deletedItem = this.basket.splice(positionInBasket, 1);
+        console.log(this.basket);
+        return false;
+      }
+    } else {
+      if (item.id != null || item.id != null) {
+        return this.addToBasket(item);
+      }
+    }
+  };
+
+  Cart.prototype.addToBasket = function (item) {
+    this.basket.push(item);
+    console.log("Basket: ", this.basket);
+    return true;
+  };
+
+  Cart.prototype.inBasket = function (incomingID) {
+    // let mappedArr = this.basket.map( ( x ) => {
+    //     return x['id'];
+    // });
+    this.basket.forEach(function (basketItem, i) {
+      return basketItem.id === incomingID ? i : false;
+    });
+  };
+
+  Cart.prototype.totalCart = function () {
+    if (this.basket.length > 0) {
+      var cartTotal_1 = 0;
+      this.basket.forEach(function (item) {
+        cartTotal_1 += item.price;
+      });
+      return cartTotal_1;
+    }
+  };
+
+  Cart.prototype.countCart = function () {
+    return this.basket.length;
+  };
+
+  Cart.prototype.setCookie = function (name, value, days) {
+    var d = new Date();
+    d.setTime(d.getTime() + 24 * 60 * 60 * 1000 * days);
+    document.cookie = name + "=" + value + ";path=/;expires=" + d.toUTCString();
+  };
+
+  Cart.prototype.getCookie = function (name) {
+    var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+    return v ? v[2] : null;
+  };
+
+  Cart.prototype.deleteCookie = function (name) {
+    this.setCookie(name, '', -1);
+  };
 
   return Cart;
 }();
@@ -178,9 +248,10 @@ function () {
 var Store =
 /** @class */
 function () {
-  function Store(containerID) {
+  function Store(containerID, cart) {
     this.apiURL = 'https://feinberg-dev.fsm.northwestern.edu/it-new/ws/purchasing-api.php';
     this.items = [{}];
+    this.cart = cart;
     this.containerEL = document.getElementById(containerID);
     this.stockTheShelves();
   }
@@ -208,24 +279,24 @@ function () {
 
   Store.prototype.stockTheShelves = function () {
     return __awaiter(this, void 0, void 0, function () {
-      var result, shelves_1, _loop_1, _i, _a, el;
+      var result, shelves_1, _loop_1, _i, _a, el, _loop_2, _b, _c, elBtn;
 
       var _this = this;
 
-      return __generator(this, function (_b) {
-        switch (_b.label) {
+      return __generator(this, function (_d) {
+        switch (_d.label) {
           case 0:
             return [4
             /*yield*/
             , this.loadProducts()];
 
           case 1:
-            result = _b.sent();
+            result = _d.sent();
 
             if (result) {
               shelves_1 = "<div class=\"block-wrapper\"><section class=\"shelves\"><div class=\"feature-three-col modBreakFour\">";
               this.items.forEach(function (item, i) {
-                shelves_1 += "<article class=\"feature-box\">\n                                    <a class=\"overSpecs\" data-id=\"" + item.id + "\" data-num=\"" + i + "\" href=\"#\">\n                                        <center>\n                                            <img src=\"assets/png/300x200.png\" />\n                                        </center>\n                                        <div class=\"feature-copy\">\n                                            <h6>" + item.title + "</h6>\n                                            <p>$" + _this.numberWithCommas(item.price) + "</p>\n                                            <a class=\"specs\" href=\"#\">Read product specs</a>\n                                        </div>\n                                    </a>\n                                    <a class=\"button\" href=\"publications/index.html\">Add To Cart</a>\n                                </article>";
+                shelves_1 += "<article class=\"feature-box prodBox\" data-id=\"" + item.id + "\" data-num=\"" + i + "\">   \n                                    <center>\n                                        <img src=\"assets/png/300x200.png\" />\n                                    </center>\n                                    <div class=\"feature-copy\">\n                                        <h6>" + item.title + "</h6>\n                                        <p>$" + _this.numberWithCommas(item.price) + "</p>\n                                        <a class=\"specs\" data-id=\"" + item.id + "\" href=\"#\">Read product specs</a>\n                                    </div>\n                                    <a class=\"button atcBtn\" data-num=\"" + i + "\" href=\"publications/index.html\">Add To Cart</a>\n                                </article>";
               });
               shelves_1 += "</div></section></div>";
               this.containerEL.insertAdjacentHTML('beforeend', shelves_1);
@@ -241,10 +312,35 @@ function () {
               }; //add event listener to all product item feature boxes
 
 
-              for (_i = 0, _a = document.getElementsByClassName('overSpecs'); _i < _a.length; _i++) {
+              for (_i = 0, _a = document.getElementsByClassName('prodBox'); _i < _a.length; _i++) {
                 el = _a[_i];
 
                 _loop_1(el);
+              }
+
+              _loop_2 = function _loop_2(elBtn) {
+                elBtn.addEventListener('click', function (e) {
+                  var num = elBtn.getAttribute('data-num');
+
+                  var cartResult = _this.cart.addOrRemoveFromCart(_this.items[num]);
+
+                  if (cartResult) {
+                    elBtn.classList.add('onCart');
+                    elBtn.textContent = 'Remove From Cart';
+                  } else {
+                    elBtn.classList.remove('onCart');
+                    elBtn.textContent = 'Add to Cart';
+                  }
+
+                  e.preventDefault();
+                  e.stopPropagation();
+                });
+              };
+
+              for (_b = 0, _c = document.getElementsByClassName('atcBtn'); _b < _c.length; _b++) {
+                elBtn = _c[_b];
+
+                _loop_2(elBtn);
               }
             }
 
@@ -299,5 +395,7 @@ function () {
 }();
 
 window.onload = function () {
-  var store = new Store('main-content');
+  var cart = new Cart();
+  console.log(cart.basket);
+  var store = new Store('main-content', cart);
 }; // <section class="contain-1120"><div class="feature-three-col width-1120 policies"><article class="feature-box"><a href="information-security/index.html" title="Information Security"><div class="feature-copy"><div class="iBox"><i class="fas fa-shield-alt"></i></div><h4>Information Security</h4><p>Get details on information protection required by Feinberg</p></div></a></article>

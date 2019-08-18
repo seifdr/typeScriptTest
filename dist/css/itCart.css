@@ -1,9 +1,13 @@
-section.shelves article.feature-box div.feature-copy {
-  margin-bottom: 46px; }
-  section.shelves article.feature-box div.feature-copy a:hover {
-    text-decoration: none; }
-  section.shelves article.feature-box div.feature-copy a.specs:hover {
-    text-decoration: underline; }
+section.shelves article.prodBox {
+  cursor: pointer; }
+  section.shelves article.prodBox div.feature-copy {
+    margin-bottom: 46px; }
+    section.shelves article.prodBox div.feature-copy a:hover {
+      text-decoration: none; }
+    section.shelves article.prodBox div.feature-copy a.specs:hover {
+      text-decoration: underline; }
+  section.shelves article.prodBox a.onCart {
+    background-color: #df6426 !important; }
 
 div#overlay-content {
   max-width: 750px; }
