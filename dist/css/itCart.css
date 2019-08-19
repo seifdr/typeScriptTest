@@ -1,3 +1,16 @@
+#cartContainer {
+  position: fixed;
+  height: 75px;
+  width: 75px;
+  bottom: 2.5%;
+  right: 2.5%;
+  background-color: #0082bf;
+  border-radius: 100%;
+  z-index: 500;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex; }
+
 section.shelves article.prodBox {
   cursor: pointer; }
   section.shelves article.prodBox div.feature-copy {
@@ -8,6 +21,8 @@ section.shelves article.prodBox {
       text-decoration: underline; }
   section.shelves article.prodBox a.onCart {
     background-color: #df6426 !important; }
+    section.shelves article.prodBox a.onCart:before {
+      background-color: #daa88f !important; }
 
 div#overlay-content {
   max-width: 750px; }

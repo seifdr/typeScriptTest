@@ -169,10 +169,11 @@ var Cart =
 function () {
   function Cart() {
     this.basket = [];
+    this.makeCartInBrowser();
   }
 
   Cart.prototype.addOrRemoveFromCart = function (item) {
-    console.log('Incoming item:', item);
+    // console.log('Incoming item:', item );
     var mappedArr = [];
     var positionInBasket;
 
@@ -186,9 +187,9 @@ function () {
       if (positionInBasket === -1 || positionInBasket === undefined) {
         return this.addToBasket(item);
       } else {
-        console.log("Already in cart. Remove");
-        var deletedItem = this.basket.splice(positionInBasket, 1);
-        console.log(this.basket);
+        // console.log("Already in cart. Remove");
+        var deletedItem = this.basket.splice(positionInBasket, 1); // console.log( this.basket );
+
         return false;
       }
     } else {
@@ -199,8 +200,8 @@ function () {
   };
 
   Cart.prototype.addToBasket = function (item) {
-    this.basket.push(item);
-    console.log("Basket: ", this.basket);
+    this.basket.push(item); // console.log( "Basket: ", this.basket );
+
     return true;
   };
 
@@ -240,6 +241,11 @@ function () {
 
   Cart.prototype.deleteCookie = function (name) {
     this.setCookie(name, '', -1);
+  };
+
+  Cart.prototype.makeCartInBrowser = function () {
+    var x = "<div id=\"cartContainer\">\n                    <i class=\"fas fa-shopping-cart\"></i>\n                </div>";
+    document.body.insertAdjacentHTML('afterbegin', x);
   };
 
   return Cart;
@@ -296,7 +302,7 @@ function () {
             if (result) {
               shelves_1 = "<div class=\"block-wrapper\"><section class=\"shelves\"><div class=\"feature-three-col modBreakFour\">";
               this.items.forEach(function (item, i) {
-                shelves_1 += "<article class=\"feature-box prodBox\" data-id=\"" + item.id + "\" data-num=\"" + i + "\">   \n                                    <center>\n                                        <img src=\"assets/png/300x200.png\" />\n                                    </center>\n                                    <div class=\"feature-copy\">\n                                        <h6>" + item.title + "</h6>\n                                        <p>$" + _this.numberWithCommas(item.price) + "</p>\n                                        <a class=\"specs\" data-id=\"" + item.id + "\" href=\"#\">Read product specs</a>\n                                    </div>\n                                    <a class=\"button atcBtn\" data-num=\"" + i + "\" href=\"publications/index.html\">Add To Cart</a>\n                                </article>";
+                shelves_1 += "<article class=\"feature-box prodBox\" data-id=\"" + item.id + "\" data-num=\"" + i + "\">   \n                                    <center>\n                                        <img src=\"assets/png/300x200.png\" />\n                                    </center>\n                                    <div class=\"feature-copy\">\n                                        <h6>" + item.title + "</h6>\n                                        <p>$" + _this.numberWithCommas(item.price) + "</p>\n                                        <a class=\"specs\" data-id=\"" + item.id + "\" href=\"#\">Read product specs</a>\n                                    </div>\n                                    <a class=\"button atcBtn\" data-num=\"" + i + "\" data-isCartBtn=\"true\" href=\"#\">Add To Cart</a>\n                                </article>";
               });
               shelves_1 += "</div></section></div>";
               this.containerEL.insertAdjacentHTML('beforeend', shelves_1);
@@ -327,9 +333,11 @@ function () {
                   if (cartResult) {
                     elBtn.classList.add('onCart');
                     elBtn.textContent = 'Remove From Cart';
+                    elBtn.blur();
                   } else {
                     elBtn.classList.remove('onCart');
                     elBtn.textContent = 'Add to Cart';
+                    elBtn.blur();
                   }
 
                   e.preventDefault();
@@ -395,7 +403,7 @@ function () {
 }();
 
 window.onload = function () {
-  var cart = new Cart();
-  console.log(cart.basket);
-  var store = new Store('main-content', cart);
+  var cart = new Cart(); // console.log( cart.basket )
+
+  var store = new Store('shopping-cart', cart);
 }; // <section class="contain-1120"><div class="feature-three-col width-1120 policies"><article class="feature-box"><a href="information-security/index.html" title="Information Security"><div class="feature-copy"><div class="iBox"><i class="fas fa-shield-alt"></i></div><h4>Information Security</h4><p>Get details on information protection required by Feinberg</p></div></a></article>

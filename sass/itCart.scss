@@ -1,6 +1,27 @@
 $break-large: 875px;
 
-$fsmOrange: #df6426;
+$fsmOrange:      #df6426;
+$fsmOrangeHover: #daa88f; 
+$fsmElectricBlue: #0082bf;
+
+// @media screen and (min-width: 1000px) {
+	// #cartContainer {
+	// 	max-width: 1120px;
+	// 	 margin: 0 auto;	 
+    // }
+    
+    #cartContainer {
+        position: fixed;
+        height: 75px;
+        width: 75px;
+        bottom: 2.5%;
+        right: 2.5%;
+        background-color: $fsmElectricBlue;
+        border-radius: 100%;
+        z-index: 500;
+        display: flex;
+    }
+// }
 
 section.shelves {
     article.prodBox {
@@ -20,7 +41,11 @@ section.shelves {
     
     a.onCart {
         background-color: $fsmOrange !important;
+        &:before  {
+            background-color: $fsmOrangeHover !important;
+        }
     }
+
 
     }
 }

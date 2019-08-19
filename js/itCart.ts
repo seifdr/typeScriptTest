@@ -56,9 +56,13 @@ class Item implements product {
 class Cart {
     private basket = [];
 
+    constructor() {
+        this.makeCartInBrowser();
+    }
+
     addOrRemoveFromCart( item:product ){
         
-        console.log('Incoming item:', item );
+        // console.log('Incoming item:', item );
 
         let mappedArr = [];
         let positionInBasket:number;
@@ -74,9 +78,9 @@ class Cart {
             if( positionInBasket === -1 || positionInBasket === undefined ){
                 return this.addToBasket(item);
             } else {
-                console.log("Already in cart. Remove");
+                // console.log("Already in cart. Remove");
                 const deletedItem = this.basket.splice(positionInBasket, 1);
-                console.log( this.basket );
+                // console.log( this.basket );
                 return false;
             }
 
@@ -90,7 +94,7 @@ class Cart {
 
     addToBasket( item:product ){
         this.basket.push( item );
-        console.log( "Basket: ", this.basket );
+        // console.log( "Basket: ", this.basket );
         return true;
     }
 
@@ -134,6 +138,15 @@ class Cart {
 
     deleteCookie(name){
         this.setCookie(name, '', -1);
+    }
+
+    makeCartInBrowser(){
+        let x = `<div id="cartContainer">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>`;
+
+        document.body.insertAdjacentHTML('afterbegin', x);
+        
     }
 }
 
@@ -190,7 +203,7 @@ class Store {
                                         <p>$${ this.numberWithCommas(item.price) }</p>
                                         <a class="specs" data-id="${item.id}" href="#">Read product specs</a>
                                     </div>
-                                    <a class="button atcBtn" data-num="${i}" href="publications/index.html">Add To Cart</a>
+                                    <a class="button atcBtn" data-num="${i}" data-isCartBtn="true" href="#">Add To Cart</a>
                                 </article>`;
                 });
 
@@ -201,9 +214,9 @@ class Store {
             //add event listener to all product item feature boxes
             for( let el of document.getElementsByClassName('prodBox') ){
                 el.addEventListener('click', (e) => {
-                    let num = el.getAttribute('data-num');
-                    this.openOverlay( num );
-                    e.preventDefault();
+                        let num = el.getAttribute('data-num');
+                        this.openOverlay( num );
+                        e.preventDefault();
                 });
             }
 
@@ -216,9 +229,11 @@ class Store {
                     if( cartResult ){
                         elBtn.classList.add('onCart');
                         elBtn.textContent = 'Remove From Cart';
+                        elBtn.blur();
                     } else {
                         elBtn.classList.remove('onCart');
                         elBtn.textContent = 'Add to Cart';
+                        elBtn.blur();
                     }
 
                     e.preventDefault();
@@ -278,9 +293,9 @@ class Store {
 window.onload=function() {
     let cart = new Cart();
 
-    console.log( cart.basket )
+    // console.log( cart.basket )
 
-    let store = new Store('main-content', cart );
+    let store = new Store('shopping-cart', cart );
 };
 
 
