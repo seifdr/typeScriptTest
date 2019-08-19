@@ -55,8 +55,10 @@ class Item implements product {
 
 class Cart {
     private basket = [];
+    private modal: Modal;
 
-    constructor() {
+    constructor( modal ) {
+        this.modal = modal;
         this.makeCartInBrowser();
     }
 
@@ -141,11 +143,19 @@ class Cart {
     }
 
     makeCartInBrowser(){
-        let x = `<div id="cartContainer">
-                    <i class="fas fa-shopping-cart"></i>
+        let x = `<div id="cart">
+                    <div>
+                        <div id="cartLeft">
+                            <p>2 items <br />
+                            Total: $ 3,696.78</p>
+                        </div>
+                        <div id="cartRight">
+                            <a class="button">View Cart</a>
+                        </div>
+                    </div>
                 </div>`;
 
-        document.body.insertAdjacentHTML('afterbegin', x);
+        document.getElementById('headerWrapper').insertAdjacentHTML('afterbegin', x);
         
     }
 }
@@ -156,8 +166,10 @@ class Store {
     private items = [<product>{}];
     private sortBy: string;
     private cart:Cart;
+    private modal: Modal;
 
-    constructor( containerID, cart ) {
+    constructor( containerID, cart, modal ) {
+        this.modal = modal;
         this.cart = cart;
         this.containerEL = document.getElementById( containerID );
         this.stockTheShelves();
@@ -215,7 +227,13 @@ class Store {
             for( let el of document.getElementsByClassName('prodBox') ){
                 el.addEventListener('click', (e) => {
                         let num = el.getAttribute('data-num');
-                        this.openOverlay( num );
+
+                        // let selectedItem = new Item(this.items[num]);
+                        // el.innerHTML = selectedItem.outputOverlay();
+
+                        let output = this.items[num].outputOverlay();
+
+                        this.modal.openOverlay( output );
                         e.preventDefault();
                 });
             }
@@ -244,13 +262,31 @@ class Store {
         }
         this.addOverlay();
     }
-    openOverlay( num ){
+
+
+    numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+}
+
+class Modal {
+
+    constructor(){
+        this.addOverlay();
+    }
+
+    addOverlay() {
+        let overlay = `<div id="overlay"><div id="overlay-content"><a href="#" class="closebtn"><i class="fa fa-times"> </i></a><div id="overlayGuts" class="col1of1 responsive-container"></div></div></div>`;
+        
+        document.getElementById('main-content').insertAdjacentHTML('beforeend', overlay);
+    }
+
+    openOverlay( output ){
         let oel = document.getElementById('overlay');
         let el = document.getElementById('overlayGuts');
 
-        let selectedItem = new Item(this.items[num]);
-
-        el.innerHTML = selectedItem.outputOverlay();
+        el.innerHTML = output;
 
         oel.style.height = "100%";
         oel.style.display = "block";
@@ -277,25 +313,17 @@ class Store {
         document.body.classList.remove('modal-open');
     }
 
-    addOverlay() {
-        let overlay = `<div id="overlay"><div id="overlay-content"><a href="#" class="closebtn"><i class="fa fa-times"> </i></a><div id="overlayGuts" class="col1of1 responsive-container"></div></div></div>`;
-        
-        this.containerEL.insertAdjacentHTML('beforeend', overlay);
-    }
-
-    numberWithCommas(x) {
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-
 }
 
 
 window.onload=function() {
-    let cart = new Cart();
+    let shoppingModal = new Modal();
+
+    let shoppingCart = new Cart( shoppingModal );
 
     // console.log( cart.basket )
 
-    let store = new Store('shopping-cart', cart );
+    let store = new Store('shopping-cart', shoppingCart, shoppingModal );
 };
 
 

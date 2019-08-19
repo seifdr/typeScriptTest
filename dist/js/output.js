@@ -167,8 +167,9 @@ function () {
 var Cart =
 /** @class */
 function () {
-  function Cart() {
+  function Cart(modal) {
     this.basket = [];
+    this.modal = modal;
     this.makeCartInBrowser();
   }
 
@@ -244,8 +245,8 @@ function () {
   };
 
   Cart.prototype.makeCartInBrowser = function () {
-    var x = "<div id=\"cartContainer\">\n                    <i class=\"fas fa-shopping-cart\"></i>\n                </div>";
-    document.body.insertAdjacentHTML('afterbegin', x);
+    var x = "<div id=\"cart\">\n                    <div>\n                        <div id=\"cartLeft\">\n                            <p>2 items <br />\n                            Total: $ 3,696.78</p>\n                        </div>\n                        <div id=\"cartRight\">\n                            <a class=\"button\">View Cart</a>\n                        </div>\n                    </div>\n                </div>";
+    document.getElementById('headerWrapper').insertAdjacentHTML('afterbegin', x);
   };
 
   return Cart;
@@ -254,9 +255,10 @@ function () {
 var Store =
 /** @class */
 function () {
-  function Store(containerID, cart) {
+  function Store(containerID, cart, modal) {
     this.apiURL = 'https://feinberg-dev.fsm.northwestern.edu/it-new/ws/purchasing-api.php';
     this.items = [{}];
+    this.modal = modal;
     this.cart = cart;
     this.containerEL = document.getElementById(containerID);
     this.stockTheShelves();
@@ -309,9 +311,12 @@ function () {
 
               _loop_1 = function _loop_1(el) {
                 el.addEventListener('click', function (e) {
-                  var num = el.getAttribute('data-num');
+                  var num = el.getAttribute('data-num'); // let selectedItem = new Item(this.items[num]);
+                  // el.innerHTML = selectedItem.outputOverlay();
 
-                  _this.openOverlay(num);
+                  var output = _this.items[num].outputOverlay();
+
+                  _this.modal.openOverlay(output);
 
                   e.preventDefault();
                 });
@@ -361,13 +366,31 @@ function () {
     });
   };
 
-  Store.prototype.openOverlay = function (num) {
+  Store.prototype.numberWithCommas = function (x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  return Store;
+}();
+
+var Modal =
+/** @class */
+function () {
+  function Modal() {
+    this.addOverlay();
+  }
+
+  Modal.prototype.addOverlay = function () {
+    var overlay = "<div id=\"overlay\"><div id=\"overlay-content\"><a href=\"#\" class=\"closebtn\"><i class=\"fa fa-times\"> </i></a><div id=\"overlayGuts\" class=\"col1of1 responsive-container\"></div></div></div>";
+    document.getElementById('main-content').insertAdjacentHTML('beforeend', overlay);
+  };
+
+  Modal.prototype.openOverlay = function (output) {
     var _this = this;
 
     var oel = document.getElementById('overlay');
     var el = document.getElementById('overlayGuts');
-    var selectedItem = new Item(this.items[num]);
-    el.innerHTML = selectedItem.outputOverlay();
+    el.innerHTML = output;
     oel.style.height = "100%";
     oel.style.display = "block";
     document.body.classList.add('modal-open'); // Close modal when X btn is clicked
@@ -383,27 +406,19 @@ function () {
     });
   };
 
-  Store.prototype.closeOverlay = function (el, oel) {
+  Modal.prototype.closeOverlay = function (el, oel) {
     el.innerHTML = "";
     oel.style.height = "0%";
     oel.style.display = "none";
     document.body.classList.remove('modal-open');
   };
 
-  Store.prototype.addOverlay = function () {
-    var overlay = "<div id=\"overlay\"><div id=\"overlay-content\"><a href=\"#\" class=\"closebtn\"><i class=\"fa fa-times\"> </i></a><div id=\"overlayGuts\" class=\"col1of1 responsive-container\"></div></div></div>";
-    this.containerEL.insertAdjacentHTML('beforeend', overlay);
-  };
-
-  Store.prototype.numberWithCommas = function (x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  };
-
-  return Store;
+  return Modal;
 }();
 
 window.onload = function () {
-  var cart = new Cart(); // console.log( cart.basket )
+  var shoppingModal = new Modal();
+  var shoppingCart = new Cart(shoppingModal); // console.log( cart.basket )
 
-  var store = new Store('shopping-cart', cart);
+  var store = new Store('shopping-cart', shoppingCart, shoppingModal);
 }; // <section class="contain-1120"><div class="feature-three-col width-1120 policies"><article class="feature-box"><a href="information-security/index.html" title="Information Security"><div class="feature-copy"><div class="iBox"><i class="fas fa-shield-alt"></i></div><h4>Information Security</h4><p>Get details on information protection required by Feinberg</p></div></a></article>
