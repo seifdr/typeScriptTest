@@ -1,4 +1,5 @@
 #cart {
+  display: none;
   height: auto;
   background-color: #514689; }
   #cart > div {

@@ -148,7 +148,7 @@ function () {
     this.element = item.element;
     this.type = item.type;
     this.categories = item.categories;
-    this.price = item.price;
+    this.price = this.removeSpecialChars(item.price);
     this.desc = item.desc;
   }
 
@@ -161,6 +161,11 @@ function () {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
+  Item.prototype.removeSpecialChars = function (inputVal) {
+    //allow periods
+    return inputVal.replace(/[`~!@#$%^&*()_|+\-=?;:'",<>\{\}\[\]\\\/]/gi, '');
+  };
+
   return Item;
 }();
 
@@ -169,14 +174,22 @@ var Cart =
 function () {
   function Cart(modal) {
     this.basket = [];
+    this.mappedBasket = [];
+    this.cartCount = 0;
+    this.cartTotal = 0;
     this.modal = modal;
     this.makeCartInBrowser();
   }
 
+  Cart.prototype.mapCart = function () {
+    this.mappedBasket = this.basket.map(function (row) {
+      return row.id;
+    });
+  };
+
   Cart.prototype.addOrRemoveFromCart = function (item) {
-    // console.log('Incoming item:', item );
-    var mappedArr = [];
     var positionInBasket;
+    console.log(item);
 
     if (this.basket.length > 0) {
       this.basket.forEach(function (basketItem, i) {
@@ -184,25 +197,34 @@ function () {
           positionInBasket = i;
         }
       });
+      console.log(positionInBasket);
 
       if (positionInBasket === -1 || positionInBasket === undefined) {
-        return this.addToBasket(item);
+        var result = this.addToBasket(item);
+        this.mapCart();
+        this.updateCartTotalAndCount();
+        return result;
       } else {
         // console.log("Already in cart. Remove");
         var deletedItem = this.basket.splice(positionInBasket, 1); // console.log( this.basket );
 
+        this.mapCart();
+        this.updateCartTotalAndCount();
         return false;
       }
     } else {
       if (item.id != null || item.id != null) {
-        return this.addToBasket(item);
+        var result = this.addToBasket(item);
+        this.mapCart();
+        this.updateCartTotalAndCount();
+        return result;
       }
     }
   };
 
   Cart.prototype.addToBasket = function (item) {
-    this.basket.push(item); // console.log( "Basket: ", this.basket );
-
+    this.basket.push(item);
+    console.log("Basket: ", this.basket);
     return true;
   };
 
@@ -216,17 +238,45 @@ function () {
   };
 
   Cart.prototype.totalCart = function () {
+    var _this = this;
+
     if (this.basket.length > 0) {
       var cartTotal_1 = 0;
       this.basket.forEach(function (item) {
-        cartTotal_1 += item.price;
+        console.log('Adding: ', parseFloat(_this.removeSpecialChars(item.price)));
+        cartTotal_1 += parseFloat(_this.removeSpecialChars(item.price));
       });
       return cartTotal_1;
     }
   };
 
   Cart.prototype.countCart = function () {
+    console.log('Cart count: ', this.cartCount);
     return this.basket.length;
+  };
+
+  Cart.prototype.updateCartTotalAndCount = function () {
+    this.cartTotal = this.totalCart();
+    this.cartCount = this.countCart();
+
+    if (this.cartCount > 0) {
+      document.getElementById('cart').style.display = "block";
+      var cartInfoTxt = '';
+      console.log('Cart Count: ', this.cartCount);
+
+      if (this.cartCount >= 2) {
+        cartInfoTxt += "<p>" + this.cartCount + " items<br />";
+      } else {
+        cartInfoTxt += "<p>" + this.cartCount + " item<br />";
+      }
+
+      cartInfoTxt += "Total: $" + this.numberWithCommas(this.cartTotal) + "</p>";
+      document.getElementById('cartLeft').innerHTML = cartInfoTxt;
+      document.getElementById('nav').style.top = "150px";
+    } else {
+      document.getElementById('cart').style.display = "none";
+      document.getElementById('nav').style.top = "75px";
+    }
   };
 
   Cart.prototype.setCookie = function (name, value, days) {
@@ -245,8 +295,22 @@ function () {
   };
 
   Cart.prototype.makeCartInBrowser = function () {
-    var x = "<div id=\"cart\">\n                    <div>\n                        <div id=\"cartLeft\">\n                            <p>2 items <br />\n                            Total: $ 3,696.78</p>\n                        </div>\n                        <div id=\"cartRight\">\n                            <a class=\"button\">View Cart</a>\n                        </div>\n                    </div>\n                </div>";
+    var _this = this;
+
+    var x = "<div id=\"cart\">\n                    <div>\n                        <div id=\"cartLeft\"></div>\n                        <div id=\"cartRight\">\n                            <a id=\"viewCart\" class=\"button\">View Cart</a>\n                        </div>\n                    </div>\n                </div>";
     document.getElementById('headerWrapper').insertAdjacentHTML('afterbegin', x);
+    document.getElementById('viewCart').addEventListener('click', function (e) {
+      _this.modal.openOverlay('<p>Hello There</p>');
+    });
+  };
+
+  Cart.prototype.numberWithCommas = function (x) {
+    return x.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  Cart.prototype.removeSpecialChars = function (inputVal) {
+    //allow periods
+    return inputVal.replace(/[`~!@#$%^&*()_|+\-=?;:'",<>\{\}\[\]\\\/]/gi, '');
   };
 
   return Cart;
@@ -314,6 +378,8 @@ function () {
                   var num = el.getAttribute('data-num'); // let selectedItem = new Item(this.items[num]);
                   // el.innerHTML = selectedItem.outputOverlay();
 
+                  console.log(_this.items[num]);
+
                   var output = _this.items[num].outputOverlay();
 
                   _this.modal.openOverlay(output);
@@ -357,7 +423,6 @@ function () {
               }
             }
 
-            this.addOverlay();
             return [2
             /*return*/
             ];
@@ -368,6 +433,11 @@ function () {
 
   Store.prototype.numberWithCommas = function (x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  Store.prototype.removeSpecialChars = function (inputVal) {
+    //allow periods
+    return inputVal.replace(/[`~!@#$%^&*()_|+\-=?;:'",<>\{\}\[\]\\\/]/gi, '');
   };
 
   return Store;

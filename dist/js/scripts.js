@@ -17,7 +17,7 @@ class Item implements product {
     element;
     type;
     categories;
-    price;
+    price:number;
     desc;
 
     constructor( item:product ){
@@ -26,7 +26,7 @@ class Item implements product {
         this.element = item.element;
         this.type = item.type;
         this.categories = item.categories;
-        this.price = item.price;
+        this.price = this.removeSpecialChars( item.price );
         this.desc = item.desc;
     }
 
@@ -51,10 +51,20 @@ class Item implements product {
     numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
+
+    removeSpecialChars( inputVal ){
+        //allow periods
+        return inputVal.replace(/[`~!@#$%^&*()_|+\-=?;:'",<>\{\}\[\]\\\/]/gi, '');
+    }
 }
 
 class Cart {
     private basket = [];
+    private mappedBasket = [];
+
+    public cartCount: number = 0;
+    public cartTotal: number = 0;
+
     private modal: Modal;
 
     constructor( modal ) {
@@ -62,12 +72,16 @@ class Cart {
         this.makeCartInBrowser();
     }
 
-    addOrRemoveFromCart( item:product ){
-        
-        // console.log('Incoming item:', item );
+    mapCart(){
+        this.mappedBasket = this.basket.map( ( row:Item ) => {
+            return row.id;
+        });
+    }
 
-        let mappedArr = [];
+    addOrRemoveFromCart( item:product ){
         let positionInBasket:number;
+
+        console.log( item );
 
         if( this.basket.length > 0 ){
     
@@ -77,18 +91,28 @@ class Cart {
                 }
             });
 
+            console.log( positionInBasket );
+
             if( positionInBasket === -1 || positionInBasket === undefined ){
-                return this.addToBasket(item);
+                let result = this.addToBasket(item);
+                this.mapCart();
+                this.updateCartTotalAndCount();
+                return result;
             } else {
                 // console.log("Already in cart. Remove");
                 const deletedItem = this.basket.splice(positionInBasket, 1);
                 // console.log( this.basket );
+                this.mapCart();
+                this.updateCartTotalAndCount();
                 return false;
             }
 
         } else {
             if( item.id != null || item.id != null ){
-                return this.addToBasket(item);
+                let result = this.addToBasket(item);
+                this.mapCart();
+                this.updateCartTotalAndCount();
+                return result;
             }
         }
     
@@ -96,7 +120,7 @@ class Cart {
 
     addToBasket( item:product ){
         this.basket.push( item );
-        // console.log( "Basket: ", this.basket );
+        console.log( "Basket: ", this.basket );
         return true;
     }
 
@@ -116,7 +140,8 @@ class Cart {
             let cartTotal = 0;
 
             this.basket.forEach( (item) => {
-                cartTotal += item.price;
+                console.log( 'Adding: ', parseFloat( this.removeSpecialChars( item.price ) ) );
+                cartTotal += parseFloat( this.removeSpecialChars( item.price ) );
             });
 
             return cartTotal;
@@ -124,7 +149,36 @@ class Cart {
     }
 
     countCart(){
+        console.log( 'Cart count: ', this.cartCount );
         return this.basket.length;
+    }
+
+    updateCartTotalAndCount(){
+        this.cartTotal = this.totalCart();
+        this.cartCount = this.countCart();
+
+        if( this.cartCount > 0 ){
+            document.getElementById('cart').style.display = "block";
+
+            let cartInfoTxt = '';
+
+            console.log('Cart Count: ', this.cartCount );
+
+            if( this.cartCount >=2 ){
+                cartInfoTxt += `<p>${this.cartCount} items<br />`;
+            } else {
+                cartInfoTxt += `<p>${this.cartCount} item<br />`;
+            }
+
+            cartInfoTxt +=  `Total: $` + this.numberWithCommas( this.cartTotal ) + `</p>`; 
+
+            document.getElementById('cartLeft').innerHTML = cartInfoTxt;
+            document.getElementById('nav').style.top = "150px";
+        } else {
+            document.getElementById('cart').style.display = "none";
+            document.getElementById('nav').style.top = "75px";
+        }
+
     }
 
     setCookie(name, value, days){
@@ -145,18 +199,28 @@ class Cart {
     makeCartInBrowser(){
         let x = `<div id="cart">
                     <div>
-                        <div id="cartLeft">
-                            <p>2 items <br />
-                            Total: $ 3,696.78</p>
-                        </div>
+                        <div id="cartLeft"></div>
                         <div id="cartRight">
-                            <a class="button">View Cart</a>
+                            <a id="viewCart" class="button">View Cart</a>
                         </div>
                     </div>
                 </div>`;
 
         document.getElementById('headerWrapper').insertAdjacentHTML('afterbegin', x);
+
+        document.getElementById('viewCart').addEventListener( 'click', (e) => {
+            this.modal.openOverlay('<p>Hello There</p>');
+        });
         
+    }
+
+    numberWithCommas(x) {
+        return x.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") ;
+    }
+
+    removeSpecialChars( inputVal ){
+        //allow periods
+        return inputVal.replace(/[`~!@#$%^&*()_|+\-=?;:'",<>\{\}\[\]\\\/]/gi, '');
     }
 }
 
@@ -231,6 +295,8 @@ class Store {
                         // let selectedItem = new Item(this.items[num]);
                         // el.innerHTML = selectedItem.outputOverlay();
 
+                        console.log( this.items[num] );
+
                         let output = this.items[num].outputOverlay();
 
                         this.modal.openOverlay( output );
@@ -260,7 +326,6 @@ class Store {
                 });
             }    
         }
-        this.addOverlay();
     }
 
 
@@ -268,6 +333,10 @@ class Store {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
+    removeSpecialChars( inputVal ){
+        //allow periods
+        return inputVal.replace(/[`~!@#$%^&*()_|+\-=?;:'",<>\{\}\[\]\\\/]/gi, '');
+    }
 }
 
 class Modal {
