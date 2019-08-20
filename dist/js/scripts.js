@@ -209,13 +209,44 @@ class Cart {
         document.getElementById('headerWrapper').insertAdjacentHTML('afterbegin', x);
 
         document.getElementById('viewCart').addEventListener( 'click', (e) => {
-            this.modal.openOverlay('<p>Hello There</p>');
+            let cartList = this.listCart();
+            this.modal.openOverlay( cartList );
         });
         
     }
 
-    numberWithCommas(x) {
-        return x.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") ;
+    listCart(){
+        this.cartCount = this.countCart();
+
+        if( this.cartCount > 0 ){
+            let cartlistOutput = '<div id="cartList">';
+
+            this.basket.forEach( (row:Item) => {
+                cartlistOutput += `<div class="cartRow">
+                    <div class="crImg">
+                        <img src="http://feinberg-dev.fsm.northwestern.edu/it-new/images/placeholder/placeholder-140x140.png" />
+                    </div>
+                    <div class="crDesc">
+                        <p>${row.title}</p>
+                        <p><a href="">Delete</a></p>
+                    </div>
+                    <div>${ this.numberWithCommas(row.price, false) }</div>
+                </div>`
+            });
+
+            cartlistOutput += '</div>';
+
+            return cartlistOutput;
+        }
+        //list cart items for modal here.
+    }
+
+    numberWithCommas(x, fixed = true) {
+        if( fixed ){
+            return x.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") ;
+        } else {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") ;
+        }
     }
 
     removeSpecialChars( inputVal ){

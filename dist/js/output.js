@@ -300,12 +300,38 @@ function () {
     var x = "<div id=\"cart\">\n                    <div>\n                        <div id=\"cartLeft\"></div>\n                        <div id=\"cartRight\">\n                            <a id=\"viewCart\" class=\"button\">View Cart</a>\n                        </div>\n                    </div>\n                </div>";
     document.getElementById('headerWrapper').insertAdjacentHTML('afterbegin', x);
     document.getElementById('viewCart').addEventListener('click', function (e) {
-      _this.modal.openOverlay('<p>Hello There</p>');
+      var cartList = _this.listCart();
+
+      _this.modal.openOverlay(cartList);
     });
   };
 
-  Cart.prototype.numberWithCommas = function (x) {
-    return x.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  Cart.prototype.listCart = function () {
+    var _this = this;
+
+    this.cartCount = this.countCart();
+
+    if (this.cartCount > 0) {
+      var cartlistOutput_1 = '<div id="cartList">';
+      this.basket.forEach(function (row) {
+        cartlistOutput_1 += "<div class=\"cartRow\">\n                    <div class=\"crImg\">\n                        <img src=\"http://feinberg-dev.fsm.northwestern.edu/it-new/images/placeholder/placeholder-140x140.png\" />\n                    </div>\n                    <div class=\"crDesc\">\n                        <p>" + row.title + "</p>\n                        <p><a href=\"\">Delete</a></p>\n                    </div>\n                    <div>" + _this.numberWithCommas(row.price, false) + "</div>\n                </div>";
+      });
+      cartlistOutput_1 += '</div>';
+      return cartlistOutput_1;
+    } //list cart items for modal here.
+
+  };
+
+  Cart.prototype.numberWithCommas = function (x, fixed) {
+    if (fixed === void 0) {
+      fixed = true;
+    }
+
+    if (fixed) {
+      return x.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    } else {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
   };
 
   Cart.prototype.removeSpecialChars = function (inputVal) {
