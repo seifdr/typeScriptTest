@@ -102,9 +102,25 @@ div#cartList {
     max-height: 600px;
 }
 
+div#cartList div.cartRow > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+div#cartList div.cartRow > div.crDesc {
+    flex-direction: column;
+}
+
 div#cartList > div {
     display: flex;
     margin: .5em;
+    
+    p {
+        padding: 0;
+        margin: 0;
+    }
 
     & > div {
         flex: 1 1 0;
@@ -121,6 +137,7 @@ div#cartList > div {
 
     a.crDeleteEmbed {
        visibility: hidden;
+       height: 0px;
     }
 }
 
@@ -148,6 +165,7 @@ div#cartList div.cartRow div.checkoutRow {
 
         a.crDeleteEmbed {
             visibility: visible;
+            height: 1em;
         }
 
         div.crDesc{
@@ -173,6 +191,19 @@ div#cartList div.cartRow div.checkoutRow {
 section.shelves {
     article.prodBox {
         cursor: pointer;
+
+        center {
+            min-height: 180px;
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            padding: 10px;
+        }
+
+        center img {
+            flex: 1;
+            max-height: 180px;
+        }
 
         div.feature-copy {
             margin-bottom: 46px;
@@ -220,7 +251,10 @@ div#overlayGuts {
         display: flex;
 
         div.overlayImg {
+            align-self: center;
+            justify-self: center;
             padding-right: 1em;
+            max-width: 300px;
         }
 
         @media screen and (max-width: $break-large) {

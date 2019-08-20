@@ -94,11 +94,31 @@ div#cartList {
   overflow-y: scroll;
   max-height: 600px; }
 
+div#cartList div.cartRow > div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center; }
+
+div#cartList div.cartRow > div.crDesc {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column; }
+
 div#cartList > div {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   margin: .5em; }
+  div#cartList > div p {
+    padding: 0;
+    margin: 0; }
   div#cartList > div > div {
     -webkit-box-flex: 1;
         -ms-flex: 1 1 0px;
@@ -111,7 +131,8 @@ div#cartList > div {
             flex: 2 1 0;
     padding-left: .5em; }
   div#cartList > div a.crDeleteEmbed {
-    visibility: hidden; }
+    visibility: hidden;
+    height: 0px; }
 
 div#cartList div.cartRow div.checkoutRow {
   display: -webkit-box;
@@ -135,7 +156,8 @@ div#cartList div.cartRow div.checkoutRow {
         -ms-flex: 0 0 0px;
             flex: 0 0 0; }
   div#cartList > div a.crDeleteEmbed {
-    visibility: visible; }
+    visibility: visible;
+    height: 1em; }
   div#cartList > div div.crDesc {
     -webkit-box-flex: 2;
         -ms-flex: 2 1 0px;
@@ -157,6 +179,22 @@ div#cartList div.cartRow div.checkoutRow {
 
 section.shelves article.prodBox {
   cursor: pointer; }
+  section.shelves article.prodBox center {
+    min-height: 180px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -ms-flex-line-pack: center;
+        align-content: center;
+    padding: 10px; }
+  section.shelves article.prodBox center img {
+    -webkit-box-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+    max-height: 180px; }
   section.shelves article.prodBox div.feature-copy {
     margin-bottom: 46px; }
     section.shelves article.prodBox div.feature-copy a:hover {
@@ -186,7 +224,11 @@ div#overlayGuts {
     display: -ms-flexbox;
     display: flex; }
     div#overlayGuts div#overlayPad div.overlayImg {
-      padding-right: 1em; }
+      -ms-flex-item-align: center;
+          align-self: center;
+      justify-self: center;
+      padding-right: 1em;
+      max-width: 300px; }
     @media screen and (max-width: 875px) {
       div#overlayGuts div#overlayPad {
         -webkit-box-orient: vertical;

@@ -8,6 +8,7 @@ interface product {
     type: string;
     categories: [];
     price: number;
+    image: string;
     desc: string;
 }
 
@@ -18,6 +19,7 @@ class Item implements product {
     type;
     categories;
     price:number;
+    image: string;
     desc;
 
     constructor( item:product ){
@@ -27,14 +29,16 @@ class Item implements product {
         this.type = item.type;
         this.categories = item.categories;
         this.price = this.removeSpecialChars( item.price );
+        this.image = item.image['path'];
         this.desc = item.desc;
     }
 
     outputOverlay(){
+        // <img src="assets/png/300x200.png" />
         let output:string = `
             <div id="overlayPad">
                 <div class="overlayImg">
-                    <img src="assets/png/300x200.png" />
+                    <img src="http://feinberg-dev.fsm.northwestern.edu/it-new/${this.image}" />
                 </div>
                 <div class="overlayText">
                     <h3>${this.title}</h3>
@@ -106,7 +110,7 @@ class Cart {
 
                 for (let i = 0; i < atcBtns.length; i++) {
                     let dataId = atcBtns[i].getAttribute('data-id');
-                    
+
                     if( deletedItem['id'] == dataId ){
                         this.toggleATCbutton( atcBtns[i], false );
                     }
@@ -155,7 +159,6 @@ class Cart {
             let cartTotal = 0;
 
             this.basket.forEach( (item) => {
-                console.log( 'Adding: ', parseFloat( this.removeSpecialChars( item.price ) ) );
                 cartTotal += parseFloat( this.removeSpecialChars( item.price ) );
             });
 
@@ -257,7 +260,6 @@ class Cart {
             //delete links under title on responsive    
             if( crDeleteEmbeds.length > 0 ){
                 for( let ela of crDeleteEmbeds ){
-                    console.log( 'Running');
                     ela.addEventListener('click', (e) => {
                         let positionInBasket = ela.getAttribute('data-basket-position');
                         this.addOrRemoveFromCart( this.basket[positionInBasket] );
@@ -279,9 +281,12 @@ class Cart {
             let cartlistOutput = '<div id="cartList">';
 
             this.basket.forEach( (row:Item, i) => {
+
+                // <img src="http://feinberg-dev.fsm.northwestern.edu/it-new/images/placeholder/placeholder-140x140.png" />
+
                 cartlistOutput += `<div class="cartRow">
                     <div class="crImg">
-                        <img src="http://feinberg-dev.fsm.northwestern.edu/it-new/images/placeholder/placeholder-140x140.png" />
+                        <img src="https://feinberg-dev.fsm.northwestern.edu/it-new/${row.image}" alt="${row.title}-image" />
                     </div>
                     <div class="crDesc">
                         <p>${row.title}</p>
@@ -290,7 +295,7 @@ class Cart {
                     <div class="crDelete"> 
                         <p><a class="crDeleteBtn" data-basket-position="${ i }" href="">Delete</a></p>
                     </div>
-                    <div>$${ this.numberWithCommas(row.price, false) }</div>
+                    <div><p>$${ this.numberWithCommas(row.price, false) }</p></div>
                 </div>`
             });
 
@@ -385,10 +390,11 @@ class Store {
 
             let shelves = `<div class="block-wrapper"><section class="shelves"><div class="feature-three-col modBreakFour">`;
 
+            // <img src="assets/png/300x200.png" />
                 this.items.forEach( ( item, i ) => {
                     shelves += `<article class="feature-box prodBox" data-id="${item.id}" data-num="${i}">   
                                     <center>
-                                        <img src="assets/png/300x200.png" />
+                                        <img src="https://feinberg-dev.fsm.northwestern.edu/it-new/${item.image}" alt="${item.title}-image" />
                                     </center>
                                     <div class="feature-copy">
                                         <h6>${item.title}</h6>
@@ -407,12 +413,6 @@ class Store {
             for( let el of document.getElementsByClassName('prodBox') ){
                 el.addEventListener('click', (e) => {
                         let num = el.getAttribute('data-num');
-
-                        // let selectedItem = new Item(this.items[num]);
-                        // el.innerHTML = selectedItem.outputOverlay();
-
-                        console.log( this.items[num] );
-
                         let output = this.items[num].outputOverlay();
 
                         this.modal.openOverlay( output );
@@ -509,10 +509,5 @@ window.onload=function() {
 
     let shoppingCart = new Cart( shoppingModal );
 
-    // console.log( cart.basket )
-
     let store = new Store('shopping-cart', shoppingCart, shoppingModal );
 };
-
-
-// <section class="contain-1120"><div class="feature-three-col width-1120 policies"><article class="feature-box"><a href="information-security/index.html" title="Information Security"><div class="feature-copy"><div class="iBox"><i class="fas fa-shield-alt"></i></div><h4>Information Security</h4><p>Get details on information protection required by Feinberg</p></div></a></article>

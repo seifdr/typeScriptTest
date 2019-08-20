@@ -149,11 +149,13 @@ function () {
     this.type = item.type;
     this.categories = item.categories;
     this.price = this.removeSpecialChars(item.price);
+    this.image = item.image['path'];
     this.desc = item.desc;
   }
 
   Item.prototype.outputOverlay = function () {
-    var output = "\n            <div id=\"overlayPad\">\n                <div class=\"overlayImg\">\n                    <img src=\"assets/png/300x200.png\" />\n                </div>\n                <div class=\"overlayText\">\n                    <h3>" + this.title + "</h3>\n                    <h6>$" + this.numberWithCommas(this.price) + "</h6>\n                    <div>" + this.desc + "</div>\n                    <br />\n                    <a class=\"button\" href=\"#\">Add To Cart</a>\n                </div>\n            </div>\n        ";
+    // <img src="assets/png/300x200.png" />
+    var output = "\n            <div id=\"overlayPad\">\n                <div class=\"overlayImg\">\n                    <img src=\"http://feinberg-dev.fsm.northwestern.edu/it-new/" + this.image + "\" />\n                </div>\n                <div class=\"overlayText\">\n                    <h3>" + this.title + "</h3>\n                    <h6>$" + this.numberWithCommas(this.price) + "</h6>\n                    <div>" + this.desc + "</div>\n                    <br />\n                    <a class=\"button\" href=\"#\">Add To Cart</a>\n                </div>\n            </div>\n        ";
     return output;
   };
 
@@ -257,7 +259,6 @@ function () {
     if (this.basket.length > 0) {
       var cartTotal_1 = 0;
       this.basket.forEach(function (item) {
-        console.log('Adding: ', parseFloat(_this.removeSpecialChars(item.price)));
         cartTotal_1 += parseFloat(_this.removeSpecialChars(item.price));
       });
       return cartTotal_1;
@@ -358,7 +359,6 @@ function () {
 
       if (crDeleteEmbeds.length > 0) {
         var _loop_2 = function _loop_2(ela) {
-          console.log('Running');
           ela.addEventListener('click', function (e) {
             var positionInBasket = ela.getAttribute('data-basket-position');
 
@@ -391,7 +391,8 @@ function () {
     if (this.cartCount > 0) {
       var cartlistOutput_1 = '<div id="cartList">';
       this.basket.forEach(function (row, i) {
-        cartlistOutput_1 += "<div class=\"cartRow\">\n                    <div class=\"crImg\">\n                        <img src=\"http://feinberg-dev.fsm.northwestern.edu/it-new/images/placeholder/placeholder-140x140.png\" />\n                    </div>\n                    <div class=\"crDesc\">\n                        <p>" + row.title + "</p>\n                        <a class=\"crDeleteEmbed\" data-basket-position=\"" + i + "\" >Delete</a>\n                    </div>\n                    <div class=\"crDelete\"> \n                        <p><a class=\"crDeleteBtn\" data-basket-position=\"" + i + "\" href=\"\">Delete</a></p>\n                    </div>\n                    <div>$" + _this.numberWithCommas(row.price, false) + "</div>\n                </div>";
+        // <img src="http://feinberg-dev.fsm.northwestern.edu/it-new/images/placeholder/placeholder-140x140.png" />
+        cartlistOutput_1 += "<div class=\"cartRow\">\n                    <div class=\"crImg\">\n                        <img src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + row.image + "\" alt=\"" + row.title + "-image\" />\n                    </div>\n                    <div class=\"crDesc\">\n                        <p>" + row.title + "</p>\n                        <a class=\"crDeleteEmbed\" data-basket-position=\"" + i + "\" >Delete</a>\n                    </div>\n                    <div class=\"crDelete\"> \n                        <p><a class=\"crDeleteBtn\" data-basket-position=\"" + i + "\" href=\"\">Delete</a></p>\n                    </div>\n                    <div><p>$" + _this.numberWithCommas(row.price, false) + "</p></div>\n                </div>";
       });
       cartlistOutput_1 += "\n                <div class=\"cartRow\">\n                    <div class=\"crImg\">&nbsp;</div>\n                    <div class=\"crDesc\">&nbsp;</div>\n                    <div class=\"crDelete\">Total:</div>\n                    <div>$" + this.numberWithCommas(this.totalCart(), true) + "</div>\n                </div>\n                <div class=\"cartRow\">\n                    <div class=\"checkoutRow\">\n                        <a href=\"#\" class=\"button\">Checkout Now</a> \n                    </div>\n                </div>\n            ";
       cartlistOutput_1 += '</div>';
@@ -482,19 +483,17 @@ function () {
             result = _d.sent();
 
             if (result) {
-              shelves_1 = "<div class=\"block-wrapper\"><section class=\"shelves\"><div class=\"feature-three-col modBreakFour\">";
+              shelves_1 = "<div class=\"block-wrapper\"><section class=\"shelves\"><div class=\"feature-three-col modBreakFour\">"; // <img src="assets/png/300x200.png" />
+
               this.items.forEach(function (item, i) {
-                shelves_1 += "<article class=\"feature-box prodBox\" data-id=\"" + item.id + "\" data-num=\"" + i + "\">   \n                                    <center>\n                                        <img src=\"assets/png/300x200.png\" />\n                                    </center>\n                                    <div class=\"feature-copy\">\n                                        <h6>" + item.title + "</h6>\n                                        <p>$" + _this.numberWithCommas(item.price) + "</p>\n                                        <a class=\"specs\" data-id=\"" + item.id + "\" href=\"#\">Read product specs</a>\n                                    </div>\n                                    <a class=\"button atcBtn\" data-num=\"" + i + "\" data-id=\"" + item.id + "\" data-isCartBtn=\"true\" href=\"#\">Add To Cart</a>\n                                </article>";
+                shelves_1 += "<article class=\"feature-box prodBox\" data-id=\"" + item.id + "\" data-num=\"" + i + "\">   \n                                    <center>\n                                        <img src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + item.image + "\" alt=\"" + item.title + "-image\" />\n                                    </center>\n                                    <div class=\"feature-copy\">\n                                        <h6>" + item.title + "</h6>\n                                        <p>$" + _this.numberWithCommas(item.price) + "</p>\n                                        <a class=\"specs\" data-id=\"" + item.id + "\" href=\"#\">Read product specs</a>\n                                    </div>\n                                    <a class=\"button atcBtn\" data-num=\"" + i + "\" data-id=\"" + item.id + "\" data-isCartBtn=\"true\" href=\"#\">Add To Cart</a>\n                                </article>";
               });
               shelves_1 += "</div></section></div>";
               this.containerEL.insertAdjacentHTML('beforeend', shelves_1);
 
               _loop_3 = function _loop_3(el) {
                 el.addEventListener('click', function (e) {
-                  var num = el.getAttribute('data-num'); // let selectedItem = new Item(this.items[num]);
-                  // el.innerHTML = selectedItem.outputOverlay();
-
-                  console.log(_this.items[num]);
+                  var num = el.getAttribute('data-num');
 
                   var output = _this.items[num].outputOverlay();
 
@@ -607,7 +606,6 @@ function () {
 
 window.onload = function () {
   var shoppingModal = new Modal();
-  var shoppingCart = new Cart(shoppingModal); // console.log( cart.basket )
-
+  var shoppingCart = new Cart(shoppingModal);
   var store = new Store('shopping-cart', shoppingCart, shoppingModal);
-}; // <section class="contain-1120"><div class="feature-three-col width-1120 policies"><article class="feature-box"><a href="information-security/index.html" title="Information Security"><div class="feature-copy"><div class="iBox"><i class="fas fa-shield-alt"></i></div><h4>Information Security</h4><p>Get details on information protection required by Feinberg</p></div></a></article>
+};
