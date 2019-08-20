@@ -216,17 +216,50 @@ class Cart {
         document.getElementById('viewCart').addEventListener( 'click', (e) => {
             let cartList = this.listCart();
             
-            this.modal.openOverlay( cartList );         
-            
-            for( let el of document.getElementsByClassName('crDeleteBtn') ){
-                el.addEventListener('click', (e) => {
-                    let positionInBasket = el.getAttribute('data-basket-position');
-                    this.addOrRemoveFromCart( this.basket[positionInBasket] );
-                    this.modal.updateOverlayContent( this.listCart() );
-                    e.preventDefault();
-                });
+            if( this.cartTotal > 0 ){
+                this.modal.openOverlay( cartList );         
+                this.wireUpCartDeletes();
+            } else {
+                this.modal.closeOverlay( document.getElementById(this.modal.overlayContainerGuts), document.getElementById(this.modal.overlayContainerID) );
             }
+            
         });
+    }
+
+    wireUpCartDeletes(){
+        if( this.countCart() > 0 ){
+            let crDeleteBtns = document.getElementsByClassName('crDeleteBtn');
+            let crDeleteEmbeds = document.getElementsByClassName('crDeleteEmbed');
+
+            //delete links in column
+            if( crDeleteBtns.length > 0 ){
+                for( let el of crDeleteBtns ){
+                    el.addEventListener('click', (e) => {
+                        let positionInBasket = el.getAttribute('data-basket-position');
+                        this.addOrRemoveFromCart( this.basket[positionInBasket] );
+                        this.modal.updateOverlayContent( this.listCart() );
+                        this.wireUpCartDeletes();
+                        e.preventDefault();
+                    });
+                }
+            }
+
+            //delete links under title on responsive    
+            if( crDeleteEmbeds.length > 0 ){
+                for( let ela of crDeleteEmbeds ){
+                    console.log( 'Running');
+                    ela.addEventListener('click', (e) => {
+                        let positionInBasket = ela.getAttribute('data-basket-position');
+                        this.addOrRemoveFromCart( this.basket[positionInBasket] );
+                        this.modal.updateOverlayContent( this.listCart() );
+                        this.wireUpCartDeletes();
+                        e.preventDefault();
+                    });
+                }
+            }
+        } else {
+            this.modal.closeOverlay( document.getElementById(this.modal.overlayContainerGuts), document.getElementById(this.modal.overlayContainerID) );
+        }
     }
 
     listCart(){
@@ -242,6 +275,7 @@ class Cart {
                     </div>
                     <div class="crDesc">
                         <p>${row.title}</p>
+                        <a class="crDeleteEmbed" data-basket-position="${ i }" >Delete</a>
                     </div>
                     <div class="crDelete"> 
                         <p><a class="crDeleteBtn" data-basket-position="${ i }" href="">Delete</a></p>
@@ -401,6 +435,9 @@ class Store {
 }
 
 class Modal {
+    public overlayContainerID   = 'overlay';
+    public overlayContainerGuts = 'overlayGuts'; 
+
 
     constructor(){
         this.addOverlay();
@@ -413,12 +450,13 @@ class Modal {
     }
 
     updateOverlayContent( output ){
-        let el = document.getElementById('overlayGuts');
+        let el = document.getElementById( this.overlayContainerGuts );
         el.innerHTML = output;
     }
 
     openOverlay( output ){
-        let oel = document.getElementById('overlay');
+        let oel = document.getElementById( this.overlayContainerID );
+        let el = document.getElementById( this.overlayContainerGuts );
 
         this.updateOverlayContent( output );
 

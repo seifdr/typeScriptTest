@@ -307,26 +307,71 @@ function () {
     document.getElementById('viewCart').addEventListener('click', function (e) {
       var cartList = _this.listCart();
 
-      _this.modal.openOverlay(cartList);
+      if (_this.cartTotal > 0) {
+        _this.modal.openOverlay(cartList);
 
-      var _loop_1 = function _loop_1(el) {
-        el.addEventListener('click', function (e) {
-          var positionInBasket = el.getAttribute('data-basket-position');
-
-          _this.addOrRemoveFromCart(_this.basket[positionInBasket]);
-
-          _this.modal.updateOverlayContent(_this.listCart());
-
-          e.preventDefault();
-        });
-      };
-
-      for (var _i = 0, _a = document.getElementsByClassName('crDeleteBtn'); _i < _a.length; _i++) {
-        var el = _a[_i];
-
-        _loop_1(el);
+        _this.wireUpCartDeletes();
+      } else {
+        _this.modal.closeOverlay(document.getElementById(_this.modal.overlayContainerGuts), document.getElementById(_this.modal.overlayContainerID));
       }
     });
+  };
+
+  Cart.prototype.wireUpCartDeletes = function () {
+    var _this = this;
+
+    if (this.countCart() > 0) {
+      var crDeleteBtns = document.getElementsByClassName('crDeleteBtn');
+      var crDeleteEmbeds = document.getElementsByClassName('crDeleteEmbed'); //delete links in column
+
+      if (crDeleteBtns.length > 0) {
+        var _loop_1 = function _loop_1(el) {
+          el.addEventListener('click', function (e) {
+            var positionInBasket = el.getAttribute('data-basket-position');
+
+            _this.addOrRemoveFromCart(_this.basket[positionInBasket]);
+
+            _this.modal.updateOverlayContent(_this.listCart());
+
+            _this.wireUpCartDeletes();
+
+            e.preventDefault();
+          });
+        };
+
+        for (var _i = 0, crDeleteBtns_1 = crDeleteBtns; _i < crDeleteBtns_1.length; _i++) {
+          var el = crDeleteBtns_1[_i];
+
+          _loop_1(el);
+        }
+      } //delete links under title on responsive    
+
+
+      if (crDeleteEmbeds.length > 0) {
+        var _loop_2 = function _loop_2(ela) {
+          console.log('Running');
+          ela.addEventListener('click', function (e) {
+            var positionInBasket = ela.getAttribute('data-basket-position');
+
+            _this.addOrRemoveFromCart(_this.basket[positionInBasket]);
+
+            _this.modal.updateOverlayContent(_this.listCart());
+
+            _this.wireUpCartDeletes();
+
+            e.preventDefault();
+          });
+        };
+
+        for (var _a = 0, crDeleteEmbeds_1 = crDeleteEmbeds; _a < crDeleteEmbeds_1.length; _a++) {
+          var ela = crDeleteEmbeds_1[_a];
+
+          _loop_2(ela);
+        }
+      }
+    } else {
+      this.modal.closeOverlay(document.getElementById(this.modal.overlayContainerGuts), document.getElementById(this.modal.overlayContainerID));
+    }
   };
 
   Cart.prototype.listCart = function () {
@@ -337,7 +382,7 @@ function () {
     if (this.cartCount > 0) {
       var cartlistOutput_1 = '<div id="cartList">';
       this.basket.forEach(function (row, i) {
-        cartlistOutput_1 += "<div class=\"cartRow\">\n                    <div class=\"crImg\">\n                        <img src=\"http://feinberg-dev.fsm.northwestern.edu/it-new/images/placeholder/placeholder-140x140.png\" />\n                    </div>\n                    <div class=\"crDesc\">\n                        <p>" + row.title + "</p>\n                    </div>\n                    <div class=\"crDelete\"> \n                        <p><a class=\"crDeleteBtn\" data-basket-position=\"" + i + "\" href=\"\">Delete</a></p>\n                    </div>\n                    <div>$" + _this.numberWithCommas(row.price, false) + "</div>\n                </div>";
+        cartlistOutput_1 += "<div class=\"cartRow\">\n                    <div class=\"crImg\">\n                        <img src=\"http://feinberg-dev.fsm.northwestern.edu/it-new/images/placeholder/placeholder-140x140.png\" />\n                    </div>\n                    <div class=\"crDesc\">\n                        <p>" + row.title + "</p>\n                        <a class=\"crDeleteEmbed\" data-basket-position=\"" + i + "\" >Delete</a>\n                    </div>\n                    <div class=\"crDelete\"> \n                        <p><a class=\"crDeleteBtn\" data-basket-position=\"" + i + "\" href=\"\">Delete</a></p>\n                    </div>\n                    <div>$" + _this.numberWithCommas(row.price, false) + "</div>\n                </div>";
       });
       cartlistOutput_1 += "\n                <div class=\"cartRow\">\n                    <div class=\"crImg\">&nbsp;</div>\n                    <div class=\"crDesc\">&nbsp;</div>\n                    <div class=\"crDelete\">Total:</div>\n                    <div>$" + this.numberWithCommas(this.totalCart(), true) + "</div>\n                </div>\n                <div class=\"cartRow\">\n                    <div class=\"checkoutRow\">\n                        <a href=\"#\" class=\"button\">Checkout Now</a> \n                    </div>\n                </div>\n            ";
       cartlistOutput_1 += '</div>';
@@ -401,7 +446,7 @@ function () {
 
   Store.prototype.stockTheShelves = function () {
     return __awaiter(this, void 0, void 0, function () {
-      var result, shelves_1, _loop_2, _i, _a, el, _loop_3, _b, _c, elBtn;
+      var result, shelves_1, _loop_3, _i, _a, el, _loop_4, _b, _c, elBtn;
 
       var _this = this;
 
@@ -423,7 +468,7 @@ function () {
               shelves_1 += "</div></section></div>";
               this.containerEL.insertAdjacentHTML('beforeend', shelves_1);
 
-              _loop_2 = function _loop_2(el) {
+              _loop_3 = function _loop_3(el) {
                 el.addEventListener('click', function (e) {
                   var num = el.getAttribute('data-num'); // let selectedItem = new Item(this.items[num]);
                   // el.innerHTML = selectedItem.outputOverlay();
@@ -442,10 +487,10 @@ function () {
               for (_i = 0, _a = document.getElementsByClassName('prodBox'); _i < _a.length; _i++) {
                 el = _a[_i];
 
-                _loop_2(el);
+                _loop_3(el);
               }
 
-              _loop_3 = function _loop_3(elBtn) {
+              _loop_4 = function _loop_4(elBtn) {
                 elBtn.addEventListener('click', function (e) {
                   var num = elBtn.getAttribute('data-num');
 
@@ -469,7 +514,7 @@ function () {
               for (_b = 0, _c = document.getElementsByClassName('atcBtn'); _b < _c.length; _b++) {
                 elBtn = _c[_b];
 
-                _loop_3(elBtn);
+                _loop_4(elBtn);
               }
             }
 
@@ -497,6 +542,8 @@ var Modal =
 /** @class */
 function () {
   function Modal() {
+    this.overlayContainerID = 'overlay';
+    this.overlayContainerGuts = 'overlayGuts';
     this.addOverlay();
   }
 
@@ -506,14 +553,15 @@ function () {
   };
 
   Modal.prototype.updateOverlayContent = function (output) {
-    var el = document.getElementById('overlayGuts');
+    var el = document.getElementById(this.overlayContainerGuts);
     el.innerHTML = output;
   };
 
   Modal.prototype.openOverlay = function (output) {
     var _this = this;
 
-    var oel = document.getElementById('overlay');
+    var oel = document.getElementById(this.overlayContainerID);
+    var el = document.getElementById(this.overlayContainerGuts);
     this.updateOverlayContent(output);
     oel.style.height = "100%";
     oel.style.display = "block";

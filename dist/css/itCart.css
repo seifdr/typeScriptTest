@@ -110,6 +110,8 @@ div#cartList > div {
         -ms-flex: 2 1 0px;
             flex: 2 1 0;
     padding-left: .5em; }
+  div#cartList > div a.crDeleteEmbed {
+    visibility: hidden; }
 
 div#cartList div.cartRow div.checkoutRow {
   display: -webkit-box;
@@ -128,7 +130,12 @@ div#cartList div.cartRow div.checkoutRow {
   div#cartList > div div.crImg {
     max-width: 75px; }
   div#cartList > div div.crDelete {
-    display: none; }
+    visibility: hidden;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 0px;
+            flex: 0 0 0; }
+  div#cartList > div a.crDeleteEmbed {
+    visibility: visible; }
   div#cartList > div div.crDesc {
     -webkit-box-flex: 2;
         -ms-flex: 2 1 0px;

@@ -118,6 +118,10 @@ div#cartList > div {
         flex: 2 1 0;
         padding-left: .5em;
     }
+
+    a.crDeleteEmbed {
+       visibility: hidden;
+    }
 }
 
 div#cartList div.cartRow div.checkoutRow {
@@ -138,7 +142,12 @@ div#cartList div.cartRow div.checkoutRow {
         }
 
         div.crDelete {
-            display: none;
+            visibility: hidden;
+            flex: 0 0 0;
+        }
+
+        a.crDeleteEmbed {
+            visibility: visible;
         }
 
         div.crDesc{
