@@ -236,6 +236,20 @@ class Cart {
                 </div>`
             });
 
+            cartlistOutput += `
+                <div class="cartRow">
+                    <div class="crImg">&nbsp;</div>
+                    <div class="crDesc">&nbsp;</div>
+                    <div class="crDelete">Total:</div>
+                    <div>$${ this.numberWithCommas( this.totalCart(), true ) }</div>
+                </div>
+                <div class="cartRow">
+                    <div class="checkoutRow">
+                        <a href="#" class="button">Checkout Now</a> 
+                    </div>
+                </div>
+            `;
+
             cartlistOutput += '</div>';
 
             return cartlistOutput;

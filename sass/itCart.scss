@@ -120,7 +120,13 @@ div#cartList > div {
     }
 }
 
-@media screen and (max-width: $break-large) {
+div#cartList div.cartRow div.checkoutRow {
+   display: flex;
+   justify-content: flex-end;
+   padding-top: .5em;
+}
+
+@media screen and (max-width: 1000px) {
     div#cartList > div {
         
         & > div {
@@ -140,6 +146,12 @@ div#cartList > div {
             padding-left: .5em;
         }
     }
+
+    div#cartList div.cartRow div.checkoutRow {
+        display: flex;
+        justify-content: center;
+        padding-top: .5em;
+     }
 }
 
 @media screen and (min-width: 1000px) {
