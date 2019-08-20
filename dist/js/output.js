@@ -314,7 +314,7 @@ function () {
     if (this.cartCount > 0) {
       var cartlistOutput_1 = '<div id="cartList">';
       this.basket.forEach(function (row) {
-        cartlistOutput_1 += "<div class=\"cartRow\">\n                    <div class=\"crImg\">\n                        <img src=\"http://feinberg-dev.fsm.northwestern.edu/it-new/images/placeholder/placeholder-140x140.png\" />\n                    </div>\n                    <div class=\"crDesc\">\n                        <p>" + row.title + "</p>\n                        <p><a href=\"\">Delete</a></p>\n                    </div>\n                    <div>" + _this.numberWithCommas(row.price, false) + "</div>\n                </div>";
+        cartlistOutput_1 += "<div class=\"cartRow\">\n                    <div class=\"crImg\">\n                        <img src=\"http://feinberg-dev.fsm.northwestern.edu/it-new/images/placeholder/placeholder-140x140.png\" />\n                    </div>\n                    <div class=\"crDesc\">\n                        <p>" + row.title + "</p>\n                    </div>\n                    <div class=\"crDelete\"> \n                        <p><a href=\"\">Delete</a></p>\n                    </div>\n                    <div>$" + _this.numberWithCommas(row.price, false) + "</div>\n                </div>";
       });
       cartlistOutput_1 += '</div>';
       return cartlistOutput_1;

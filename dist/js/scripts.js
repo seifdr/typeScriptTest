@@ -228,9 +228,11 @@ class Cart {
                     </div>
                     <div class="crDesc">
                         <p>${row.title}</p>
+                    </div>
+                    <div class="crDelete"> 
                         <p><a href="">Delete</a></p>
                     </div>
-                    <div>${ this.numberWithCommas(row.price, false) }</div>
+                    <div>$${ this.numberWithCommas(row.price, false) }</div>
                 </div>`
             });
 
