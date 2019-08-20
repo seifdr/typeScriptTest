@@ -100,8 +100,18 @@ class Cart {
                 return result;
             } else {
                 // console.log("Already in cart. Remove");
-                const deletedItem = this.removeFromBasket( positionInBasket );
-                // console.log( this.basket );
+                const deletedItem = this.removeFromBasket( positionInBasket )[0];
+                
+                let atcBtns = document.getElementsByClassName('atcBtn');
+
+                for (let i = 0; i < atcBtns.length; i++) {
+                    let dataId = atcBtns[i].getAttribute('data-id');
+                    
+                    if( deletedItem['id'] == dataId ){
+                        this.toggleATCbutton( atcBtns[i], false );
+                    }
+                }
+
                 this.mapCart();
                 this.updateCartTotalAndCount();
                 return false;
@@ -305,6 +315,17 @@ class Cart {
         //list cart items for modal here.
     }
 
+    toggleATCbutton( elRef, onCart:boolean ){
+        if( onCart ){
+            elRef.classList.add('onCart');
+            elRef.textContent = "Remove From Cart";
+        } else {
+            elRef.classList.remove('onCart');
+            elRef.textContent = "Add To Cart";
+        }
+        elRef.blur();
+    }
+
     numberWithCommas(x, fixed = true) {
         if( fixed ){
             return x.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") ;
@@ -374,7 +395,7 @@ class Store {
                                         <p>$${ this.numberWithCommas(item.price) }</p>
                                         <a class="specs" data-id="${item.id}" href="#">Read product specs</a>
                                     </div>
-                                    <a class="button atcBtn" data-num="${i}" data-isCartBtn="true" href="#">Add To Cart</a>
+                                    <a class="button atcBtn" data-num="${i}" data-id="${item.id}" data-isCartBtn="true" href="#">Add To Cart</a>
                                 </article>`;
                 });
 
@@ -406,13 +427,9 @@ class Store {
                     let cartResult = this.cart.addOrRemoveFromCart( this.items[num] );
 
                     if( cartResult ){
-                        elBtn.classList.add('onCart');
-                        elBtn.textContent = 'Remove From Cart';
-                        elBtn.blur();
+                        this.cart.toggleATCbutton( elBtn, true );
                     } else {
-                        elBtn.classList.remove('onCart');
-                        elBtn.textContent = 'Add to Cart';
-                        elBtn.blur();
+                        this.cart.toggleATCbutton( elBtn, false );
                     }
 
                     e.preventDefault();
@@ -422,7 +439,6 @@ class Store {
             }    
         }
     }
-
 
     numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

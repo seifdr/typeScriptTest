@@ -206,7 +206,16 @@ function () {
         return result;
       } else {
         // console.log("Already in cart. Remove");
-        var deletedItem = this.removeFromBasket(positionInBasket); // console.log( this.basket );
+        var deletedItem = this.removeFromBasket(positionInBasket)[0];
+        var atcBtns = document.getElementsByClassName('atcBtn');
+
+        for (var i = 0; i < atcBtns.length; i++) {
+          var dataId = atcBtns[i].getAttribute('data-id');
+
+          if (deletedItem['id'] == dataId) {
+            this.toggleATCbutton(atcBtns[i], false);
+          }
+        }
 
         this.mapCart();
         this.updateCartTotalAndCount();
@@ -391,6 +400,18 @@ function () {
 
   };
 
+  Cart.prototype.toggleATCbutton = function (elRef, onCart) {
+    if (onCart) {
+      elRef.classList.add('onCart');
+      elRef.textContent = "Remove From Cart";
+    } else {
+      elRef.classList.remove('onCart');
+      elRef.textContent = "Add To Cart";
+    }
+
+    elRef.blur();
+  };
+
   Cart.prototype.numberWithCommas = function (x, fixed) {
     if (fixed === void 0) {
       fixed = true;
@@ -463,7 +484,7 @@ function () {
             if (result) {
               shelves_1 = "<div class=\"block-wrapper\"><section class=\"shelves\"><div class=\"feature-three-col modBreakFour\">";
               this.items.forEach(function (item, i) {
-                shelves_1 += "<article class=\"feature-box prodBox\" data-id=\"" + item.id + "\" data-num=\"" + i + "\">   \n                                    <center>\n                                        <img src=\"assets/png/300x200.png\" />\n                                    </center>\n                                    <div class=\"feature-copy\">\n                                        <h6>" + item.title + "</h6>\n                                        <p>$" + _this.numberWithCommas(item.price) + "</p>\n                                        <a class=\"specs\" data-id=\"" + item.id + "\" href=\"#\">Read product specs</a>\n                                    </div>\n                                    <a class=\"button atcBtn\" data-num=\"" + i + "\" data-isCartBtn=\"true\" href=\"#\">Add To Cart</a>\n                                </article>";
+                shelves_1 += "<article class=\"feature-box prodBox\" data-id=\"" + item.id + "\" data-num=\"" + i + "\">   \n                                    <center>\n                                        <img src=\"assets/png/300x200.png\" />\n                                    </center>\n                                    <div class=\"feature-copy\">\n                                        <h6>" + item.title + "</h6>\n                                        <p>$" + _this.numberWithCommas(item.price) + "</p>\n                                        <a class=\"specs\" data-id=\"" + item.id + "\" href=\"#\">Read product specs</a>\n                                    </div>\n                                    <a class=\"button atcBtn\" data-num=\"" + i + "\" data-id=\"" + item.id + "\" data-isCartBtn=\"true\" href=\"#\">Add To Cart</a>\n                                </article>";
               });
               shelves_1 += "</div></section></div>";
               this.containerEL.insertAdjacentHTML('beforeend', shelves_1);
@@ -497,13 +518,9 @@ function () {
                   var cartResult = _this.cart.addOrRemoveFromCart(_this.items[num]);
 
                   if (cartResult) {
-                    elBtn.classList.add('onCart');
-                    elBtn.textContent = 'Remove From Cart';
-                    elBtn.blur();
+                    _this.cart.toggleATCbutton(elBtn, true);
                   } else {
-                    elBtn.classList.remove('onCart');
-                    elBtn.textContent = 'Add to Cart';
-                    elBtn.blur();
+                    _this.cart.toggleATCbutton(elBtn, false);
                   }
 
                   e.preventDefault();
