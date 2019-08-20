@@ -206,7 +206,7 @@ function () {
         return result;
       } else {
         // console.log("Already in cart. Remove");
-        var deletedItem = this.basket.splice(positionInBasket, 1); // console.log( this.basket );
+        var deletedItem = this.removeFromBasket(positionInBasket); // console.log( this.basket );
 
         this.mapCart();
         this.updateCartTotalAndCount();
@@ -226,6 +226,11 @@ function () {
     this.basket.push(item);
     console.log("Basket: ", this.basket);
     return true;
+  };
+
+  Cart.prototype.removeFromBasket = function (positionInBasket) {
+    console.log('Removing this: ', positionInBasket);
+    return this.basket.splice(positionInBasket, 1);
   };
 
   Cart.prototype.inBasket = function (incomingID) {
@@ -303,6 +308,24 @@ function () {
       var cartList = _this.listCart();
 
       _this.modal.openOverlay(cartList);
+
+      var _loop_1 = function _loop_1(el) {
+        el.addEventListener('click', function (e) {
+          var positionInBasket = el.getAttribute('data-basket-position');
+
+          _this.addOrRemoveFromCart(_this.basket[positionInBasket]);
+
+          _this.modal.updateOverlayContent(_this.listCart());
+
+          e.preventDefault();
+        });
+      };
+
+      for (var _i = 0, _a = document.getElementsByClassName('crDeleteBtn'); _i < _a.length; _i++) {
+        var el = _a[_i];
+
+        _loop_1(el);
+      }
     });
   };
 
@@ -313,8 +336,8 @@ function () {
 
     if (this.cartCount > 0) {
       var cartlistOutput_1 = '<div id="cartList">';
-      this.basket.forEach(function (row) {
-        cartlistOutput_1 += "<div class=\"cartRow\">\n                    <div class=\"crImg\">\n                        <img src=\"http://feinberg-dev.fsm.northwestern.edu/it-new/images/placeholder/placeholder-140x140.png\" />\n                    </div>\n                    <div class=\"crDesc\">\n                        <p>" + row.title + "</p>\n                    </div>\n                    <div class=\"crDelete\"> \n                        <p><a href=\"\">Delete</a></p>\n                    </div>\n                    <div>$" + _this.numberWithCommas(row.price, false) + "</div>\n                </div>";
+      this.basket.forEach(function (row, i) {
+        cartlistOutput_1 += "<div class=\"cartRow\">\n                    <div class=\"crImg\">\n                        <img src=\"http://feinberg-dev.fsm.northwestern.edu/it-new/images/placeholder/placeholder-140x140.png\" />\n                    </div>\n                    <div class=\"crDesc\">\n                        <p>" + row.title + "</p>\n                    </div>\n                    <div class=\"crDelete\"> \n                        <p><a class=\"crDeleteBtn\" data-basket-position=\"" + i + "\" href=\"\">Delete</a></p>\n                    </div>\n                    <div>$" + _this.numberWithCommas(row.price, false) + "</div>\n                </div>";
       });
       cartlistOutput_1 += "\n                <div class=\"cartRow\">\n                    <div class=\"crImg\">&nbsp;</div>\n                    <div class=\"crDesc\">&nbsp;</div>\n                    <div class=\"crDelete\">Total:</div>\n                    <div>$" + this.numberWithCommas(this.totalCart(), true) + "</div>\n                </div>\n                <div class=\"cartRow\">\n                    <div class=\"checkoutRow\">\n                        <a href=\"#\" class=\"button\">Checkout Now</a> \n                    </div>\n                </div>\n            ";
       cartlistOutput_1 += '</div>';
@@ -378,7 +401,7 @@ function () {
 
   Store.prototype.stockTheShelves = function () {
     return __awaiter(this, void 0, void 0, function () {
-      var result, shelves_1, _loop_1, _i, _a, el, _loop_2, _b, _c, elBtn;
+      var result, shelves_1, _loop_2, _i, _a, el, _loop_3, _b, _c, elBtn;
 
       var _this = this;
 
@@ -400,7 +423,7 @@ function () {
               shelves_1 += "</div></section></div>";
               this.containerEL.insertAdjacentHTML('beforeend', shelves_1);
 
-              _loop_1 = function _loop_1(el) {
+              _loop_2 = function _loop_2(el) {
                 el.addEventListener('click', function (e) {
                   var num = el.getAttribute('data-num'); // let selectedItem = new Item(this.items[num]);
                   // el.innerHTML = selectedItem.outputOverlay();
@@ -419,10 +442,10 @@ function () {
               for (_i = 0, _a = document.getElementsByClassName('prodBox'); _i < _a.length; _i++) {
                 el = _a[_i];
 
-                _loop_1(el);
+                _loop_2(el);
               }
 
-              _loop_2 = function _loop_2(elBtn) {
+              _loop_3 = function _loop_3(elBtn) {
                 elBtn.addEventListener('click', function (e) {
                   var num = elBtn.getAttribute('data-num');
 
@@ -446,7 +469,7 @@ function () {
               for (_b = 0, _c = document.getElementsByClassName('atcBtn'); _b < _c.length; _b++) {
                 elBtn = _c[_b];
 
-                _loop_2(elBtn);
+                _loop_3(elBtn);
               }
             }
 
@@ -482,12 +505,16 @@ function () {
     document.getElementById('main-content').insertAdjacentHTML('beforeend', overlay);
   };
 
+  Modal.prototype.updateOverlayContent = function (output) {
+    var el = document.getElementById('overlayGuts');
+    el.innerHTML = output;
+  };
+
   Modal.prototype.openOverlay = function (output) {
     var _this = this;
 
     var oel = document.getElementById('overlay');
-    var el = document.getElementById('overlayGuts');
-    el.innerHTML = output;
+    this.updateOverlayContent(output);
     oel.style.height = "100%";
     oel.style.display = "block";
     document.body.classList.add('modal-open'); // Close modal when X btn is clicked

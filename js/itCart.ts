@@ -100,7 +100,7 @@ class Cart {
                 return result;
             } else {
                 // console.log("Already in cart. Remove");
-                const deletedItem = this.basket.splice(positionInBasket, 1);
+                const deletedItem = this.removeFromBasket( positionInBasket );
                 // console.log( this.basket );
                 this.mapCart();
                 this.updateCartTotalAndCount();
@@ -122,6 +122,11 @@ class Cart {
         this.basket.push( item );
         console.log( "Basket: ", this.basket );
         return true;
+    }
+
+    removeFromBasket( positionInBasket ){
+        console.log( 'Removing this: ', positionInBasket);
+        return this.basket.splice(positionInBasket, 1);
     }
 
     inBasket( incomingID ){
@@ -210,9 +215,18 @@ class Cart {
 
         document.getElementById('viewCart').addEventListener( 'click', (e) => {
             let cartList = this.listCart();
-            this.modal.openOverlay( cartList );
+            
+            this.modal.openOverlay( cartList );         
+            
+            for( let el of document.getElementsByClassName('crDeleteBtn') ){
+                el.addEventListener('click', (e) => {
+                    let positionInBasket = el.getAttribute('data-basket-position');
+                    this.addOrRemoveFromCart( this.basket[positionInBasket] );
+                    this.modal.updateOverlayContent( this.listCart() );
+                    e.preventDefault();
+                });
+            }
         });
-        
     }
 
     listCart(){
@@ -221,7 +235,7 @@ class Cart {
         if( this.cartCount > 0 ){
             let cartlistOutput = '<div id="cartList">';
 
-            this.basket.forEach( (row:Item) => {
+            this.basket.forEach( (row:Item, i) => {
                 cartlistOutput += `<div class="cartRow">
                     <div class="crImg">
                         <img src="http://feinberg-dev.fsm.northwestern.edu/it-new/images/placeholder/placeholder-140x140.png" />
@@ -230,7 +244,7 @@ class Cart {
                         <p>${row.title}</p>
                     </div>
                     <div class="crDelete"> 
-                        <p><a href="">Delete</a></p>
+                        <p><a class="crDeleteBtn" data-basket-position="${ i }" href="">Delete</a></p>
                     </div>
                     <div>$${ this.numberWithCommas(row.price, false) }</div>
                 </div>`
@@ -398,11 +412,15 @@ class Modal {
         document.getElementById('main-content').insertAdjacentHTML('beforeend', overlay);
     }
 
+    updateOverlayContent( output ){
+        let el = document.getElementById('overlayGuts');
+        el.innerHTML = output;
+    }
+
     openOverlay( output ){
         let oel = document.getElementById('overlay');
-        let el = document.getElementById('overlayGuts');
 
-        el.innerHTML = output;
+        this.updateOverlayContent( output );
 
         oel.style.height = "100%";
         oel.style.display = "block";
