@@ -515,6 +515,7 @@ function () {
 
               _loop_3 = function _loop_3(el) {
                 el.addEventListener('click', function (e) {
+                  e.preventDefault();
                   var num = el.getAttribute('data-num');
 
                   var output = _this.items[num].outputOverlay(num);
@@ -525,9 +526,6 @@ function () {
                   atcModalBtn.addEventListener('click', function (e) {
                     _this.addToCartToggle(num, atcModalBtn);
                   }); //wireup event listener to ATC button 
-
-                  e.preventDefault();
-                  return false;
                 });
               }; //add event listener to all product item feature boxes
 

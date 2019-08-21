@@ -460,6 +460,7 @@ class Store {
             //add event listener to all product item feature boxes
             for( let el of document.getElementsByClassName('prodBox') ){
                 el.addEventListener('click', (e) => {
+                        e.preventDefault();
                         let num = el.getAttribute('data-num');
                         let output = this.items[num].outputOverlay(num);
                         this.modal.openOverlay( output );
@@ -471,9 +472,6 @@ class Store {
                         });
                         
                         //wireup event listener to ATC button 
-
-                        e.preventDefault();
-                        return false;
                 });
             }
 
