@@ -14,9 +14,16 @@ $fsmElectricBlueHover: #80c8ea;
 $featureBoxGrey:       #f0f0f0;
 
 #cart {
-    display: none;
-    height: auto;
+    display: block;
+    // height: auto;
     background-color: $fsmPurple;
+
+    height: 0;
+    transition: height 1s;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 500;
 
     & > div {
         display: flex;
@@ -29,6 +36,10 @@ $featureBoxGrey:       #f0f0f0;
         justify-content: end;
         padding: 1em 2em 1em 0;
         color: #fff;
+
+        @media screen and (max-width: $break-medium ) {
+            display: none;
+        }
 
         p {
             text-transform: uppercase;
@@ -43,6 +54,11 @@ $featureBoxGrey:       #f0f0f0;
         display: flex;
         justify-content: start;
         padding-left: 2em; 
+
+        @media screen and (max-width: $break-medium ) {
+            padding: 1em 2em;
+            justify-content: center;
+        }
 
         a.button {  
             padding: .8em; 

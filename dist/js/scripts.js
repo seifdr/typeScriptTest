@@ -181,7 +181,7 @@ class Cart {
         this.cartCount = this.countCart();
 
         if( this.cartCount > 0 ){
-            document.getElementById('cart').style.display = "block";
+            document.getElementById('cart').style.height = "75px";
 
             let cartInfoTxt = '';
 
@@ -196,10 +196,8 @@ class Cart {
             cartInfoTxt +=  `Total: $` + this.numberWithCommas( this.cartTotal ) + `</p>`; 
 
             document.getElementById('cartLeft').innerHTML = cartInfoTxt;
-            document.getElementById('nav').style.top = "150px";
         } else {
-            document.getElementById('cart').style.display = "none";
-            document.getElementById('nav').style.top = "75px";
+            document.getElementById('cart').style.height = "0";
         }
 
     }
@@ -231,7 +229,7 @@ class Cart {
 
         // document.getElementById('headerWrapper').insertAdjacentHTML('afterbegin', x);
 
-        document.body.insertAdjacentHTML('afterbegin', x);
+        document.body.insertAdjacentHTML('beforeend', x);
 
         document.getElementById('viewCart').addEventListener( 'click', (e) => {
             let cartList = this.listCart();

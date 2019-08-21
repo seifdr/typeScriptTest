@@ -284,7 +284,7 @@ function () {
     this.cartCount = this.countCart();
 
     if (this.cartCount > 0) {
-      document.getElementById('cart').style.display = "block";
+      document.getElementById('cart').style.height = "75px";
       var cartInfoTxt = '';
       console.log('Cart Count: ', this.cartCount);
 
@@ -296,10 +296,8 @@ function () {
 
       cartInfoTxt += "Total: $" + this.numberWithCommas(this.cartTotal) + "</p>";
       document.getElementById('cartLeft').innerHTML = cartInfoTxt;
-      document.getElementById('nav').style.top = "150px";
     } else {
-      document.getElementById('cart').style.display = "none";
-      document.getElementById('nav').style.top = "75px";
+      document.getElementById('cart').style.height = "0";
     }
   };
 
@@ -323,7 +321,7 @@ function () {
 
     var x = "<div id=\"cart\">\n                    <div>\n                        <div id=\"cartLeft\"></div>\n                        <div id=\"cartRight\">\n                            <a id=\"viewCart\" class=\"button\">View Cart</a>\n                        </div>\n                    </div>\n                </div>"; // document.getElementById('headerWrapper').insertAdjacentHTML('afterbegin', x);
 
-    document.body.insertAdjacentHTML('afterbegin', x);
+    document.body.insertAdjacentHTML('beforeend', x);
     document.getElementById('viewCart').addEventListener('click', function (e) {
       var cartList = _this.listCart();
 
