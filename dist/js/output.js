@@ -1,5 +1,7 @@
 "use strict";
 
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 var __awaiter = void 0 && (void 0).__awaiter || function (thisArg, _arguments, P, generator) {
   return new (P || (P = Promise))(function (resolve, reject) {
     function fulfilled(value) {
@@ -468,7 +470,7 @@ function () {
 
   Store.prototype.stockTheShelves = function () {
     return __awaiter(this, void 0, void 0, function () {
-      var result, shelves_1, _loop_3, _i, _a, el, _loop_4, _b, _c, elBtn;
+      var result, shelves_1, needToAdd, i, _loop_3, _i, _a, el, _loop_4, _b, _c, elBtn, filterCat_1, products_1;
 
       var _this = this;
 
@@ -483,11 +485,29 @@ function () {
             result = _d.sent();
 
             if (result) {
-              shelves_1 = "<div class=\"block-wrapper\"><section class=\"shelves\"><div class=\"feature-three-col modBreakFour\">"; // <img src="assets/png/300x200.png" />
+              shelves_1 = "<div class=\"block-wrapper\">\n            \n            <section id=\"filterChecks\">\n                <form>\n                    <div>\n                        <label>Filter by Category:</label>\n                        <select id=\"filterCat\" class=\"filterOptions\">\n                            <option value=\"bundles\">Bundles</option>\n                            <option value=\"desktops\">Desktops</option>\n                            <option value=\"laptops\">Laptops</option>\n                            <option value=\"monitors\">Monitors</option>\n                            <option value=\"apple desktops\">Apple Desktops</option>\n                            <option value=\"apple laptops\">Apple Laptops</option>\n                            <option value=\"ipads\">iPads</option>\n                            <option value=\"tablets\">Tablets</option>\n                            <option value=\"printers\">Printers</option>\n                            <option value=\"software\">software</option>\n                        </select>\n                    </div>\n                    <div>\n                        <label>Filter by OS:</label>\n                        <select id=\"filterOS\" class=\"filterOptions\">\n                            <option value=\"all\">All</option>\n                            <option value=\"apple\">Apple</option>\n                            <option value=\"pc\">PC</option>\n                        </select>\n                    </div>   \n                </form>\n            </section>\n            <section class=\"shelves\"><div class=\"feature-three-col modBreakFour\">"; // <img src="assets/png/300x200.png" />
 
               this.items.forEach(function (item, i) {
-                shelves_1 += "<article class=\"feature-box prodBox\" data-id=\"" + item.id + "\" data-num=\"" + i + "\">   \n                                    <center>\n                                        <img src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + item.image + "\" alt=\"" + item.title + "-image\" />\n                                    </center>\n                                    <div class=\"feature-copy\">\n                                        <h6>" + item.title + "</h6>\n                                        <p>$" + _this.numberWithCommas(item.price) + "</p>\n                                        <a class=\"specs\" data-id=\"" + item.id + "\" href=\"#\">Read product specs</a>\n                                    </div>\n                                    <a class=\"button atcBtn\" data-num=\"" + i + "\" data-id=\"" + item.id + "\" data-isCartBtn=\"true\" href=\"#\">Add To Cart</a>\n                                </article>";
+                var categoryStr = "";
+
+                if (_typeof(item.categories['value']) == 'object') {
+                  item.categories['value'].forEach(function (value) {
+                    if (value) {
+                      categoryStr = categoryStr + '' + value + ' ';
+                    }
+                  });
+                } else {
+                  categoryStr = item.categories['value'];
+                }
+
+                shelves_1 += "<article class=\"feature-box prodBox\" data-id=\"" + item.id + "\" data-num=\"" + i + "\" data-os=\"" + item.type + "\" data-catString=\"" + categoryStr + "\" >   \n                                    <center>\n                                        <img src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + item.image + "\" alt=\"" + item.title + "-image\" />\n                                    </center>\n                                    <div class=\"feature-copy\">\n                                        <h6>" + item.title + "</h6>\n                                        <p>$" + _this.numberWithCommas(item.price) + "</p>\n                                        <a class=\"specs\" data-id=\"" + item.id + "\" href=\"#\">Read product specs</a>\n                                    </div>\n                                    <a class=\"button atcBtn\" data-num=\"" + i + "\" data-id=\"" + item.id + "\" data-isCartBtn=\"true\" href=\"#\">Add To Cart</a>\n                                </article>";
               });
+              needToAdd = 4 - this.items.length % 4;
+
+              for (i = 0; i < needToAdd; i++) {
+                shelves_1 += "<article class=\"feature-box prodBox empty\"></article>";
+              }
+
               shelves_1 += "</div></section></div>";
               this.containerEL.insertAdjacentHTML('beforeend', shelves_1);
 
@@ -532,6 +552,23 @@ function () {
 
                 _loop_4(elBtn);
               }
+
+              filterCat_1 = document.getElementById('filterCat');
+              products_1 = document.getElementsByClassName('prodBox');
+              filterCat_1.addEventListener('change', function (e) {
+                var selectedVal = filterCat_1.options[filterCat_1.selectedIndex].value;
+
+                for (var i = 0; i < products_1.length; i++) {
+                  var prod = products_1[i];
+                  var prodTypeAttr = prod.getAttribute('data-catString');
+
+                  if (!prodTypeAttr.includes(selectedVal)) {
+                    prod.style.display = 'none';
+                  } else {
+                    prod.style.display = 'block';
+                  }
+                }
+              });
             }
 
             return [2

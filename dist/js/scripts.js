@@ -388,11 +388,51 @@ class Store {
 
         if( result ){
 
-            let shelves = `<div class="block-wrapper"><section class="shelves"><div class="feature-three-col modBreakFour">`;
+            let shelves = `<div class="block-wrapper">
+            
+            <section id="filterChecks">
+                <form>
+                    <div>
+                        <label>Filter by Category:</label>
+                        <select id="filterCat" class="filterOptions">
+                            <option value="bundles">Bundles</option>
+                            <option value="desktops">Desktops</option>
+                            <option value="laptops">Laptops</option>
+                            <option value="monitors">Monitors</option>
+                            <option value="apple desktops">Apple Desktops</option>
+                            <option value="apple laptops">Apple Laptops</option>
+                            <option value="ipads">iPads</option>
+                            <option value="tablets">Tablets</option>
+                            <option value="printers">Printers</option>
+                            <option value="software">software</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Filter by OS:</label>
+                        <select id="filterOS" class="filterOptions">
+                            <option value="all">All</option>
+                            <option value="apple">Apple</option>
+                            <option value="pc">PC</option>
+                        </select>
+                    </div>   
+                </form>
+            </section>
+            <section class="shelves"><div class="feature-three-col modBreakFour">`;
 
             // <img src="assets/png/300x200.png" />
                 this.items.forEach( ( item, i ) => {
-                    shelves += `<article class="feature-box prodBox" data-id="${item.id}" data-num="${i}">   
+
+                    let categoryStr = "";
+
+                    if( typeof item.categories['value'] == 'object' ){
+                        item.categories['value'].forEach( value => {
+                            if( value ){ categoryStr =  categoryStr + '' + value + ' '; }
+                        });
+                    } else {
+                        categoryStr = item.categories['value'];
+                    }
+
+                    shelves += `<article class="feature-box prodBox" data-id="${item.id}" data-num="${i}" data-os="${item.type}" data-catString="${categoryStr}" >   
                                     <center>
                                         <img src="https://feinberg-dev.fsm.northwestern.edu/it-new/${item.image}" alt="${item.title}-image" />
                                     </center>
@@ -404,6 +444,13 @@ class Store {
                                     <a class="button atcBtn" data-num="${i}" data-id="${item.id}" data-isCartBtn="true" href="#">Add To Cart</a>
                                 </article>`;
                 });
+
+                let needToAdd = 4 - (this.items.length % 4);
+                
+                for (let i = 0; i < needToAdd; i++) {
+                    shelves += `<article class="feature-box prodBox empty"></article>`;
+                }
+                
 
             shelves += `</div></section></div>`;
 
@@ -436,7 +483,27 @@ class Store {
                     e.stopPropagation();
                     
                 });
-            }    
+            }   
+            
+            //filter buttons
+            const filterCat = document.getElementById('filterCat');
+
+            let products = document.getElementsByClassName('prodBox');
+
+            filterCat.addEventListener( 'change', (e) => {
+                let selectedVal = filterCat.options[filterCat.selectedIndex].value;
+
+                for (let i = 0; i < products.length; i++) {
+                    const prod          = products[i];
+                    const prodTypeAttr  = prod.getAttribute('data-catString');
+                    if( !prodTypeAttr.includes( selectedVal ) ){
+                        prod.style.display = 'none';
+                    } else {
+                        prod.style.display = 'block';
+                    }
+                }
+
+            });
         }
     }
 
