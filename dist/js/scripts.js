@@ -237,6 +237,7 @@ class Cart {
             if( this.cartTotal > 0 ){
                 this.modal.openOverlay( cartList );         
                 this.wireUpCartDeletes();
+                e.preventDefault();
             } else {
                 this.modal.closeOverlay( document.getElementById(this.modal.overlayContainerGuts), document.getElementById(this.modal.overlayContainerID) );
             }
@@ -445,7 +446,7 @@ class Store {
                                     <div class="feature-copy">
                                         <h6>${item.title}</h6>
                                         <p>$${ this.numberWithCommas(item.price) }</p>
-                                        <a class="specs" data-id="${item.id}" href="#">Read product specs</a>
+                                        <a class="specs" data-id="${item.id}">Read product specs</a>
                                     </div>
                                     <a class="button atcBtn" data-num="${i}" data-id="${item.id}" data-isCartBtn="true" href="#">Add To Cart</a>
                                 </article></div>`;
@@ -472,6 +473,7 @@ class Store {
                         //wireup event listener to ATC button 
 
                         e.preventDefault();
+                        return false;
                 });
             }
 
@@ -483,7 +485,6 @@ class Store {
 
                     e.preventDefault();
                     e.stopPropagation();
-                    
                 });
             }   
             
@@ -577,7 +578,7 @@ class Modal {
     }
 
     addOverlay() {
-        let overlay = `<div id="overlay"><div id="overlay-content"><a href="#" class="closebtn"><i class="fa fa-times"> </i></a><div id="overlayGuts" class="col1of1 responsive-container"></div></div></div>`;
+        let overlay = `<div id="overlay"><div id="overlay-content"><a class="closebtn"><i class="fa fa-times"> </i></a><div id="overlayGuts" class="col1of1 responsive-container"></div></div></div>`;
         
         document.getElementById('main-content').insertAdjacentHTML('beforeend', overlay);
     }
@@ -588,6 +589,10 @@ class Modal {
     }
 
     openOverlay( output ){
+
+        const scrollPos = window.scrollY;
+        window.scroll(0, scrollPos);
+
         let oel = document.getElementById( this.overlayContainerID );
         let el = document.getElementById( this.overlayContainerGuts );
 
@@ -600,22 +605,26 @@ class Modal {
 
         // Close modal when X btn is clicked
         oel.getElementsByClassName('closebtn')[0].addEventListener('click', (e) => {
-            this.closeOverlay(el, oel);
+            this.closeOverlay(el, oel, scrollPos);
+            e.preventDefault();
         });
 
         // Close modal on ESC 
         document.addEventListener('keydown', (e) => {
             if(e.key === "Escape") {
-                this.closeOverlay(el, oel);
+                this.closeOverlay(el, oel, scrollPos);
+                e.preventDefault();
             }
         });
+
     }
 
-    closeOverlay(el, oel){
+    closeOverlay(el, oel, scrollPos){
         el.innerHTML = "";
         oel.style.height = "0%";
         oel.style.display = "none";
         document.body.classList.remove('modal-open');
+        window.scroll(0, scrollPos);
     }
 
 }

@@ -329,6 +329,8 @@ function () {
         _this.modal.openOverlay(cartList);
 
         _this.wireUpCartDeletes();
+
+        e.preventDefault();
       } else {
         _this.modal.closeOverlay(document.getElementById(_this.modal.overlayContainerGuts), document.getElementById(_this.modal.overlayContainerID));
       }
@@ -506,7 +508,7 @@ function () {
                   categoryStr = item.categories['value'];
                 }
 
-                shelves_1 += "<div class=\"col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc\" data-os=\"" + item.type + "\" data-catString=\"" + categoryStr + "\"><article class=\"feature-box prodBox\" data-id=\"" + item.id + "\" data-num=\"" + i + "\" >   \n                                    <div class=\"img-container\">\n                                        <img class=\"img-fluid\" src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + item.image + "\" alt=\"" + item.title + "-image\" />\n                                    </div>\n                                    <div class=\"feature-copy\">\n                                        <h6>" + item.title + "</h6>\n                                        <p>$" + _this.numberWithCommas(item.price) + "</p>\n                                        <a class=\"specs\" data-id=\"" + item.id + "\" href=\"#\">Read product specs</a>\n                                    </div>\n                                    <a class=\"button atcBtn\" data-num=\"" + i + "\" data-id=\"" + item.id + "\" data-isCartBtn=\"true\" href=\"#\">Add To Cart</a>\n                                </article></div>";
+                shelves_1 += "<div class=\"col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc\" data-os=\"" + item.type + "\" data-catString=\"" + categoryStr + "\"><article class=\"feature-box prodBox\" data-id=\"" + item.id + "\" data-num=\"" + i + "\" >   \n                                    <div class=\"img-container\">\n                                        <img class=\"img-fluid\" src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + item.image + "\" alt=\"" + item.title + "-image\" />\n                                    </div>\n                                    <div class=\"feature-copy\">\n                                        <h6>" + item.title + "</h6>\n                                        <p>$" + _this.numberWithCommas(item.price) + "</p>\n                                        <a class=\"specs\" data-id=\"" + item.id + "\">Read product specs</a>\n                                    </div>\n                                    <a class=\"button atcBtn\" data-num=\"" + i + "\" data-id=\"" + item.id + "\" data-isCartBtn=\"true\" href=\"#\">Add To Cart</a>\n                                </article></div>";
               });
               shelves_1 += "</div></section>\n                            </div></div>";
               this.containerEL.insertAdjacentHTML('beforeend', shelves_1);
@@ -525,6 +527,7 @@ function () {
                   }); //wireup event listener to ATC button 
 
                   e.preventDefault();
+                  return false;
                 });
               }; //add event listener to all product item feature boxes
 
@@ -646,7 +649,7 @@ function () {
   }
 
   Modal.prototype.addOverlay = function () {
-    var overlay = "<div id=\"overlay\"><div id=\"overlay-content\"><a href=\"#\" class=\"closebtn\"><i class=\"fa fa-times\"> </i></a><div id=\"overlayGuts\" class=\"col1of1 responsive-container\"></div></div></div>";
+    var overlay = "<div id=\"overlay\"><div id=\"overlay-content\"><a class=\"closebtn\"><i class=\"fa fa-times\"> </i></a><div id=\"overlayGuts\" class=\"col1of1 responsive-container\"></div></div></div>";
     document.getElementById('main-content').insertAdjacentHTML('beforeend', overlay);
   };
 
@@ -658,6 +661,8 @@ function () {
   Modal.prototype.openOverlay = function (output) {
     var _this = this;
 
+    var scrollPos = window.scrollY;
+    window.scroll(0, scrollPos);
     var oel = document.getElementById(this.overlayContainerID);
     var el = document.getElementById(this.overlayContainerGuts);
     this.updateOverlayContent(output);
@@ -666,21 +671,26 @@ function () {
     document.body.classList.add('modal-open'); // Close modal when X btn is clicked
 
     oel.getElementsByClassName('closebtn')[0].addEventListener('click', function (e) {
-      _this.closeOverlay(el, oel);
+      _this.closeOverlay(el, oel, scrollPos);
+
+      e.preventDefault();
     }); // Close modal on ESC 
 
     document.addEventListener('keydown', function (e) {
       if (e.key === "Escape") {
-        _this.closeOverlay(el, oel);
+        _this.closeOverlay(el, oel, scrollPos);
+
+        e.preventDefault();
       }
     });
   };
 
-  Modal.prototype.closeOverlay = function (el, oel) {
+  Modal.prototype.closeOverlay = function (el, oel, scrollPos) {
     el.innerHTML = "";
     oel.style.height = "0%";
     oel.style.display = "none";
     document.body.classList.remove('modal-open');
+    window.scroll(0, scrollPos);
   };
 
   return Modal;
