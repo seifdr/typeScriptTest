@@ -284,15 +284,15 @@ section.shelves {
                 text-decoration: underline;
             }
         }
+        //btn text was here
 
-    a.onCart {
-        background-color: $fsmOrange !important;
-        &:before  {
-            background-color: $fsmOrangeHover !important;
-        }
     }
+}
 
-
+a.onCart {
+    background-color: $fsmOrange !important;
+    &:before  {
+        background-color: $fsmOrangeHover !important;
     }
 }
 

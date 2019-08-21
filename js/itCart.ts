@@ -10,6 +10,7 @@ interface product {
     price: number;
     image: string;
     desc: string;
+    onCart: boolean;
 }
 
 class Item implements product {
@@ -18,9 +19,10 @@ class Item implements product {
     element;
     type;
     categories;
-    price:number;
-    image: string;
+    price;
+    image;
     desc;
+    onCart = false;
 
     constructor( item:product ){
         this.id = item.id;
@@ -33,19 +35,22 @@ class Item implements product {
         this.desc = item.desc;
     }
 
-    outputOverlay(){
+    outputOverlay( num = null ){
         // <img src="assets/png/300x200.png" />
+        const btnText = ( this.onCart )? 'Remove From Cart' : 'Add To Cart';
+        const optClass = (this.onCart)? 'onCart':'';
+
         let output:string = `
             <div id="overlayPad">
                 <div class="overlayImg">
-                    <img src="http://feinberg-dev.fsm.northwestern.edu/it-new/${this.image}" />
+                    <img src="https://feinberg-dev.fsm.northwestern.edu/it-new/${this.image}" />
                 </div>
                 <div class="overlayText">
                     <h3>${this.title}</h3>
                     <h6>$${ this.numberWithCommas( this.price ) }</h6>
                     <div>${this.desc}</div>
                     <br />
-                    <a class="button" href="#">Add To Cart</a>
+                    <a id="atcModalBtn" class="button ${optClass}" href="#" data-num="${num}" >${ btnText }</a>
                 </div>
             </div>
         `;
@@ -224,7 +229,9 @@ class Cart {
                     </div>
                 </div>`;
 
-        document.getElementById('headerWrapper').insertAdjacentHTML('afterbegin', x);
+        // document.getElementById('headerWrapper').insertAdjacentHTML('afterbegin', x);
+
+        document.body.insertAdjacentHTML('afterbegin', x);
 
         document.getElementById('viewCart').addEventListener( 'click', (e) => {
             let cartList = this.listCart();
@@ -390,36 +397,35 @@ class Store {
 
             let shelves = `<div class="bootstrap-wrapper">
                             <div class="container-fluid">
-
-            
-            <section id="filterChecks">
-                <form class="row">
-                    <div class="col-6">
-                            <label>Filter by Category:</label>
-                            <select id="filterCat" class="filterOptions">
-                                <option value="bundles">Bundles</option>
-                                <option value="desktops">Desktops</option>
-                                <option value="laptops">Laptops</option>
-                                <option value="monitors">Monitors</option>
-                                <option value="apple desktops">Apple Desktops</option>
-                                <option value="apple laptops">Apple Laptops</option>
-                                <option value="ipads">iPads</option>
-                                <option value="tablets">Tablets</option>
-                                <option value="printers">Printers</option>
-                                <option value="software">software</option>
-                            </select>
-                    </div>
-                    <div class="col-6">
-                        <label>Filter by OS:</label>
-                        <select id="filterOS" class="filterOptions">
-                            <option value="all">All</option>
-                            <option value="apple">Apple</option>
-                            <option value="pc">PC</option>
-                        </select>
-                    </div>   
-                </form>
-            </section>
-            <section class="shelves"><div class="row">`;
+                                <section id="filterChecks">
+                                    <form class="row">
+                                        <div class="col-6">
+                                                <label>Filter by Category:</label>
+                                                <select id="filterCat" class="filterOptions">
+                                                    <option value="all">Show All</option>
+                                                    <option value="bundles">Bundles</option>
+                                                    <option value="desktops">Desktops</option>
+                                                    <option value="laptops">Laptops</option>
+                                                    <option value="monitors">Monitors</option>
+                                                    <option value="apple desktops">Apple Desktops</option>
+                                                    <option value="apple laptops">Apple Laptops</option>
+                                                    <option value="ipads">iPads</option>
+                                                    <option value="tablets">Tablets</option>
+                                                    <option value="printers">Printers</option>
+                                                    <option value="software">software</option>
+                                                </select>
+                                        </div>
+                                        <div class="col-6">
+                                            <label>Filter by OS:</label>
+                                            <select id="filterOS" class="filterOptions">
+                                                <option value="all">Show All</option>
+                                                <option value="apple">Apple</option>
+                                                <option value="pc">PC</option>
+                                            </select>
+                                        </div>   
+                                    </form>
+                                </section>
+                                <section class="shelves"><div class="row">`;
 
             // <img src="assets/png/300x200.png" />
                 this.items.forEach( ( item, i ) => {
@@ -453,27 +459,29 @@ class Store {
             this.containerEL.insertAdjacentHTML('beforeend', shelves);
 
             //add event listener to all product item feature boxes
-            for( let el of document.getElementsByClassName('pbc') ){
+            for( let el of document.getElementsByClassName('prodBox') ){
                 el.addEventListener('click', (e) => {
                         let num = el.getAttribute('data-num');
-                        let output = this.items[num].outputOverlay();
-
+                        let output = this.items[num].outputOverlay(num);
                         this.modal.openOverlay( output );
+
+                        let atcModalBtn = document.getElementById('atcModalBtn');
+
+                        atcModalBtn.addEventListener('click', (e) => {
+                            this.addToCartToggle(num, atcModalBtn);  
+                        });
+                        
+                        //wireup event listener to ATC button 
+
                         e.preventDefault();
                 });
             }
 
             for( let elBtn of document.getElementsByClassName('atcBtn') ){
                 elBtn.addEventListener('click', (e) => {
-                    
                     let num = elBtn.getAttribute('data-num');
-                    let cartResult = this.cart.addOrRemoveFromCart( this.items[num] );
 
-                    if( cartResult ){
-                        this.cart.toggleATCbutton( elBtn, true );
-                    } else {
-                        this.cart.toggleATCbutton( elBtn, false );
-                    }
+                    this.addToCartToggle(num, elBtn);
 
                     e.preventDefault();
                     e.stopPropagation();
@@ -481,25 +489,73 @@ class Store {
                 });
             }   
             
-            //filter buttons
+            //filter dropdowns 
             const filterCat = document.getElementById('filterCat');
-
-            let products = document.getElementsByClassName('pbc');
+            const filterOS = document.getElementById('filterOS');
 
             filterCat.addEventListener( 'change', (e) => {
-                let selectedVal = filterCat.options[filterCat.selectedIndex].value;
-
-                for (let i = 0; i < products.length; i++) {
-                    const prod          = products[i];
-                    const prodTypeAttr  = prod.getAttribute('data-catString');
-                    if( !prodTypeAttr.includes( selectedVal ) ){
-                        prod.style.display = 'none';
-                    } else {
-                        prod.style.display = 'flex';
-                    }
-                }
-
+                this.filterShelves( filterCat, filterOS );
             });
+
+            filterOS.addEventListener( 'change', (e) => {
+                this.filterShelves( filterCat, filterOS );
+            });
+        }
+    }
+
+    addToCartToggle(num, elBtn){
+        let cartResult = this.cart.addOrRemoveFromCart( this.items[num] );
+
+        if( cartResult ){
+            this.items[num].onCart = true;
+            this.cart.toggleATCbutton( elBtn, true );
+        } else {
+            this.items[num].onCart = false;
+            this.cart.toggleATCbutton( elBtn, false );
+        }
+    }
+
+    filterShelves(filterCat, filterOS ){
+        let products = document.getElementsByClassName('pbc');
+        let selectedCat = filterCat.options[filterCat.selectedIndex].value;
+        let selectedOS  = filterOS.options[filterOS.selectedIndex].value;
+
+        console.log( 'Selected OS: ', selectedOS );
+
+        this.showAllProducts(products);
+
+        if( selectedCat != 'all'){
+            // we have a filter
+            this.hideShowProducts(products, selectedCat, selectedOS);
+        } else if (selectedOS != 'all') {
+            // we have a filter
+            this.hideShowProducts(products, selectedCat, selectedOS);
+        } else {
+            //selected val is all, show everything
+            this.showAllProducts(products);
+        }
+    }
+
+    hideShowProducts( products, selectedCat, selectedOS ){
+        for (let i = 0; i < products.length; i++) {
+            const prod          = products[i];
+            const prodTypeAttr  = prod.getAttribute('data-catString');
+            const prodOSAttr    = prod.getAttribute('data-os');
+
+            if( selectedCat != 'all' && !prodTypeAttr.includes( selectedCat ) ){
+                prod.style.display = 'none';
+            }
+
+            if( selectedOS != 'all' && !prodOSAttr.includes( selectedOS ) ){
+                prod.style.display = 'none';
+            }
+        }
+    }
+
+    showAllProducts(products){
+        for (let i = 0; i < products.length; i++) {
+            const prod          = products[i];
+            prod.style.display = 'flex';
         }
     }
 

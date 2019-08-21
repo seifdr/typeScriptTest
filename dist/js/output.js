@@ -145,6 +145,7 @@ var Item =
 /** @class */
 function () {
   function Item(item) {
+    this.onCart = false;
     this.id = item.id;
     this.title = item.title;
     this.element = item.element;
@@ -155,9 +156,15 @@ function () {
     this.desc = item.desc;
   }
 
-  Item.prototype.outputOverlay = function () {
-    // <img src="assets/png/300x200.png" />
-    var output = "\n            <div id=\"overlayPad\">\n                <div class=\"overlayImg\">\n                    <img src=\"http://feinberg-dev.fsm.northwestern.edu/it-new/" + this.image + "\" />\n                </div>\n                <div class=\"overlayText\">\n                    <h3>" + this.title + "</h3>\n                    <h6>$" + this.numberWithCommas(this.price) + "</h6>\n                    <div>" + this.desc + "</div>\n                    <br />\n                    <a class=\"button\" href=\"#\">Add To Cart</a>\n                </div>\n            </div>\n        ";
+  Item.prototype.outputOverlay = function (num) {
+    if (num === void 0) {
+      num = null;
+    } // <img src="assets/png/300x200.png" />
+
+
+    var btnText = this.onCart ? 'Remove From Cart' : 'Add To Cart';
+    var optClass = this.onCart ? 'onCart' : '';
+    var output = "\n            <div id=\"overlayPad\">\n                <div class=\"overlayImg\">\n                    <img src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + this.image + "\" />\n                </div>\n                <div class=\"overlayText\">\n                    <h3>" + this.title + "</h3>\n                    <h6>$" + this.numberWithCommas(this.price) + "</h6>\n                    <div>" + this.desc + "</div>\n                    <br />\n                    <a id=\"atcModalBtn\" class=\"button " + optClass + "\" href=\"#\" data-num=\"" + num + "\" >" + btnText + "</a>\n                </div>\n            </div>\n        ";
     return output;
   };
 
@@ -314,8 +321,9 @@ function () {
   Cart.prototype.makeCartInBrowser = function () {
     var _this = this;
 
-    var x = "<div id=\"cart\">\n                    <div>\n                        <div id=\"cartLeft\"></div>\n                        <div id=\"cartRight\">\n                            <a id=\"viewCart\" class=\"button\">View Cart</a>\n                        </div>\n                    </div>\n                </div>";
-    document.getElementById('headerWrapper').insertAdjacentHTML('afterbegin', x);
+    var x = "<div id=\"cart\">\n                    <div>\n                        <div id=\"cartLeft\"></div>\n                        <div id=\"cartRight\">\n                            <a id=\"viewCart\" class=\"button\">View Cart</a>\n                        </div>\n                    </div>\n                </div>"; // document.getElementById('headerWrapper').insertAdjacentHTML('afterbegin', x);
+
+    document.body.insertAdjacentHTML('afterbegin', x);
     document.getElementById('viewCart').addEventListener('click', function (e) {
       var cartList = _this.listCart();
 
@@ -470,7 +478,7 @@ function () {
 
   Store.prototype.stockTheShelves = function () {
     return __awaiter(this, void 0, void 0, function () {
-      var result, shelves_1, _loop_3, _i, _a, el, _loop_4, _b, _c, elBtn, filterCat_1, products_1;
+      var result, shelves_1, _loop_3, _i, _a, el, _loop_4, _b, _c, elBtn, filterCat_1, filterOS_1;
 
       var _this = this;
 
@@ -485,7 +493,7 @@ function () {
             result = _d.sent();
 
             if (result) {
-              shelves_1 = "<div class=\"bootstrap-wrapper\">\n                            <div class=\"container-fluid\">\n\n            \n            <section id=\"filterChecks\">\n                <form class=\"row\">\n                    <div class=\"col-6\">\n                            <label>Filter by Category:</label>\n                            <select id=\"filterCat\" class=\"filterOptions\">\n                                <option value=\"bundles\">Bundles</option>\n                                <option value=\"desktops\">Desktops</option>\n                                <option value=\"laptops\">Laptops</option>\n                                <option value=\"monitors\">Monitors</option>\n                                <option value=\"apple desktops\">Apple Desktops</option>\n                                <option value=\"apple laptops\">Apple Laptops</option>\n                                <option value=\"ipads\">iPads</option>\n                                <option value=\"tablets\">Tablets</option>\n                                <option value=\"printers\">Printers</option>\n                                <option value=\"software\">software</option>\n                            </select>\n                    </div>\n                    <div class=\"col-6\">\n                        <label>Filter by OS:</label>\n                        <select id=\"filterOS\" class=\"filterOptions\">\n                            <option value=\"all\">All</option>\n                            <option value=\"apple\">Apple</option>\n                            <option value=\"pc\">PC</option>\n                        </select>\n                    </div>   \n                </form>\n            </section>\n            <section class=\"shelves\"><div class=\"row\">"; // <img src="assets/png/300x200.png" />
+              shelves_1 = "<div class=\"bootstrap-wrapper\">\n                            <div class=\"container-fluid\">\n                                <section id=\"filterChecks\">\n                                    <form class=\"row\">\n                                        <div class=\"col-6\">\n                                                <label>Filter by Category:</label>\n                                                <select id=\"filterCat\" class=\"filterOptions\">\n                                                    <option value=\"all\">Show All</option>\n                                                    <option value=\"bundles\">Bundles</option>\n                                                    <option value=\"desktops\">Desktops</option>\n                                                    <option value=\"laptops\">Laptops</option>\n                                                    <option value=\"monitors\">Monitors</option>\n                                                    <option value=\"apple desktops\">Apple Desktops</option>\n                                                    <option value=\"apple laptops\">Apple Laptops</option>\n                                                    <option value=\"ipads\">iPads</option>\n                                                    <option value=\"tablets\">Tablets</option>\n                                                    <option value=\"printers\">Printers</option>\n                                                    <option value=\"software\">software</option>\n                                                </select>\n                                        </div>\n                                        <div class=\"col-6\">\n                                            <label>Filter by OS:</label>\n                                            <select id=\"filterOS\" class=\"filterOptions\">\n                                                <option value=\"all\">Show All</option>\n                                                <option value=\"apple\">Apple</option>\n                                                <option value=\"pc\">PC</option>\n                                            </select>\n                                        </div>   \n                                    </form>\n                                </section>\n                                <section class=\"shelves\"><div class=\"row\">"; // <img src="assets/png/300x200.png" />
 
               this.items.forEach(function (item, i) {
                 var categoryStr = "";
@@ -509,16 +517,21 @@ function () {
                 el.addEventListener('click', function (e) {
                   var num = el.getAttribute('data-num');
 
-                  var output = _this.items[num].outputOverlay();
+                  var output = _this.items[num].outputOverlay(num);
 
                   _this.modal.openOverlay(output);
+
+                  var atcModalBtn = document.getElementById('atcModalBtn');
+                  atcModalBtn.addEventListener('click', function (e) {
+                    _this.addToCartToggle(num, atcModalBtn);
+                  }); //wireup event listener to ATC button 
 
                   e.preventDefault();
                 });
               }; //add event listener to all product item feature boxes
 
 
-              for (_i = 0, _a = document.getElementsByClassName('pbc'); _i < _a.length; _i++) {
+              for (_i = 0, _a = document.getElementsByClassName('prodBox'); _i < _a.length; _i++) {
                 el = _a[_i];
 
                 _loop_3(el);
@@ -528,13 +541,7 @@ function () {
                 elBtn.addEventListener('click', function (e) {
                   var num = elBtn.getAttribute('data-num');
 
-                  var cartResult = _this.cart.addOrRemoveFromCart(_this.items[num]);
-
-                  if (cartResult) {
-                    _this.cart.toggleATCbutton(elBtn, true);
-                  } else {
-                    _this.cart.toggleATCbutton(elBtn, false);
-                  }
+                  _this.addToCartToggle(num, elBtn);
 
                   e.preventDefault();
                   e.stopPropagation();
@@ -548,20 +555,12 @@ function () {
               }
 
               filterCat_1 = document.getElementById('filterCat');
-              products_1 = document.getElementsByClassName('pbc');
+              filterOS_1 = document.getElementById('filterOS');
               filterCat_1.addEventListener('change', function (e) {
-                var selectedVal = filterCat_1.options[filterCat_1.selectedIndex].value;
-
-                for (var i = 0; i < products_1.length; i++) {
-                  var prod = products_1[i];
-                  var prodTypeAttr = prod.getAttribute('data-catString');
-
-                  if (!prodTypeAttr.includes(selectedVal)) {
-                    prod.style.display = 'none';
-                  } else {
-                    prod.style.display = 'flex';
-                  }
-                }
+                _this.filterShelves(filterCat_1, filterOS_1);
+              });
+              filterOS_1.addEventListener('change', function (e) {
+                _this.filterShelves(filterCat_1, filterOS_1);
               });
             }
 
@@ -571,6 +570,60 @@ function () {
         }
       });
     });
+  };
+
+  Store.prototype.addToCartToggle = function (num, elBtn) {
+    var cartResult = this.cart.addOrRemoveFromCart(this.items[num]);
+
+    if (cartResult) {
+      this.items[num].onCart = true;
+      this.cart.toggleATCbutton(elBtn, true);
+    } else {
+      this.items[num].onCart = false;
+      this.cart.toggleATCbutton(elBtn, false);
+    }
+  };
+
+  Store.prototype.filterShelves = function (filterCat, filterOS) {
+    var products = document.getElementsByClassName('pbc');
+    var selectedCat = filterCat.options[filterCat.selectedIndex].value;
+    var selectedOS = filterOS.options[filterOS.selectedIndex].value;
+    console.log('Selected OS: ', selectedOS);
+    this.showAllProducts(products);
+
+    if (selectedCat != 'all') {
+      // we have a filter
+      this.hideShowProducts(products, selectedCat, selectedOS);
+    } else if (selectedOS != 'all') {
+      // we have a filter
+      this.hideShowProducts(products, selectedCat, selectedOS);
+    } else {
+      //selected val is all, show everything
+      this.showAllProducts(products);
+    }
+  };
+
+  Store.prototype.hideShowProducts = function (products, selectedCat, selectedOS) {
+    for (var i = 0; i < products.length; i++) {
+      var prod = products[i];
+      var prodTypeAttr = prod.getAttribute('data-catString');
+      var prodOSAttr = prod.getAttribute('data-os');
+
+      if (selectedCat != 'all' && !prodTypeAttr.includes(selectedCat)) {
+        prod.style.display = 'none';
+      }
+
+      if (selectedOS != 'all' && !prodOSAttr.includes(selectedOS)) {
+        prod.style.display = 'none';
+      }
+    }
+  };
+
+  Store.prototype.showAllProducts = function (products) {
+    for (var i = 0; i < products.length; i++) {
+      var prod = products[i];
+      prod.style.display = 'flex';
+    }
   };
 
   Store.prototype.numberWithCommas = function (x) {

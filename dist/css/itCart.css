@@ -1179,10 +1179,11 @@ section.shelves article.prodBox {
       text-decoration: none; }
     section.shelves article.prodBox div.feature-copy a.specs:hover {
       text-decoration: underline; }
-  section.shelves article.prodBox a.onCart {
-    background-color: #df6426 !important; }
-    section.shelves article.prodBox a.onCart:before {
-      background-color: #daa88f !important; }
+
+a.onCart {
+  background-color: #df6426 !important; }
+  a.onCart:before {
+    background-color: #daa88f !important; }
 
 div#overlay-content {
   max-width: 750px; }
