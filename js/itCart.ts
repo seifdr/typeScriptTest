@@ -388,26 +388,28 @@ class Store {
 
         if( result ){
 
-            let shelves = `<div class="block-wrapper">
+            let shelves = `<div class="bootstrap-wrapper">
+                            <div class="container-fluid">
+
             
             <section id="filterChecks">
-                <form>
-                    <div>
-                        <label>Filter by Category:</label>
-                        <select id="filterCat" class="filterOptions">
-                            <option value="bundles">Bundles</option>
-                            <option value="desktops">Desktops</option>
-                            <option value="laptops">Laptops</option>
-                            <option value="monitors">Monitors</option>
-                            <option value="apple desktops">Apple Desktops</option>
-                            <option value="apple laptops">Apple Laptops</option>
-                            <option value="ipads">iPads</option>
-                            <option value="tablets">Tablets</option>
-                            <option value="printers">Printers</option>
-                            <option value="software">software</option>
-                        </select>
+                <form class="row">
+                    <div class="col-6">
+                            <label>Filter by Category:</label>
+                            <select id="filterCat" class="filterOptions">
+                                <option value="bundles">Bundles</option>
+                                <option value="desktops">Desktops</option>
+                                <option value="laptops">Laptops</option>
+                                <option value="monitors">Monitors</option>
+                                <option value="apple desktops">Apple Desktops</option>
+                                <option value="apple laptops">Apple Laptops</option>
+                                <option value="ipads">iPads</option>
+                                <option value="tablets">Tablets</option>
+                                <option value="printers">Printers</option>
+                                <option value="software">software</option>
+                            </select>
                     </div>
-                    <div>
+                    <div class="col-6">
                         <label>Filter by OS:</label>
                         <select id="filterOS" class="filterOptions">
                             <option value="all">All</option>
@@ -417,7 +419,7 @@ class Store {
                     </div>   
                 </form>
             </section>
-            <section class="shelves"><div class="feature-three-col modBreakFour">`;
+            <section class="shelves"><div class="row">`;
 
             // <img src="assets/png/300x200.png" />
                 this.items.forEach( ( item, i ) => {
@@ -432,32 +434,26 @@ class Store {
                         categoryStr = item.categories['value'];
                     }
 
-                    shelves += `<article class="feature-box prodBox" data-id="${item.id}" data-num="${i}" data-os="${item.type}" data-catString="${categoryStr}" >   
-                                    <center>
-                                        <img src="https://feinberg-dev.fsm.northwestern.edu/it-new/${item.image}" alt="${item.title}-image" />
-                                    </center>
+                    shelves += `<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc" data-os="${item.type}" data-catString="${categoryStr}"><article class="feature-box prodBox" data-id="${item.id}" data-num="${i}" >   
+                                    <div class="img-container">
+                                        <img class="img-fluid" src="https://feinberg-dev.fsm.northwestern.edu/it-new/${item.image}" alt="${item.title}-image" />
+                                    </div>
                                     <div class="feature-copy">
                                         <h6>${item.title}</h6>
                                         <p>$${ this.numberWithCommas(item.price) }</p>
                                         <a class="specs" data-id="${item.id}" href="#">Read product specs</a>
                                     </div>
                                     <a class="button atcBtn" data-num="${i}" data-id="${item.id}" data-isCartBtn="true" href="#">Add To Cart</a>
-                                </article>`;
+                                </article></div>`;
                 });
 
-                let needToAdd = 4 - (this.items.length % 4);
-                
-                for (let i = 0; i < needToAdd; i++) {
-                    shelves += `<article class="feature-box prodBox empty"></article>`;
-                }
-                
-
-            shelves += `</div></section></div>`;
+            shelves += `</div></section>
+                            </div></div>`;
 
             this.containerEL.insertAdjacentHTML('beforeend', shelves);
 
             //add event listener to all product item feature boxes
-            for( let el of document.getElementsByClassName('prodBox') ){
+            for( let el of document.getElementsByClassName('pbc') ){
                 el.addEventListener('click', (e) => {
                         let num = el.getAttribute('data-num');
                         let output = this.items[num].outputOverlay();
@@ -488,7 +484,7 @@ class Store {
             //filter buttons
             const filterCat = document.getElementById('filterCat');
 
-            let products = document.getElementsByClassName('prodBox');
+            let products = document.getElementsByClassName('pbc');
 
             filterCat.addEventListener( 'change', (e) => {
                 let selectedVal = filterCat.options[filterCat.selectedIndex].value;
@@ -499,7 +495,7 @@ class Store {
                     if( !prodTypeAttr.includes( selectedVal ) ){
                         prod.style.display = 'none';
                     } else {
-                        prod.style.display = 'block';
+                        prod.style.display = 'flex';
                     }
                 }
 

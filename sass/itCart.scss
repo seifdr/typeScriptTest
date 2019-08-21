@@ -11,6 +11,7 @@ $fsmOrange:            #df6426;
 $fsmOrangeHover:       #daa88f; 
 $fsmElectricBlue:      #0082bf;
 $fsmElectricBlueHover: #80c8ea;
+$featureBoxGrey:       #f0f0f0;
 
 #cart {
     display: none;
@@ -196,9 +197,7 @@ div#cartList div.cartRow div.checkoutRow {
 
 
 section#filterChecks > form {
-    display: flex;
     & > div {
-        flex: 1 1 0;
         display: flex;
         justify-content: flex-end;
         align-items: center;
@@ -242,23 +241,39 @@ section#filterChecks > form {
 
 
 section.shelves {
-    article.prodBox {
-        cursor: pointer;
 
-        center {
-            min-height: 180px;
+    div.pbc {
+        display: flex;
+        padding-bottom: 15px;
+    }
+
+    article.prodBox {
+        flex-grow: 1;
+        background-color: $featureBoxGrey;
+        cursor: pointer;
+        box-sizing: border-box;
+        position: relative;
+
+        div.img-container {
+            @media screen and (min-width: $break-medium) {
+                height: 180px;
+                width: auto;
+            }
             display: flex;
             justify-content: center;
             align-content: center;
             padding: 10px;
+            
+            img {
+                flex: 1;
+                max-height: 180px;
+            }
         }
 
-        center img {
-            flex: 1;
-            max-height: 180px;
-        }
+        
 
         div.feature-copy {
+            padding: 1rem 1.5rem 1rem 1.5rem;
             margin-bottom: 46px;
 
             a:hover {
@@ -269,7 +284,7 @@ section.shelves {
                 text-decoration: underline;
             }
         }
-    
+
     a.onCart {
         background-color: $fsmOrange !important;
         &:before  {
@@ -343,22 +358,3 @@ body.modal-open {
      position: fixed;
  }
 
-.shopBreakFour {
-    display: flex; 
-    flex-wrap: wrap;
-    justify-content: flex-start;
-
-
-    // &:after {
-    //     content: "";
-    //     flex: auto;
-    //     border: 1px solid blue;
-    // }
-
-    article.prodBox {
-        border: 1px solid red;
-        flex: 1 0 21%; /* explanation below */
-        // max-width: 22%;
-    }   
-    
-}
