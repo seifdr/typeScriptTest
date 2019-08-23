@@ -202,12 +202,13 @@ function () {
 var Cart =
 /** @class */
 function () {
-  function Cart(modal) {
+  function Cart(modal, cookie) {
     this.basket = [];
     this.mappedBasket = [];
     this.cartCount = 0;
     this.cartTotal = 0;
     this.modal = modal;
+    this.cookie = cookie;
     this.makeCartInBrowser();
   }
 
@@ -215,6 +216,13 @@ function () {
     this.mappedBasket = this.basket.map(function (row) {
       return row.id;
     });
+
+    if (this.mappedBasket.length > 0) {
+      var mappedBasketToCookie = JSON.stringify(this.mappedBasket);
+      this.cookie.setCookie(mappedBasketToCookie, 1);
+    } else {
+      this.cookie.deleteCookie();
+    }
   };
 
   Cart.prototype.addOrRemoveFromCart = function (item) {
@@ -231,7 +239,6 @@ function () {
 
       if (positionInBasket === -1 || positionInBasket === undefined) {
         var result = this.addToBasket(item);
-        this.mapCart();
         this.updateCartTotalAndCount();
         return result;
       } else {
@@ -247,14 +254,12 @@ function () {
           }
         }
 
-        this.mapCart();
         this.updateCartTotalAndCount();
         return false;
       }
     } else {
       if (item.id != null || item.id != null) {
         var result = this.addToBasket(item);
-        this.mapCart();
         this.updateCartTotalAndCount();
         return result;
       }
@@ -299,6 +304,7 @@ function () {
   };
 
   Cart.prototype.updateCartTotalAndCount = function () {
+    this.mapCart();
     this.cartTotal = this.totalCart();
     this.cartCount = this.countCart();
 
@@ -318,21 +324,8 @@ function () {
     } else {
       document.getElementById('cart').style.height = "0";
     }
-  };
 
-  Cart.prototype.setCookie = function (name, value, days) {
-    var d = new Date();
-    d.setTime(d.getTime() + 24 * 60 * 60 * 1000 * days);
-    document.cookie = name + "=" + value + ";path=/;expires=" + d.toUTCString();
-  };
-
-  Cart.prototype.getCookie = function (name) {
-    var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-    return v ? v[2] : null;
-  };
-
-  Cart.prototype.deleteCookie = function (name) {
-    this.setCookie(name, '', -1);
+    console.log(this.cookie.getCookie());
   };
 
   Cart.prototype.makeCartInBrowser = function () {
@@ -719,6 +712,31 @@ function () {
   };
 
   return Modal;
+}();
+
+var Cookie =
+/** @class */
+function () {
+  function Cookie(name) {
+    this.name = name;
+  }
+
+  Cookie.prototype.setCookie = function (value, days) {
+    var d = new Date();
+    d.setTime(d.getTime() + 24 * 60 * 60 * 1000 * days);
+    document.cookie = this.name + "=" + value + ";path=/;expires=" + d.toUTCString();
+  };
+
+  Cookie.prototype.getCookie = function () {
+    var v = document.cookie.match('(^|;) ?' + this.name + '=([^;]*)(;|$)');
+    return v ? v[2] : null;
+  };
+
+  Cookie.prototype.deleteCookie = function () {
+    this.setCookie('', -1);
+  };
+
+  return Cookie;
 }();
 
 window.onload = function () {

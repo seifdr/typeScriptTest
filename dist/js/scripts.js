@@ -88,9 +88,11 @@ class Cart {
     public cartTotal: number = 0;
 
     private modal: Modal;
+    private cookie: Cookie;
 
-    constructor( modal ) {
+    constructor( modal, cookie ) {
         this.modal = modal;
+        this.cookie = cookie;
         this.makeCartInBrowser();
     }
 
@@ -98,6 +100,13 @@ class Cart {
         this.mappedBasket = this.basket.map( ( row:Item ) => {
             return row.id;
         });
+
+        if( this.mappedBasket.length > 0 ){
+            let mappedBasketToCookie = JSON.stringify( this.mappedBasket );
+            this.cookie.setCookie( mappedBasketToCookie, 1 );
+        } else {
+            this.cookie.deleteCookie();
+        }
     }
 
     addOrRemoveFromCart( item:product ){
@@ -117,7 +126,6 @@ class Cart {
 
             if( positionInBasket === -1 || positionInBasket === undefined ){
                 let result = this.addToBasket(item);
-                this.mapCart();
                 this.updateCartTotalAndCount();
                 return result;
             } else {
@@ -133,8 +141,6 @@ class Cart {
                         this.toggleATCbutton( atcBtns[i], false );
                     }
                 }
-
-                this.mapCart();
                 this.updateCartTotalAndCount();
                 return false;
             }
@@ -142,7 +148,6 @@ class Cart {
         } else {
             if( item.id != null || item.id != null ){
                 let result = this.addToBasket(item);
-                this.mapCart();
                 this.updateCartTotalAndCount();
                 return result;
             }
@@ -190,6 +195,7 @@ class Cart {
     }
 
     updateCartTotalAndCount(){
+        this.mapCart();
         this.cartTotal = this.totalCart();
         this.cartCount = this.countCart();
 
@@ -213,21 +219,7 @@ class Cart {
             document.getElementById('cart').style.height = "0";
         }
 
-    }
-
-    setCookie(name, value, days){
-        let d = new Date;
-        d.setTime(d.getTime() + 24*60*60*1000*days);
-        document.cookie = name + "=" + value + ";path=/;expires=" + d.toUTCString();
-    }
-
-    getCookie(name) {
-        let v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-        return v ? v[2] : null;
-    }
-
-    deleteCookie(name){
-        this.setCookie(name, '', -1);
+        console.log( this.cookie.getCookie() );
     }
 
     makeCartInBrowser(){
@@ -649,6 +641,28 @@ class Modal {
 
 }
 
+class Cookie {
+    name:string;
+
+    constructor(name) {
+        this.name = name;
+    }
+
+    setCookie(value, days){
+        let d = new Date;
+        d.setTime(d.getTime() + 24*60*60*1000*days);
+        document.cookie = this.name + "=" + value + ";path=/;expires=" + d.toUTCString();
+    }
+
+    getCookie() {
+        let v = document.cookie.match('(^|;) ?' + this.name + '=([^;]*)(;|$)');
+        return v ? v[2] : null;
+    }
+
+    deleteCookie(){
+        this.setCookie('', -1);
+    }
+}
 
 window.onload=function() {
     let shoppingModal = new Modal();
