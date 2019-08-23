@@ -360,6 +360,8 @@ function () {
     var _this = this;
 
     document.getElementById('checkoutNow').addEventListener('click', function (e) {
+      e.preventDefault();
+
       var checkoutURL = _this.makeCheckoutURL(); //clear the cart
 
 
@@ -367,9 +369,12 @@ function () {
 
       _this.cookie.deleteCookie();
 
+      if (_this.modal.isOpen) {
+        _this.modal.closeOverlay(document.getElementById(_this.modal.overlayContainerGuts), document.getElementById(_this.modal.overlayContainerID), window.scrollY);
+      }
+
       e.target.href = checkoutURL;
       window.location = checkoutURL;
-      e.preventDefault();
     });
   };
 
@@ -745,6 +750,7 @@ function () {
   function Modal() {
     this.overlayContainerID = 'overlay';
     this.overlayContainerGuts = 'overlayGuts';
+    this.isOpen = false;
     this.addOverlay();
   }
 
@@ -783,6 +789,7 @@ function () {
         e.preventDefault();
       }
     });
+    this.isOpen = true;
   };
 
   Modal.prototype.closeOverlay = function (el, oel, scrollPos) {
@@ -791,6 +798,7 @@ function () {
     oel.style.display = "none";
     document.body.classList.remove('modal-open');
     window.scroll(0, scrollPos);
+    this.isOpen = false;
   };
 
   return Modal;

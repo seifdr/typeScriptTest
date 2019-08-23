@@ -259,16 +259,21 @@ class Cart {
 
     wireUpCartCheckoutBtn(){
         document.getElementById('checkoutNow').addEventListener( 'click', (e) => {
+            e.preventDefault();
             const checkoutURL = this.makeCheckoutURL();
             //clear the cart
             this.basket = [];
             //clear the cookie
             this.cookie.deleteCookie();
 
+            if( this.modal.isOpen ){
+                this.modal.closeOverlay( document.getElementById(this.modal.overlayContainerGuts), document.getElementById(this.modal.overlayContainerID), window.scrollY );
+            }
+
             e.target.href = checkoutURL;
             window.location = checkoutURL;
 
-            e.preventDefault();
+            
         });
     }
 
@@ -660,6 +665,7 @@ class Modal {
     public overlayContainerID   = 'overlay';
     public overlayContainerGuts = 'overlayGuts'; 
 
+    public isOpen = false;
 
     constructor(){
         this.addOverlay();
@@ -705,6 +711,8 @@ class Modal {
             }
         });
 
+        this.isOpen = true;
+
     }
 
     closeOverlay(el, oel, scrollPos){
@@ -713,6 +721,7 @@ class Modal {
         oel.style.display = "none";
         document.body.classList.remove('modal-open');
         window.scroll(0, scrollPos);
+        this.isOpen = false;
     }
 
 }
