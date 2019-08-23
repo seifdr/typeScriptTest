@@ -203,6 +203,7 @@ var Cart =
 /** @class */
 function () {
   function Cart(modal, cookie) {
+    this.machformBase = 'https://forms.feinberg.northwestern.edu/view.php?id=48491';
     this.basket = [];
     this.mappedBasket = [];
     this.cartCount = 0;
@@ -329,8 +330,6 @@ function () {
     } else {
       document.getElementById('cart').style.height = "0";
     }
-
-    console.log(this.cookie.getJSONfromCookieAsArray());
   };
 
   Cart.prototype.makeCartInBrowser = function () {
@@ -338,7 +337,8 @@ function () {
 
     var x = "<div id=\"cart\">\n                    <div>\n                        <div id=\"cartLeft\"></div>\n                        <div id=\"cartRight\">\n                            <a id=\"viewCart\" class=\"button\">View Cart</a>\n                        </div>\n                    </div>\n                </div>"; // document.getElementById('headerWrapper').insertAdjacentHTML('afterbegin', x);
 
-    document.body.insertAdjacentHTML('beforeend', x);
+    document.body.insertAdjacentHTML('beforeend', x); //view cart button listener
+
     document.getElementById('viewCart').addEventListener('click', function (e) {
       var cartList = _this.listCart();
 
@@ -347,10 +347,29 @@ function () {
 
         _this.wireUpCartDeletes();
 
+        _this.wireUpCartCheckoutBtn();
+
         e.preventDefault();
       } else {
         _this.modal.closeOverlay(document.getElementById(_this.modal.overlayContainerGuts), document.getElementById(_this.modal.overlayContainerID), window.scrollY);
       }
+    });
+  };
+
+  Cart.prototype.wireUpCartCheckoutBtn = function () {
+    var _this = this;
+
+    document.getElementById('checkoutNow').addEventListener('click', function (e) {
+      var checkoutURL = _this.makeCheckoutURL(); //clear the cart
+
+
+      _this.basket = []; //clear the cookie
+
+      _this.cookie.deleteCookie();
+
+      e.target.href = checkoutURL;
+      window.location = checkoutURL;
+      e.preventDefault();
     });
   };
 
@@ -421,7 +440,7 @@ function () {
         // <img src="http://feinberg-dev.fsm.northwestern.edu/it-new/images/placeholder/placeholder-140x140.png" />
         cartlistOutput_1 += "<div class=\"cartRow\">\n                    <div class=\"crImg\">\n                        <img src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + row.image + "\" alt=\"" + row.title + "-image\" />\n                    </div>\n                    <div class=\"crDesc\">\n                        <p>" + row.title + "</p>\n                        <a class=\"crDeleteEmbed\" data-basket-position=\"" + i + "\" >Delete</a>\n                    </div>\n                    <div class=\"crDelete\"> \n                        <p><a class=\"crDeleteBtn\" data-basket-position=\"" + i + "\" href=\"\">Delete</a></p>\n                    </div>\n                    <div><p>$" + _this.numberWithCommas(row.price, false) + "</p></div>\n                </div>";
       });
-      cartlistOutput_1 += "\n                <div class=\"cartRow\">\n                    <div class=\"crImg\">&nbsp;</div>\n                    <div class=\"crDesc\">&nbsp;</div>\n                    <div class=\"crDelete\">Total:</div>\n                    <div>$" + this.numberWithCommas(this.totalCart(), true) + "</div>\n                </div>\n                <div class=\"cartRow\">\n                    <div class=\"checkoutRow\">\n                        <a href=\"#\" class=\"button\">Checkout Now</a> \n                    </div>\n                </div>\n            ";
+      cartlistOutput_1 += "\n                <div class=\"cartRow\">\n                    <div class=\"crImg\">&nbsp;</div>\n                    <div class=\"crDesc\">&nbsp;</div>\n                    <div class=\"crDelete\">Total:</div>\n                    <div>$" + this.numberWithCommas(this.totalCart(), true) + "</div>\n                </div>\n                <div class=\"cartRow\">\n                    <div class=\"checkoutRow\">\n                        <a id=\"checkoutNow\" href=\"#\" class=\"button\">Checkout Now</a> \n                    </div>\n                </div>\n            ";
       cartlistOutput_1 += '</div>';
       return cartlistOutput_1;
     } //list cart items for modal here.
@@ -455,6 +474,24 @@ function () {
   Cart.prototype.removeSpecialChars = function (inputVal) {
     //allow periods
     return inputVal.replace(/[`~!@#$%^&*()_|+\-=?;:'",<>\{\}\[\]\\\/]/gi, '');
+  };
+
+  Cart.prototype.makeCheckoutURL = function () {
+    if (this.basket.length > 0) {
+      var url = this.machformBase + '&';
+
+      for (var i = 0; i < this.basket.length; i++) {
+        url += this.basket[i].element + '=1';
+
+        if (i + 1 < this.basket.length) {
+          url += '&';
+        }
+      }
+
+      return url;
+    } else {
+      return null;
+    }
   };
 
   return Cart;
@@ -565,11 +602,21 @@ function () {
                   var atcModalBtn = document.getElementById('atcModalBtn');
                   atcModalBtn.addEventListener('click', function (e) {
                     //Change the modal atc button 
-                    _this.addToCartToggle(num, atcModalBtn); //find corresponding prodBox and make sure it's add to cart button is updated
-                    //change the prodbox atc button  
+                    _this.addToCartToggle(num, atcModalBtn); //the cart toggle above only applies the modal add to cart button so...
+                    //once it's been added to cart and the modal cart button has been toggled
+                    //map the cart
 
 
-                    _this.cart.toggleATCbutton(el.getElementsByClassName('atcBtn')[0], true);
+                    _this.cart.mapCart(); //withe the cart mapped by id, we can check for it and update the prod box id appropiately
+
+
+                    if (_this.cart.mappedBasket.includes(_this.items[num].id)) {
+                      //the item is on the cart, change the prodbox btn to orange
+                      _this.cart.toggleATCbutton(el.getElementsByClassName('atcBtn')[0], true);
+                    } else {
+                      //the item is not on the cart, change the prodbox btn to purple
+                      _this.cart.toggleATCbutton(el.getElementsByClassName('atcBtn')[0], false);
+                    }
                   }); //wireup event listener to ATC button 
                 });
               }; //add event listener to all product item feature boxes

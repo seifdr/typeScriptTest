@@ -7,6 +7,7 @@ $break-xlarge: 1145px;
 
 
 $fsmPurple:            #514689;
+$fsmLightPurple:       #6357a0;
 $fsmOrange:            #df6426;
 $fsmOrangeHover:       #daa88f; 
 $fsmElectricBlue:      #0082bf;
@@ -16,7 +17,7 @@ $featureBoxGrey:       #f0f0f0;
 #cart {
     display: block;
     // height: auto;
-    background-color: $fsmPurple;
+    background-color: $fsmLightPurple;
 
     height: 0;
     transition: height 1s;

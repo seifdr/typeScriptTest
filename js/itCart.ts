@@ -4,7 +4,7 @@
 interface product {
     id: number;
     title: string;
-    element: [];
+    element: string;
     type: string;
     categories: [];
     price: number;
@@ -83,8 +83,9 @@ class Item implements product {
 }
 
 class Cart {
+    private machformBase = 'https://forms.feinberg.northwestern.edu/view.php?id=48491';
     private basket = [];
-    private mappedBasket = [];
+    public mappedBasket = [];
 
     public cartCount: number = 0;
     public cartTotal: number = 0;
@@ -225,8 +226,6 @@ class Cart {
         } else {
             document.getElementById('cart').style.height = "0";
         }
-
-        console.log( this.cookie.getJSONfromCookieAsArray() );
     }
 
     makeCartInBrowser(){
@@ -243,16 +242,33 @@ class Cart {
 
         document.body.insertAdjacentHTML('beforeend', x);
 
+        //view cart button listener
         document.getElementById('viewCart').addEventListener( 'click', (e) => {
             let cartList = this.listCart();
             
             if( this.cartTotal > 0 ){
                 this.modal.openOverlay( cartList );         
                 this.wireUpCartDeletes();
+                this.wireUpCartCheckoutBtn();
                 e.preventDefault();
             } else {
                 this.modal.closeOverlay( document.getElementById(this.modal.overlayContainerGuts), document.getElementById(this.modal.overlayContainerID), window.scrollY );
             }
+        });
+    }
+
+    wireUpCartCheckoutBtn(){
+        document.getElementById('checkoutNow').addEventListener( 'click', (e) => {
+            const checkoutURL = this.makeCheckoutURL();
+            //clear the cart
+            this.basket = [];
+            //clear the cookie
+            this.cookie.deleteCookie();
+
+            e.target.href = checkoutURL;
+            window.location = checkoutURL;
+
+            e.preventDefault();
         });
     }
 
@@ -325,7 +341,7 @@ class Cart {
                 </div>
                 <div class="cartRow">
                     <div class="checkoutRow">
-                        <a href="#" class="button">Checkout Now</a> 
+                        <a id="checkoutNow" href="#" class="button">Checkout Now</a> 
                     </div>
                 </div>
             `;
@@ -359,6 +375,23 @@ class Cart {
     removeSpecialChars( inputVal ){
         //allow periods
         return inputVal.replace(/[`~!@#$%^&*()_|+\-=?;:'",<>\{\}\[\]\\\/]/gi, '');
+    }
+
+    makeCheckoutURL(){
+        if( this.basket.length > 0 ){
+            let url = this.machformBase + '&'
+
+            for (let i = 0; i < this.basket.length; i++) {
+                url += this.basket[i].element + '=1';
+
+                if( (i + 1) < this.basket.length ){
+                    url += '&'
+                }
+            }
+            return url;
+        } else {
+            return null;
+        }
     }
 }
 
@@ -500,14 +533,25 @@ class Store {
 
                         let atcModalBtn = document.getElementById('atcModalBtn');
 
-                        atcModalBtn.addEventListener('click', (e) => {
+                        atcModalBtn.addEventListener('click', (e) => {        
                             //Change the modal atc button 
                             this.addToCartToggle(num, atcModalBtn);
-                            //find corresponding prodBox and make sure it's add to cart button is updated
-                            //change the prodbox atc button  
-                            this.cart.toggleATCbutton( el.getElementsByClassName('atcBtn')[0], true );
+
+                                //the cart toggle above only applies the modal add to cart button so...
+                                //once it's been added to cart and the modal cart button has been toggled
+                                //map the cart
+                                this.cart.mapCart();
+
+                            
+                                //withe the cart mapped by id, we can check for it and update the prod box id appropiately
+                                if( this.cart.mappedBasket.includes( this.items[num].id ) ){
+                                    //the item is on the cart, change the prodbox btn to orange
+                                    this.cart.toggleATCbutton( el.getElementsByClassName('atcBtn')[0], true );
+                                } else {
+                                    //the item is not on the cart, change the prodbox btn to purple
+                                    this.cart.toggleATCbutton( el.getElementsByClassName('atcBtn')[0], false );
+                                }
                         });
-                        
                         //wireup event listener to ATC button 
                 });
             }
