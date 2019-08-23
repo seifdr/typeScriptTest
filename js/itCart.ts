@@ -112,8 +112,6 @@ class Cart {
     addOrRemoveFromCart( item:product ){
         let positionInBasket:number;
 
-        console.log( item );
-
         if( this.basket.length > 0 ){
     
             this.basket.forEach( (basketItem, i ) => {
@@ -219,7 +217,7 @@ class Cart {
             document.getElementById('cart').style.height = "0";
         }
 
-        console.log( this.cookie.getCookie() );
+        console.log( this.cookie.getCookieJSONfromCookie() );
     }
 
     makeCartInBrowser(){
@@ -488,15 +486,19 @@ class Store {
 
                     let num = elBtn.getAttribute('data-num');
 
+                    console.log( 'Price: ', this.items[num].price );
+                    console.log( 'Result: ', this.items[num].price != '0.00' );
+
                     if( this.items[num].price != '0.00' ){
                         this.addToCartToggle(num, elBtn);
+                        e.preventDefault();
+                        e.stopPropagation();
                     } else {
                         let output = this.items[num].outputOverlay(num);
                         this.modal.openOverlay( output );
+                        e.preventDefault();
+                        e.stopPropagation();
                     }
-
-                    e.preventDefault();
-                    e.stopPropagation();
                 });
             }   
             
@@ -659,15 +661,20 @@ class Cookie {
         return v ? v[2] : null;
     }
 
+    getCookieJSONfromCookie() {
+        return JSON.parse( this.getCookie() );
+    }
+
     deleteCookie(){
         this.setCookie('', -1);
     }
 }
 
 window.onload=function() {
+    let shoppingCookie = new Cookie();
     let shoppingModal = new Modal();
 
-    let shoppingCart = new Cart( shoppingModal );
+    let shoppingCart = new Cart( shoppingModal, shoppingCookie );
 
     let store = new Store('shopping-cart', shoppingCart, shoppingModal );
 };

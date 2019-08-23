@@ -227,7 +227,6 @@ function () {
 
   Cart.prototype.addOrRemoveFromCart = function (item) {
     var positionInBasket;
-    console.log(item);
 
     if (this.basket.length > 0) {
       this.basket.forEach(function (basketItem, i) {
@@ -325,7 +324,7 @@ function () {
       document.getElementById('cart').style.height = "0";
     }
 
-    console.log(this.cookie.getCookie());
+    console.log(this.cookie.getCookieJSONfromCookie());
   };
 
   Cart.prototype.makeCartInBrowser = function () {
@@ -553,17 +552,22 @@ function () {
               _loop_4 = function _loop_4(elBtn) {
                 elBtn.addEventListener('click', function (e) {
                   var num = elBtn.getAttribute('data-num');
+                  console.log('Price: ', _this.items[num].price);
+                  console.log('Result: ', _this.items[num].price != '0.00');
 
                   if (_this.items[num].price != '0.00') {
                     _this.addToCartToggle(num, elBtn);
+
+                    e.preventDefault();
+                    e.stopPropagation();
                   } else {
                     var output = _this.items[num].outputOverlay(num);
 
                     _this.modal.openOverlay(output);
-                  }
 
-                  e.preventDefault();
-                  e.stopPropagation();
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }
                 });
               };
 
@@ -732,6 +736,10 @@ function () {
     return v ? v[2] : null;
   };
 
+  Cookie.prototype.getCookieJSONfromCookie = function () {
+    return JSON.parse(this.getCookie());
+  };
+
   Cookie.prototype.deleteCookie = function () {
     this.setCookie('', -1);
   };
@@ -740,7 +748,8 @@ function () {
 }();
 
 window.onload = function () {
+  var shoppingCookie = new Cookie();
   var shoppingModal = new Modal();
-  var shoppingCart = new Cart(shoppingModal);
+  var shoppingCart = new Cart(shoppingModal, shoppingCookie);
   var store = new Store('shopping-cart', shoppingCart, shoppingModal);
 };
