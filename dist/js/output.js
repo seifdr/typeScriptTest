@@ -564,7 +564,12 @@ function () {
 
                   var atcModalBtn = document.getElementById('atcModalBtn');
                   atcModalBtn.addEventListener('click', function (e) {
-                    _this.addToCartToggle(num, atcModalBtn);
+                    //Change the modal atc button 
+                    _this.addToCartToggle(num, atcModalBtn); //find corresponding prodBox and make sure it's add to cart button is updated
+                    //change the prodbox atc button  
+
+
+                    _this.cart.toggleATCbutton(el.getElementsByClassName('atcBtn')[0], true);
                   }); //wireup event listener to ATC button 
                 });
               }; //add event listener to all product item feature boxes

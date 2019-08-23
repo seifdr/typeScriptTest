@@ -501,7 +501,11 @@ class Store {
                         let atcModalBtn = document.getElementById('atcModalBtn');
 
                         atcModalBtn.addEventListener('click', (e) => {
-                            this.addToCartToggle(num, atcModalBtn);  
+                            //Change the modal atc button 
+                            this.addToCartToggle(num, atcModalBtn);
+                            //find corresponding prodBox and make sure it's add to cart button is updated
+                            //change the prodbox atc button  
+                            this.cart.toggleATCbutton( el.getElementsByClassName('atcBtn')[0], true );
                         });
                         
                         //wireup event listener to ATC button 
