@@ -20,7 +20,7 @@ class Item implements product {
     type;
     categories;
     price;
-    image;
+    image:string;
     desc;
     onCart;
 
@@ -317,6 +317,8 @@ class Cart {
 
                 // <img src="http://feinberg-dev.fsm.northwestern.edu/it-new/images/placeholder/placeholder-140x140.png" />
 
+                console.log( row.image );
+
                 cartlistOutput += `<div class="cartRow">
                     <div class="crImg">
                         <img src="https://feinberg-dev.fsm.northwestern.edu/it-new/${row.image}" alt="${row.title}-image" />
@@ -430,7 +432,7 @@ class Store {
                     if( existingItemsInCookie.length > 0 ){
                         if( existingItemsInCookie.includes( row.id ) ){
                             row.onCart = true;
-                            this.cart.addOrRemoveFromCart( row );
+                            this.cart.addOrRemoveFromCart( new Item( row ) );
                         } else {
                             row.onCart = false;
                         }

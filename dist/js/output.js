@@ -438,6 +438,7 @@ function () {
       var cartlistOutput_1 = '<div id="cartList">';
       this.basket.forEach(function (row, i) {
         // <img src="http://feinberg-dev.fsm.northwestern.edu/it-new/images/placeholder/placeholder-140x140.png" />
+        console.log(row.image);
         cartlistOutput_1 += "<div class=\"cartRow\">\n                    <div class=\"crImg\">\n                        <img src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + row.image + "\" alt=\"" + row.title + "-image\" />\n                    </div>\n                    <div class=\"crDesc\">\n                        <p>" + row.title + "</p>\n                        <a class=\"crDeleteEmbed\" data-basket-position=\"" + i + "\" >Delete</a>\n                    </div>\n                    <div class=\"crDelete\"> \n                        <p><a class=\"crDeleteBtn\" data-basket-position=\"" + i + "\" href=\"\">Delete</a></p>\n                    </div>\n                    <div><p>$" + _this.numberWithCommas(row.price, false) + "</p></div>\n                </div>";
       });
       cartlistOutput_1 += "\n                <div class=\"cartRow\">\n                    <div class=\"crImg\">&nbsp;</div>\n                    <div class=\"crDesc\">&nbsp;</div>\n                    <div class=\"crDelete\">Total:</div>\n                    <div>$" + this.numberWithCommas(this.totalCart(), true) + "</div>\n                </div>\n                <div class=\"cartRow\">\n                    <div class=\"checkoutRow\">\n                        <a id=\"checkoutNow\" href=\"#\" class=\"button\">Checkout Now</a> \n                    </div>\n                </div>\n            ";
@@ -527,7 +528,7 @@ function () {
             if (existingItemsInCookie.includes(row.id)) {
               row.onCart = true;
 
-              _this.cart.addOrRemoveFromCart(row);
+              _this.cart.addOrRemoveFromCart(new Item(row));
             } else {
               row.onCart = false;
             }
