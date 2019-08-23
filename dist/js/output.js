@@ -538,7 +538,7 @@ function () {
                 }
 
                 var modPrice = item.price == 0.00 ? '' : '$' + _this.numberWithCommas(item.price);
-                var modBtnTxt = item.price == 0.00 ? 'More Info' : 'Add To Cart';
+                var modBtnTxt = item.price == 0.00 ? _this.cart.cartBtnTxt.Info : _this.cart.cartBtnTxt.Add;
                 shelves_1 += "<div class=\"col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc\" data-os=\"" + item.type + "\" data-catString=\"" + categoryStr + "\"><article class=\"feature-box prodBox\" data-id=\"" + item.id + "\" data-num=\"" + i + "\" >   \n                                    <div class=\"img-container\">\n                                        <img class=\"img-fluid\" src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + item.image + "\" alt=\"" + item.title + "-image\" />\n                                    </div>\n                                    <div class=\"feature-copy\">\n                                        <h6>" + item.title + "</h6>\n                                        <p>" + modPrice + "</p>\n                                        <a class=\"specs\" data-id=\"" + item.id + "\">Read product specs</a>\n                                    </div>";
                 shelves_1 += "<a class=\"button atcBtn";
 
