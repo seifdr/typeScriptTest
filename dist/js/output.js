@@ -360,21 +360,72 @@ function () {
     var _this = this;
 
     document.getElementById('checkoutNow').addEventListener('click', function (e) {
-      e.preventDefault();
+      return __awaiter(_this, void 0, void 0, function () {
+        var checkoutURL, allATCbtns, i;
+        return __generator(this, function (_a) {
+          switch (_a.label) {
+            case 0:
+              e.preventDefault();
+              return [4
+              /*yield*/
+              , this.makeCheckoutURL()];
 
-      var checkoutURL = _this.makeCheckoutURL(); //clear the cart
+            case 1:
+              checkoutURL = _a.sent(); //clear the cart
+
+              this.basket = [];
+              return [4
+              /*yield*/
+              , this.mapCart()];
+
+            case 2:
+              _a.sent(); //clear the cookie
 
 
-      _this.basket = []; //clear the cookie
+              return [4
+              /*yield*/
+              , this.cookie.deleteCookie()];
 
-      _this.cookie.deleteCookie();
+            case 3:
+              //clear the cookie
+              _a.sent(); //make sure cart feature at bottom of page is gone
 
-      if (_this.modal.isOpen) {
-        _this.modal.closeOverlay(document.getElementById(_this.modal.overlayContainerGuts), document.getElementById(_this.modal.overlayContainerID), window.scrollY);
-      }
 
-      e.target.href = checkoutURL;
-      window.location = checkoutURL;
+              return [4
+              /*yield*/
+              , this.updateCartTotalAndCount()];
+
+            case 4:
+              //make sure cart feature at bottom of page is gone
+              _a.sent();
+
+              allATCbtns = document.getElementsByClassName('atcBtn');
+
+              for (i = 0; i < allATCbtns.length; i++) {
+                allATCbtns[i].classList.remove('onCart');
+              }
+
+              if (!this.modal.isOpen) return [3
+              /*break*/
+              , 6];
+              return [4
+              /*yield*/
+              , this.modal.closeOverlay(document.getElementById(this.modal.overlayContainerGuts), document.getElementById(this.modal.overlayContainerID), window.scrollY)];
+
+            case 5:
+              _a.sent();
+
+              _a.label = 6;
+
+            case 6:
+              e.target.href = checkoutURL;
+              window.location = checkoutURL;
+              return [2
+              /*return*/
+              ];
+          }
+        });
+      });
     });
   };
 
@@ -519,6 +570,9 @@ function () {
   Store.prototype.loadProducts = function () {
     var _this = this;
 
+    console.log("im loading products");
+    console.log('Basket: ', this.cart.basket);
+    console.log('Mapped basket: ', this.cart.mappedBasket);
     var existingItemsInCookie = this.cookie.getJSONfromCookieAsArray();
     return fetch(this.apiURL).then(function (response) {
       //if you dont do another then, code executes before promise returns

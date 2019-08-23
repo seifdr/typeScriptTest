@@ -84,7 +84,7 @@ class Item implements product {
 
 class Cart {
     private machformBase = 'https://forms.feinberg.northwestern.edu/view.php?id=48491';
-    private basket = [];
+    public basket = [];
     public mappedBasket = [];
 
     public cartCount: number = 0;
@@ -258,22 +258,31 @@ class Cart {
     }
 
     wireUpCartCheckoutBtn(){
-        document.getElementById('checkoutNow').addEventListener( 'click', (e) => {
+        document.getElementById('checkoutNow').addEventListener( 'click', async (e) => {
             e.preventDefault();
-            const checkoutURL = this.makeCheckoutURL();
+            const checkoutURL = await this.makeCheckoutURL();
             //clear the cart
             this.basket = [];
+            await this.mapCart();
             //clear the cookie
-            this.cookie.deleteCookie();
+            await this.cookie.deleteCookie();
 
+            //make sure cart feature at bottom of page is gone
+            await this.updateCartTotalAndCount();
+
+            //make sure all atcButtons are set back to purple/add to cart stage
+            const allATCbtns = document.getElementsByClassName('atcBtn');
+            
+            for (let i = 0; i < allATCbtns.length; i++) { 
+                allATCbtns[i].classList.remove('onCart');
+            }
+            
             if( this.modal.isOpen ){
-                this.modal.closeOverlay( document.getElementById(this.modal.overlayContainerGuts), document.getElementById(this.modal.overlayContainerID), window.scrollY );
+                await this.modal.closeOverlay( document.getElementById(this.modal.overlayContainerGuts), document.getElementById(this.modal.overlayContainerID), window.scrollY );
             }
 
             e.target.href = checkoutURL;
             window.location = checkoutURL;
-
-            
         });
     }
 
@@ -420,6 +429,13 @@ class Store {
     }
 
     loadProducts() {
+
+        console.log("im loading products");
+
+        console.log( 'Basket: ', this.cart.basket );
+
+        console.log( 'Mapped basket: ', this.cart.mappedBasket );
+
         let existingItemsInCookie = <number[]> this.cookie.getJSONfromCookieAsArray();
 
         return fetch( this.apiURL ).then( (response) => {
