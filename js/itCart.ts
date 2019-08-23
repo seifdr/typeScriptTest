@@ -22,7 +22,7 @@ class Item implements product {
     price;
     image;
     desc;
-    onCart = false;
+    onCart;
 
     constructor( item:product ){
         this.id = item.id;
@@ -41,6 +41,8 @@ class Item implements product {
         
         this.image = item.image['path'];
         this.desc = item.desc;
+
+        this.onCart = ( item.onCart )? true : false; 
     }
 
     outputOverlay( num = null ){
@@ -89,6 +91,13 @@ class Cart {
 
     private modal: Modal;
     private cookie: Cookie;
+
+    //button text 
+    public cartBtnTxt = {
+        'Add'       : 'Add To Cart',
+        'Remove'    : 'Remove From Cart',
+        'Info'      : 'More Info'
+    }
 
     constructor( modal, cookie ) {
         this.modal = modal;
@@ -217,7 +226,7 @@ class Cart {
             document.getElementById('cart').style.height = "0";
         }
 
-        console.log( this.cookie.getCookieJSONfromCookie() );
+        console.log( this.cookie.getJSONfromCookieAsArray() );
     }
 
     makeCartInBrowser(){
@@ -331,10 +340,10 @@ class Cart {
     toggleATCbutton( elRef, onCart:boolean ){
         if( onCart ){
             elRef.classList.add('onCart');
-            elRef.textContent = "Remove From Cart";
+            elRef.textContent = this.cartBtnTxt.Remove;
         } else {
             elRef.classList.remove('onCart');
-            elRef.textContent = "Add To Cart";
+            elRef.textContent = this.cartBtnTxt.Add;
         }
         elRef.blur();
     }
@@ -360,15 +369,19 @@ class Store {
     private sortBy: string;
     private cart:Cart;
     private modal: Modal;
+    private cookie: Cookie;
 
-    constructor( containerID, cart, modal ) {
+    constructor( containerID, cart, modal, cookie ) {
         this.modal = modal;
+        this.cookie = cookie;
         this.cart = cart;
         this.containerEL = document.getElementById( containerID );
         this.stockTheShelves();
     }
 
     loadProducts() {
+        let existingItemsInCookie = <number[]> this.cookie.getJSONfromCookieAsArray();
+
         return fetch( this.apiURL ).then( (response) => {
             //if you dont do another then, code executes before promise returns
             return response.json();
@@ -380,6 +393,15 @@ class Store {
                 // this.items = myJson.items;
 
                 myJson.items.forEach( (row:product, i) => {
+
+                    if( existingItemsInCookie.length > 0 ){
+                        if( existingItemsInCookie.includes( row.id ) ){
+                            row.onCart = true;
+                            this.cart.addOrRemoveFromCart( row );
+                        } else {
+                            row.onCart = false;
+                        }
+                    }
                     this.items[i] = new Item( row );
                 });
 
@@ -453,14 +475,19 @@ class Store {
                                         <h6>${item.title}</h6>
                                         <p>${ modPrice }</p>
                                         <a class="specs" data-id="${item.id}">Read product specs</a>
-                                    </div>
-                                    <a class="button atcBtn" data-num="${i}" data-id="${item.id}" data-isCartBtn="true" href="#">${modBtnTxt}</a>
-                                </article></div>`;
+                                    </div>`;
+
+                    shelves += `<a class="button atcBtn`;
+                        if( item.onCart ){
+                            shelves += ` onCart `
+                            // come back here
+                            modBtnTxt = this.cart.cartBtnTxt.Remove;
+                        }
+                    shelves +=  ` " data-num="${i}" data-id="${item.id}" data-isCartBtn="true" href="#">${modBtnTxt}</a></article></div>`;
                 });
 
             shelves += `</div></section>
                             </div></div>`;
-
             this.containerEL.insertAdjacentHTML('beforeend', shelves);
 
             //add event listener to all product item feature boxes
@@ -485,9 +512,6 @@ class Store {
                 elBtn.addEventListener('click', (e) => {
 
                     let num = elBtn.getAttribute('data-num');
-
-                    console.log( 'Price: ', this.items[num].price );
-                    console.log( 'Result: ', this.items[num].price != '0.00' );
 
                     if( this.items[num].price != '0.00' ){
                         this.addToCartToggle(num, elBtn);
@@ -661,8 +685,10 @@ class Cookie {
         return v ? v[2] : null;
     }
 
-    getCookieJSONfromCookie() {
-        return JSON.parse( this.getCookie() );
+    getJSONfromCookieAsArray() {
+        let existingItemsInCookie = <Array<number>> JSON.parse( this.getCookie() );
+
+        return ( existingItemsInCookie )? existingItemsInCookie : [];
     }
 
     deleteCookie(){
@@ -671,10 +697,11 @@ class Cookie {
 }
 
 window.onload=function() {
-    let shoppingCookie = new Cookie();
+    let shoppingCookie = new Cookie( 'fsmITPurchasing' );
+
     let shoppingModal = new Modal();
 
     let shoppingCart = new Cart( shoppingModal, shoppingCookie );
 
-    let store = new Store('shopping-cart', shoppingCart, shoppingModal );
+    let store = new Store('shopping-cart', shoppingCart, shoppingModal, shoppingCookie );
 };

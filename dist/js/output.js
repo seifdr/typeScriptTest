@@ -145,7 +145,6 @@ var Item =
 /** @class */
 function () {
   function Item(item) {
-    this.onCart = false;
     this.id = item.id;
     this.title = item.title;
     this.element = item.element;
@@ -161,6 +160,7 @@ function () {
 
     this.image = item.image['path'];
     this.desc = item.desc;
+    this.onCart = item.onCart ? true : false;
   }
 
   Item.prototype.outputOverlay = function (num) {
@@ -206,7 +206,13 @@ function () {
     this.basket = [];
     this.mappedBasket = [];
     this.cartCount = 0;
-    this.cartTotal = 0;
+    this.cartTotal = 0; //button text 
+
+    this.cartBtnTxt = {
+      'Add': 'Add To Cart',
+      'Remove': 'Remove From Cart',
+      'Info': 'More Info'
+    };
     this.modal = modal;
     this.cookie = cookie;
     this.makeCartInBrowser();
@@ -324,7 +330,7 @@ function () {
       document.getElementById('cart').style.height = "0";
     }
 
-    console.log(this.cookie.getCookieJSONfromCookie());
+    console.log(this.cookie.getJSONfromCookieAsArray());
   };
 
   Cart.prototype.makeCartInBrowser = function () {
@@ -425,10 +431,10 @@ function () {
   Cart.prototype.toggleATCbutton = function (elRef, onCart) {
     if (onCart) {
       elRef.classList.add('onCart');
-      elRef.textContent = "Remove From Cart";
+      elRef.textContent = this.cartBtnTxt.Remove;
     } else {
       elRef.classList.remove('onCart');
-      elRef.textContent = "Add To Cart";
+      elRef.textContent = this.cartBtnTxt.Add;
     }
 
     elRef.blur();
@@ -457,10 +463,11 @@ function () {
 var Store =
 /** @class */
 function () {
-  function Store(containerID, cart, modal) {
+  function Store(containerID, cart, modal, cookie) {
     this.apiURL = 'https://feinberg-dev.fsm.northwestern.edu/it-new/ws/purchasing-api.php';
     this.items = [{}];
     this.modal = modal;
+    this.cookie = cookie;
     this.cart = cart;
     this.containerEL = document.getElementById(containerID);
     this.stockTheShelves();
@@ -469,6 +476,7 @@ function () {
   Store.prototype.loadProducts = function () {
     var _this = this;
 
+    var existingItemsInCookie = this.cookie.getJSONfromCookieAsArray();
     return fetch(this.apiURL).then(function (response) {
       //if you dont do another then, code executes before promise returns
       return response.json();
@@ -478,6 +486,16 @@ function () {
       if (result.length > 0) {
         // this.items = myJson.items;
         myJson.items.forEach(function (row, i) {
+          if (existingItemsInCookie.length > 0) {
+            if (existingItemsInCookie.includes(row.id)) {
+              row.onCart = true;
+
+              _this.cart.addOrRemoveFromCart(row);
+            } else {
+              row.onCart = false;
+            }
+          }
+
           _this.items[i] = new Item(row);
         });
         return true;
@@ -521,7 +539,16 @@ function () {
 
                 var modPrice = item.price == 0.00 ? '' : '$' + _this.numberWithCommas(item.price);
                 var modBtnTxt = item.price == 0.00 ? 'More Info' : 'Add To Cart';
-                shelves_1 += "<div class=\"col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc\" data-os=\"" + item.type + "\" data-catString=\"" + categoryStr + "\"><article class=\"feature-box prodBox\" data-id=\"" + item.id + "\" data-num=\"" + i + "\" >   \n                                    <div class=\"img-container\">\n                                        <img class=\"img-fluid\" src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + item.image + "\" alt=\"" + item.title + "-image\" />\n                                    </div>\n                                    <div class=\"feature-copy\">\n                                        <h6>" + item.title + "</h6>\n                                        <p>" + modPrice + "</p>\n                                        <a class=\"specs\" data-id=\"" + item.id + "\">Read product specs</a>\n                                    </div>\n                                    <a class=\"button atcBtn\" data-num=\"" + i + "\" data-id=\"" + item.id + "\" data-isCartBtn=\"true\" href=\"#\">" + modBtnTxt + "</a>\n                                </article></div>";
+                shelves_1 += "<div class=\"col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc\" data-os=\"" + item.type + "\" data-catString=\"" + categoryStr + "\"><article class=\"feature-box prodBox\" data-id=\"" + item.id + "\" data-num=\"" + i + "\" >   \n                                    <div class=\"img-container\">\n                                        <img class=\"img-fluid\" src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + item.image + "\" alt=\"" + item.title + "-image\" />\n                                    </div>\n                                    <div class=\"feature-copy\">\n                                        <h6>" + item.title + "</h6>\n                                        <p>" + modPrice + "</p>\n                                        <a class=\"specs\" data-id=\"" + item.id + "\">Read product specs</a>\n                                    </div>";
+                shelves_1 += "<a class=\"button atcBtn";
+
+                if (item.onCart) {
+                  shelves_1 += " onCart "; // come back here
+
+                  modBtnTxt = _this.cart.cartBtnTxt.Remove;
+                }
+
+                shelves_1 += " \" data-num=\"" + i + "\" data-id=\"" + item.id + "\" data-isCartBtn=\"true\" href=\"#\">" + modBtnTxt + "</a></article></div>";
               });
               shelves_1 += "</div></section>\n                            </div></div>";
               this.containerEL.insertAdjacentHTML('beforeend', shelves_1);
@@ -552,8 +579,6 @@ function () {
               _loop_4 = function _loop_4(elBtn) {
                 elBtn.addEventListener('click', function (e) {
                   var num = elBtn.getAttribute('data-num');
-                  console.log('Price: ', _this.items[num].price);
-                  console.log('Result: ', _this.items[num].price != '0.00');
 
                   if (_this.items[num].price != '0.00') {
                     _this.addToCartToggle(num, elBtn);
@@ -736,8 +761,9 @@ function () {
     return v ? v[2] : null;
   };
 
-  Cookie.prototype.getCookieJSONfromCookie = function () {
-    return JSON.parse(this.getCookie());
+  Cookie.prototype.getJSONfromCookieAsArray = function () {
+    var existingItemsInCookie = JSON.parse(this.getCookie());
+    return existingItemsInCookie ? existingItemsInCookie : [];
   };
 
   Cookie.prototype.deleteCookie = function () {
@@ -748,8 +774,8 @@ function () {
 }();
 
 window.onload = function () {
-  var shoppingCookie = new Cookie();
+  var shoppingCookie = new Cookie('fsmITPurchasing');
   var shoppingModal = new Modal();
   var shoppingCart = new Cart(shoppingModal, shoppingCookie);
-  var store = new Store('shopping-cart', shoppingCart, shoppingModal);
+  var store = new Store('shopping-cart', shoppingCart, shoppingModal, shoppingCookie);
 };
