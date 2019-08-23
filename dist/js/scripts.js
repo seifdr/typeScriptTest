@@ -30,7 +30,15 @@ class Item implements product {
         this.element = item.element;
         this.type = item.type;
         this.categories = item.categories;
-        this.price = this.removeSpecialChars( item.price );
+
+        let tempPrice = this.removeSpecialChars( item.price );
+
+        if( isNaN( tempPrice ) ){
+            item.price = 0.00;
+        } else {
+            this.price = this.removeSpecialChars( tempPrice );
+        }
+        
         this.image = item.image['path'];
         this.desc = item.desc;
     }
@@ -46,14 +54,19 @@ class Item implements product {
                     <img src="https://feinberg-dev.fsm.northwestern.edu/it-new/${this.image}" />
                 </div>
                 <div class="overlayText">
-                    <h3>${this.title}</h3>
-                    <h6>$${ this.numberWithCommas( this.price ) }</h6>
-                    <div>${this.desc}</div>
-                    <br />
-                    <a id="atcModalBtn" class="button ${optClass}" href="#" data-num="${num}" >${ btnText }</a>
-                </div>
-            </div>
-        `;
+                    <h3>${this.title}</h3>`
+
+                    if( this.price != '0.00' ){
+                        output += `<h6>$${ this.numberWithCommas( this.price ) }</h6>`;
+                    }
+                    output += `<div>${this.desc}</div><br />`;
+        
+        if( this.price != '0.00' ){
+            output += `<a id="atcModalBtn" class="button ${optClass}" href="#" data-num="${num}" >${ btnText }</a>`;
+        }
+
+        output += `</div>
+            </div>`;
         return output;
     }
 
@@ -239,9 +252,8 @@ class Cart {
                 this.wireUpCartDeletes();
                 e.preventDefault();
             } else {
-                this.modal.closeOverlay( document.getElementById(this.modal.overlayContainerGuts), document.getElementById(this.modal.overlayContainerID) );
+                this.modal.closeOverlay( document.getElementById(this.modal.overlayContainerGuts), document.getElementById(this.modal.overlayContainerID), window.scrollY );
             }
-            
         });
     }
 
@@ -276,7 +288,7 @@ class Cart {
                 }
             }
         } else {
-            this.modal.closeOverlay( document.getElementById(this.modal.overlayContainerGuts), document.getElementById(this.modal.overlayContainerID) );
+            this.modal.closeOverlay( document.getElementById(this.modal.overlayContainerGuts), document.getElementById(this.modal.overlayContainerID), window.scrollY );
         }
     }
 
@@ -439,16 +451,20 @@ class Store {
                         categoryStr = item.categories['value'];
                     }
 
+                    
+                    let modPrice    = ( item.price == 0.00 )? '': '$' + this.numberWithCommas(item.price);
+                    let modBtnTxt   = ( item.price == 0.00 )? 'More Info' : 'Add To Cart';   
+
                     shelves += `<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc" data-os="${item.type}" data-catString="${categoryStr}"><article class="feature-box prodBox" data-id="${item.id}" data-num="${i}" >   
                                     <div class="img-container">
                                         <img class="img-fluid" src="https://feinberg-dev.fsm.northwestern.edu/it-new/${item.image}" alt="${item.title}-image" />
                                     </div>
                                     <div class="feature-copy">
                                         <h6>${item.title}</h6>
-                                        <p>$${ this.numberWithCommas(item.price) }</p>
+                                        <p>${ modPrice }</p>
                                         <a class="specs" data-id="${item.id}">Read product specs</a>
                                     </div>
-                                    <a class="button atcBtn" data-num="${i}" data-id="${item.id}" data-isCartBtn="true" href="#">Add To Cart</a>
+                                    <a class="button atcBtn" data-num="${i}" data-id="${item.id}" data-isCartBtn="true" href="#">${modBtnTxt}</a>
                                 </article></div>`;
                 });
 
@@ -477,9 +493,15 @@ class Store {
 
             for( let elBtn of document.getElementsByClassName('atcBtn') ){
                 elBtn.addEventListener('click', (e) => {
+
                     let num = elBtn.getAttribute('data-num');
 
-                    this.addToCartToggle(num, elBtn);
+                    if( this.items[num].price != '0.00' ){
+                        this.addToCartToggle(num, elBtn);
+                    } else {
+                        let output = this.items[num].outputOverlay(num);
+                        this.modal.openOverlay( output );
+                    }
 
                     e.preventDefault();
                     e.stopPropagation();

@@ -151,7 +151,14 @@ function () {
     this.element = item.element;
     this.type = item.type;
     this.categories = item.categories;
-    this.price = this.removeSpecialChars(item.price);
+    var tempPrice = this.removeSpecialChars(item.price);
+
+    if (isNaN(tempPrice)) {
+      item.price = 0.00;
+    } else {
+      this.price = this.removeSpecialChars(tempPrice);
+    }
+
     this.image = item.image['path'];
     this.desc = item.desc;
   }
@@ -164,7 +171,19 @@ function () {
 
     var btnText = this.onCart ? 'Remove From Cart' : 'Add To Cart';
     var optClass = this.onCart ? 'onCart' : '';
-    var output = "\n            <div id=\"overlayPad\">\n                <div class=\"overlayImg\">\n                    <img src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + this.image + "\" />\n                </div>\n                <div class=\"overlayText\">\n                    <h3>" + this.title + "</h3>\n                    <h6>$" + this.numberWithCommas(this.price) + "</h6>\n                    <div>" + this.desc + "</div>\n                    <br />\n                    <a id=\"atcModalBtn\" class=\"button " + optClass + "\" href=\"#\" data-num=\"" + num + "\" >" + btnText + "</a>\n                </div>\n            </div>\n        ";
+    var output = "\n            <div id=\"overlayPad\">\n                <div class=\"overlayImg\">\n                    <img src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + this.image + "\" />\n                </div>\n                <div class=\"overlayText\">\n                    <h3>" + this.title + "</h3>";
+
+    if (this.price != '0.00') {
+      output += "<h6>$" + this.numberWithCommas(this.price) + "</h6>";
+    }
+
+    output += "<div>" + this.desc + "</div><br />";
+
+    if (this.price != '0.00') {
+      output += "<a id=\"atcModalBtn\" class=\"button " + optClass + "\" href=\"#\" data-num=\"" + num + "\" >" + btnText + "</a>";
+    }
+
+    output += "</div>\n            </div>";
     return output;
   };
 
@@ -332,7 +351,7 @@ function () {
 
         e.preventDefault();
       } else {
-        _this.modal.closeOverlay(document.getElementById(_this.modal.overlayContainerGuts), document.getElementById(_this.modal.overlayContainerID));
+        _this.modal.closeOverlay(document.getElementById(_this.modal.overlayContainerGuts), document.getElementById(_this.modal.overlayContainerID), window.scrollY);
       }
     });
   };
@@ -389,7 +408,7 @@ function () {
         }
       }
     } else {
-      this.modal.closeOverlay(document.getElementById(this.modal.overlayContainerGuts), document.getElementById(this.modal.overlayContainerID));
+      this.modal.closeOverlay(document.getElementById(this.modal.overlayContainerGuts), document.getElementById(this.modal.overlayContainerID), window.scrollY);
     }
   };
 
@@ -508,7 +527,9 @@ function () {
                   categoryStr = item.categories['value'];
                 }
 
-                shelves_1 += "<div class=\"col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc\" data-os=\"" + item.type + "\" data-catString=\"" + categoryStr + "\"><article class=\"feature-box prodBox\" data-id=\"" + item.id + "\" data-num=\"" + i + "\" >   \n                                    <div class=\"img-container\">\n                                        <img class=\"img-fluid\" src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + item.image + "\" alt=\"" + item.title + "-image\" />\n                                    </div>\n                                    <div class=\"feature-copy\">\n                                        <h6>" + item.title + "</h6>\n                                        <p>$" + _this.numberWithCommas(item.price) + "</p>\n                                        <a class=\"specs\" data-id=\"" + item.id + "\">Read product specs</a>\n                                    </div>\n                                    <a class=\"button atcBtn\" data-num=\"" + i + "\" data-id=\"" + item.id + "\" data-isCartBtn=\"true\" href=\"#\">Add To Cart</a>\n                                </article></div>";
+                var modPrice = item.price == 0.00 ? '' : '$' + _this.numberWithCommas(item.price);
+                var modBtnTxt = item.price == 0.00 ? 'More Info' : 'Add To Cart';
+                shelves_1 += "<div class=\"col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc\" data-os=\"" + item.type + "\" data-catString=\"" + categoryStr + "\"><article class=\"feature-box prodBox\" data-id=\"" + item.id + "\" data-num=\"" + i + "\" >   \n                                    <div class=\"img-container\">\n                                        <img class=\"img-fluid\" src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + item.image + "\" alt=\"" + item.title + "-image\" />\n                                    </div>\n                                    <div class=\"feature-copy\">\n                                        <h6>" + item.title + "</h6>\n                                        <p>" + modPrice + "</p>\n                                        <a class=\"specs\" data-id=\"" + item.id + "\">Read product specs</a>\n                                    </div>\n                                    <a class=\"button atcBtn\" data-num=\"" + i + "\" data-id=\"" + item.id + "\" data-isCartBtn=\"true\" href=\"#\">" + modBtnTxt + "</a>\n                                </article></div>";
               });
               shelves_1 += "</div></section>\n                            </div></div>";
               this.containerEL.insertAdjacentHTML('beforeend', shelves_1);
@@ -540,7 +561,13 @@ function () {
                 elBtn.addEventListener('click', function (e) {
                   var num = elBtn.getAttribute('data-num');
 
-                  _this.addToCartToggle(num, elBtn);
+                  if (_this.items[num].price != '0.00') {
+                    _this.addToCartToggle(num, elBtn);
+                  } else {
+                    var output = _this.items[num].outputOverlay(num);
+
+                    _this.modal.openOverlay(output);
+                  }
 
                   e.preventDefault();
                   e.stopPropagation();
