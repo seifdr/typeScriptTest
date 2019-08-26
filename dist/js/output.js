@@ -654,24 +654,28 @@ function () {
                   _this.modal.openOverlay(output);
 
                   var atcModalBtn = document.getElementById('atcModalBtn');
-                  atcModalBtn.addEventListener('click', function (e) {
-                    //Change the modal atc button 
-                    _this.addToCartToggle(num, atcModalBtn); //the cart toggle above only applies the modal add to cart button so...
-                    //once it's been added to cart and the modal cart button has been toggled
-                    //map the cart
+
+                  if (atcModalBtn != null) {
+                    atcModalBtn.addEventListener('click', function (e) {
+                      //Change the modal atc button 
+                      _this.addToCartToggle(num, atcModalBtn); //the cart toggle above only applies the modal add to cart button so...
+                      //once it's been added to cart and the modal cart button has been toggled
+                      //map the cart
 
 
-                    _this.cart.mapCart(); //withe the cart mapped by id, we can check for it and update the prod box id appropiately
+                      _this.cart.mapCart(); //withe the cart mapped by id, we can check for it and update the prod box id appropiately
 
 
-                    if (_this.cart.mappedBasket.includes(_this.items[num].id)) {
-                      //the item is on the cart, change the prodbox btn to orange
-                      _this.cart.toggleATCbutton(el.getElementsByClassName('atcBtn')[0], true);
-                    } else {
-                      //the item is not on the cart, change the prodbox btn to purple
-                      _this.cart.toggleATCbutton(el.getElementsByClassName('atcBtn')[0], false);
-                    }
-                  }); //wireup event listener to ATC button 
+                      if (_this.cart.mappedBasket.includes(_this.items[num].id)) {
+                        //the item is on the cart, change the prodbox btn to orange
+                        _this.cart.toggleATCbutton(el.getElementsByClassName('atcBtn')[0], true);
+                      } else {
+                        //the item is not on the cart, change the prodbox btn to purple
+                        _this.cart.toggleATCbutton(el.getElementsByClassName('atcBtn')[0], false);
+                      }
+                    });
+                  } //wireup event listener to ATC button 
+
                 });
               }; //add event listener to all product item feature boxes
 

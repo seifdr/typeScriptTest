@@ -551,25 +551,27 @@ class Store {
 
                         let atcModalBtn = document.getElementById('atcModalBtn');
 
-                        atcModalBtn.addEventListener('click', (e) => {        
-                            //Change the modal atc button 
-                            this.addToCartToggle(num, atcModalBtn);
+                        if( atcModalBtn != null ){
+                            atcModalBtn.addEventListener('click', (e) => {        
+                                //Change the modal atc button 
+                                this.addToCartToggle(num, atcModalBtn);
 
-                                //the cart toggle above only applies the modal add to cart button so...
-                                //once it's been added to cart and the modal cart button has been toggled
-                                //map the cart
-                                this.cart.mapCart();
+                                    //the cart toggle above only applies the modal add to cart button so...
+                                    //once it's been added to cart and the modal cart button has been toggled
+                                    //map the cart
+                                    this.cart.mapCart();
 
-                            
-                                //withe the cart mapped by id, we can check for it and update the prod box id appropiately
-                                if( this.cart.mappedBasket.includes( this.items[num].id ) ){
-                                    //the item is on the cart, change the prodbox btn to orange
-                                    this.cart.toggleATCbutton( el.getElementsByClassName('atcBtn')[0], true );
-                                } else {
-                                    //the item is not on the cart, change the prodbox btn to purple
-                                    this.cart.toggleATCbutton( el.getElementsByClassName('atcBtn')[0], false );
-                                }
-                        });
+                                
+                                    //withe the cart mapped by id, we can check for it and update the prod box id appropiately
+                                    if( this.cart.mappedBasket.includes( this.items[num].id ) ){
+                                        //the item is on the cart, change the prodbox btn to orange
+                                        this.cart.toggleATCbutton( el.getElementsByClassName('atcBtn')[0], true );
+                                    } else {
+                                        //the item is not on the cart, change the prodbox btn to purple
+                                        this.cart.toggleATCbutton( el.getElementsByClassName('atcBtn')[0], false );
+                                    }
+                            });
+                        }
                         //wireup event listener to ATC button 
                 });
             }
