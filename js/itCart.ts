@@ -67,8 +67,8 @@ class Item implements product {
                         output += `<h6>$${ this.numberWithCommas( this.price ) }</h6>`;
                     }
 
-                    if( this.desc ){
-                        output += `<div>${this.desc}</div><br />`;
+                    if( typeof this.desc == "string" ){
+                        output += `<div>${ this.desc }</div><br />`;
                     } else {
                         output += `<br />`;
                     }

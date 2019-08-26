@@ -1,4 +1,9 @@
 
+function removeSpecialChars( inputVal ){
+    //allow periods
+    return inputVal.replace(/[`~!@#$%^&*()_|+\-=?;:'",<>\{\}\[\]\\\/]/gi, '');
+}
+
 // var pmg = document.body.querySelector('g#Layer_1');
 // var svg = document.getElementById('prevMedJewel');
 interface product {
@@ -31,12 +36,12 @@ class Item implements product {
         this.type = item.type;
         this.categories = item.categories;
 
-        let tempPrice = this.removeSpecialChars( item.price );
+        let tempPrice = removeSpecialChars( item.price );
 
         if( isNaN( tempPrice ) ){
             item.price = 0.00;
         } else {
-            this.price = this.removeSpecialChars( tempPrice );
+            this.price = removeSpecialChars( tempPrice );
         }
         
         this.image = item.image['path'];
@@ -61,7 +66,13 @@ class Item implements product {
                     if( this.price != '0.00' ){
                         output += `<h6>$${ this.numberWithCommas( this.price ) }</h6>`;
                     }
-                    output += `<div>${this.desc}</div><br />`;
+
+                    if( typeof this.desc == "string" ){
+                        output += `<div>${ this.desc }</div><br />`;
+                    } else {
+                        output += `<br />`;
+                    }
+                    
         
         if( this.price != '0.00' ){
             output += `<a id="atcModalBtn" class="button ${optClass}" href="#" data-num="${num}" >${ btnText }</a>`;
@@ -74,11 +85,6 @@ class Item implements product {
 
     numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-
-    removeSpecialChars( inputVal ){
-        //allow periods
-        return inputVal.replace(/[`~!@#$%^&*()_|+\-=?;:'",<>\{\}\[\]\\\/]/gi, '');
     }
 }
 
@@ -190,7 +196,7 @@ class Cart {
             let cartTotal = 0;
 
             this.basket.forEach( (item) => {
-                cartTotal += parseFloat( this.removeSpecialChars( item.price ) );
+                cartTotal += parseFloat( removeSpecialChars( item.price ) );
             });
 
             return cartTotal;
@@ -388,11 +394,6 @@ class Cart {
         }
     }
 
-    removeSpecialChars( inputVal ){
-        //allow periods
-        return inputVal.replace(/[`~!@#$%^&*()_|+\-=?;:'",<>\{\}\[\]\\\/]/gi, '');
-    }
-
     makeCheckoutURL(){
         if( this.basket.length > 0 ){
             let url = this.machformBase + '&'
@@ -429,13 +430,6 @@ class Store {
     }
 
     loadProducts() {
-
-        console.log("im loading products");
-
-        console.log( 'Basket: ', this.cart.basket );
-
-        console.log( 'Mapped basket: ', this.cart.mappedBasket );
-
         let existingItemsInCookie = <number[]> this.cookie.getJSONfromCookieAsArray();
 
         return fetch( this.apiURL ).then( (response) => {
@@ -491,7 +485,8 @@ class Store {
                                                     <option value="ipads">iPads</option>
                                                     <option value="tablets">Tablets</option>
                                                     <option value="printers">Printers</option>
-                                                    <option value="software">software</option>
+                                                    <option value="software">Software</option>
+                                                    <option value="accessories">Peripheral Accessories</option>
                                                 </select>
                                         </div>
                                         <div class="col-6">
@@ -669,11 +664,6 @@ class Store {
 
     numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-
-    removeSpecialChars( inputVal ){
-        //allow periods
-        return inputVal.replace(/[`~!@#$%^&*()_|+\-=?;:'",<>\{\}\[\]\\\/]/gi, '');
     }
 }
 

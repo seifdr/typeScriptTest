@@ -141,6 +141,11 @@ var __generator = void 0 && (void 0).__generator || function (thisArg, body) {
   }
 };
 
+function removeSpecialChars(inputVal) {
+  //allow periods
+  return inputVal.replace(/[`~!@#$%^&*()_|+\-=?;:'",<>\{\}\[\]\\\/]/gi, '');
+}
+
 var Item =
 /** @class */
 function () {
@@ -150,12 +155,12 @@ function () {
     this.element = item.element;
     this.type = item.type;
     this.categories = item.categories;
-    var tempPrice = this.removeSpecialChars(item.price);
+    var tempPrice = removeSpecialChars(item.price);
 
     if (isNaN(tempPrice)) {
       item.price = 0.00;
     } else {
-      this.price = this.removeSpecialChars(tempPrice);
+      this.price = removeSpecialChars(tempPrice);
     }
 
     this.image = item.image['path'];
@@ -177,7 +182,11 @@ function () {
       output += "<h6>$" + this.numberWithCommas(this.price) + "</h6>";
     }
 
-    output += "<div>" + this.desc + "</div><br />";
+    if (typeof this.desc == "string") {
+      output += "<div>" + this.desc + "</div><br />";
+    } else {
+      output += "<br />";
+    }
 
     if (this.price != '0.00') {
       output += "<a id=\"atcModalBtn\" class=\"button " + optClass + "\" href=\"#\" data-num=\"" + num + "\" >" + btnText + "</a>";
@@ -189,11 +198,6 @@ function () {
 
   Item.prototype.numberWithCommas = function (x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  };
-
-  Item.prototype.removeSpecialChars = function (inputVal) {
-    //allow periods
-    return inputVal.replace(/[`~!@#$%^&*()_|+\-=?;:'",<>\{\}\[\]\\\/]/gi, '');
   };
 
   return Item;
@@ -293,12 +297,10 @@ function () {
   };
 
   Cart.prototype.totalCart = function () {
-    var _this = this;
-
     if (this.basket.length > 0) {
       var cartTotal_1 = 0;
       this.basket.forEach(function (item) {
-        cartTotal_1 += parseFloat(_this.removeSpecialChars(item.price));
+        cartTotal_1 += parseFloat(removeSpecialChars(item.price));
       });
       return cartTotal_1;
     }
@@ -528,11 +530,6 @@ function () {
     }
   };
 
-  Cart.prototype.removeSpecialChars = function (inputVal) {
-    //allow periods
-    return inputVal.replace(/[`~!@#$%^&*()_|+\-=?;:'",<>\{\}\[\]\\\/]/gi, '');
-  };
-
   Cart.prototype.makeCheckoutURL = function () {
     if (this.basket.length > 0) {
       var url = this.machformBase + '&';
@@ -570,9 +567,6 @@ function () {
   Store.prototype.loadProducts = function () {
     var _this = this;
 
-    console.log("im loading products");
-    console.log('Basket: ', this.cart.basket);
-    console.log('Mapped basket: ', this.cart.mappedBasket);
     var existingItemsInCookie = this.cookie.getJSONfromCookieAsArray();
     return fetch(this.apiURL).then(function (response) {
       //if you dont do another then, code executes before promise returns
@@ -619,7 +613,7 @@ function () {
             result = _d.sent();
 
             if (result) {
-              shelves_1 = "<div class=\"bootstrap-wrapper\">\n                            <div class=\"container-fluid\">\n                                <section id=\"filterChecks\">\n                                    <form class=\"row\">\n                                        <div class=\"col-6\">\n                                                <label>Filter by Category:</label>\n                                                <select id=\"filterCat\" class=\"filterOptions\">\n                                                    <option value=\"all\">Show All</option>\n                                                    <option value=\"bundles\">Bundles</option>\n                                                    <option value=\"desktops\">Desktops</option>\n                                                    <option value=\"laptops\">Laptops</option>\n                                                    <option value=\"monitors\">Monitors</option>\n                                                    <option value=\"apple desktops\">Apple Desktops</option>\n                                                    <option value=\"apple laptops\">Apple Laptops</option>\n                                                    <option value=\"ipads\">iPads</option>\n                                                    <option value=\"tablets\">Tablets</option>\n                                                    <option value=\"printers\">Printers</option>\n                                                    <option value=\"software\">software</option>\n                                                </select>\n                                        </div>\n                                        <div class=\"col-6\">\n                                            <label>Filter by OS:</label>\n                                            <select id=\"filterOS\" class=\"filterOptions\">\n                                                <option value=\"all\">Show All</option>\n                                                <option value=\"apple\">Apple</option>\n                                                <option value=\"pc\">PC</option>\n                                            </select>\n                                        </div>   \n                                    </form>\n                                </section>\n                                <section class=\"shelves\"><div class=\"row\">"; // <img src="assets/png/300x200.png" />
+              shelves_1 = "<div class=\"bootstrap-wrapper\">\n                            <div class=\"container-fluid\">\n                                <section id=\"filterChecks\">\n                                    <form class=\"row\">\n                                        <div class=\"col-6\">\n                                                <label>Filter by Category:</label>\n                                                <select id=\"filterCat\" class=\"filterOptions\">\n                                                    <option value=\"all\">Show All</option>\n                                                    <option value=\"bundles\">Bundles</option>\n                                                    <option value=\"desktops\">Desktops</option>\n                                                    <option value=\"laptops\">Laptops</option>\n                                                    <option value=\"monitors\">Monitors</option>\n                                                    <option value=\"apple desktops\">Apple Desktops</option>\n                                                    <option value=\"apple laptops\">Apple Laptops</option>\n                                                    <option value=\"ipads\">iPads</option>\n                                                    <option value=\"tablets\">Tablets</option>\n                                                    <option value=\"printers\">Printers</option>\n                                                    <option value=\"software\">Software</option>\n                                                    <option value=\"accessories\">Peripheral Accessories</option>\n                                                </select>\n                                        </div>\n                                        <div class=\"col-6\">\n                                            <label>Filter by OS:</label>\n                                            <select id=\"filterOS\" class=\"filterOptions\">\n                                                <option value=\"all\">Show All</option>\n                                                <option value=\"apple\">Apple</option>\n                                                <option value=\"pc\">PC</option>\n                                            </select>\n                                        </div>   \n                                    </form>\n                                </section>\n                                <section class=\"shelves\"><div class=\"row\">"; // <img src="assets/png/300x200.png" />
 
               this.items.forEach(function (item, i) {
                 var categoryStr = "";
@@ -788,11 +782,6 @@ function () {
 
   Store.prototype.numberWithCommas = function (x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  };
-
-  Store.prototype.removeSpecialChars = function (inputVal) {
-    //allow periods
-    return inputVal.replace(/[`~!@#$%^&*()_|+\-=?;:'",<>\{\}\[\]\\\/]/gi, '');
   };
 
   return Store;
