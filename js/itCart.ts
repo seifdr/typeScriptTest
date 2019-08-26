@@ -66,7 +66,13 @@ class Item implements product {
                     if( this.price != '0.00' ){
                         output += `<h6>$${ this.numberWithCommas( this.price ) }</h6>`;
                     }
-                    output += `<div>${this.desc}</div><br />`;
+
+                    if( this.desc ){
+                        output += `<div>${this.desc}</div><br />`;
+                    } else {
+                        output += `<br />`;
+                    }
+                    
         
         if( this.price != '0.00' ){
             output += `<a id="atcModalBtn" class="button ${optClass}" href="#" data-num="${num}" >${ btnText }</a>`;
@@ -424,13 +430,6 @@ class Store {
     }
 
     loadProducts() {
-
-        console.log("im loading products");
-
-        console.log( 'Basket: ', this.cart.basket );
-
-        console.log( 'Mapped basket: ', this.cart.mappedBasket );
-
         let existingItemsInCookie = <number[]> this.cookie.getJSONfromCookieAsArray();
 
         return fetch( this.apiURL ).then( (response) => {
@@ -486,7 +485,8 @@ class Store {
                                                     <option value="ipads">iPads</option>
                                                     <option value="tablets">Tablets</option>
                                                     <option value="printers">Printers</option>
-                                                    <option value="software">software</option>
+                                                    <option value="software">Software</option>
+                                                    <option value="accessories">Peripheral Accessories</option>
                                                 </select>
                                         </div>
                                         <div class="col-6">
