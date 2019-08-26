@@ -153,6 +153,7 @@ function () {
     this.id = item.id;
     this.title = item.title;
     this.element = item.element;
+    this.renewElement = item.renewElement;
     this.type = item.type;
     this.categories = item.categories;
     var tempPrice = removeSpecialChars(item.price);
@@ -630,7 +631,19 @@ function () {
 
                 var modPrice = item.price == 0.00 ? '' : '$' + _this.numberWithCommas(item.price);
                 var modBtnTxt = item.price == 0.00 ? _this.cart.cartBtnTxt.Info : _this.cart.cartBtnTxt.Add;
-                shelves_1 += "<div class=\"col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc\" data-os=\"" + item.type + "\" data-catString=\"" + categoryStr + "\"><article class=\"feature-box prodBox\" data-id=\"" + item.id + "\" data-num=\"" + i + "\" >   \n                                    <div class=\"img-container\">\n                                        <img class=\"img-fluid\" src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + item.image + "\" alt=\"" + item.title + "-image\" />\n                                    </div>\n                                    <div class=\"feature-copy\">\n                                        <h6>" + item.title + "</h6>\n                                        <p>" + modPrice + "</p>\n                                        <a class=\"specs\" data-id=\"" + item.id + "\">Read product specs</a>\n                                    </div>";
+                shelves_1 += "<div class=\"col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc\" data-os=\"" + item.type + "\" data-catString=\"" + categoryStr + "\"><article class=\"feature-box prodBox\" data-id=\"" + item.id + "\" data-num=\"" + i + "\" >";
+
+                if (item.image != '/') {
+                  shelves_1 += "<div class=\"img-container\">\n                                        <img class=\"img-fluid\" src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + item.image + "\" alt=\"" + item.title + "-image\" />\n                                    </div>";
+                }
+
+                shelves_1 += "<div class=\"feature-copy\">\n                                        <div>\n                                            <h6>" + item.title + "</h6>\n                                            <p>" + modPrice + "</p>\n                                            <a class=\"specs\" data-id=\"" + item.id + "\">Read product specs</a>\n                                        </div>";
+
+                if (categoryStr == 'software') {
+                  shelves_1 += "<div class=\"renewSelect\">\n                                                        <labelPurchase or Renew\n                                                        Software Licenc</label>\n                                                        <select>\n                                                            <option>New</option>\n                                                            <option>Renew</option>\n                                                        </select></div>";
+                }
+
+                shelves_1 += "</div>";
                 shelves_1 += "<a class=\"button atcBtn";
 
                 if (item.onCart) {

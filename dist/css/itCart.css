@@ -1189,11 +1189,33 @@ section.shelves article.prodBox {
       max-height: 180px; }
   section.shelves article.prodBox div.feature-copy {
     padding: 1rem 1.5rem 1rem 1.5rem;
-    margin-bottom: 46px; }
-    section.shelves article.prodBox div.feature-copy a:hover {
-      text-decoration: none; }
-    section.shelves article.prodBox div.feature-copy a.specs:hover {
-      text-decoration: underline; }
+    margin-bottom: 46px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    height: 100%; }
+    section.shelves article.prodBox div.feature-copy div {
+      -webkit-box-flex: 1 1 0;
+          -ms-flex-positive: 1 1 0;
+              flex-grow: 1 1 0;
+      justify-self: end; }
+      section.shelves article.prodBox div.feature-copy div a:hover {
+        text-decoration: none; }
+      section.shelves article.prodBox div.feature-copy div a.specs:hover {
+        text-decoration: underline; }
+  section.shelves article.prodBox div.renewSelect {
+    height: 75px;
+    -webkit-box-flex: 2 0 0;
+        -ms-flex-positive: 2 0 0;
+            flex-grow: 2 0 0;
+    max-height: 100%; }
+    section.shelves article.prodBox div.renewSelect select {
+      margin-top: .75em;
+      padding-top: .25em; }
 
 a.onCart {
   background-color: #df6426 !important; }

@@ -285,23 +285,40 @@ section.shelves {
                 flex: 1;
                 max-height: 180px;
             }
-        }
-
-        
+        } 
 
         div.feature-copy {
             padding: 1rem 1.5rem 1rem 1.5rem;
             margin-bottom: 46px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
 
-            a:hover {
-                text-decoration: none;
+            div {
+                flex-grow: 1 1 0;
+                justify-self: end;
+                
+                a:hover {
+                    text-decoration: none;
+                }
+    
+                a.specs:hover {
+                    text-decoration: underline;
+                }
             }
+   
+        }
+        
+        div.renewSelect {
+            height: 75px;
+            flex-grow: 2 0 0;
+            max-height: 100%;
 
-            a.specs:hover {
-                text-decoration: underline;
+            select {
+                margin-top: .75em;
+                padding-top: .25em;
             }
         }
-        //btn text was here
 
     }
 }

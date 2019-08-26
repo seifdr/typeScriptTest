@@ -10,6 +10,7 @@ interface product {
     id: number;
     title: string;
     element: string;
+    renewElement: string;
     type: string;
     categories: [];
     price: number;
@@ -22,6 +23,7 @@ class Item implements product {
     id;
     title;
     element;
+    renewElement;
     type;
     categories;
     price;
@@ -33,6 +35,7 @@ class Item implements product {
         this.id = item.id;
         this.title = item.title;
         this.element = item.element;
+        this.renewElement = item.renewElement;
         this.type = item.type;
         this.categories = item.categories;
 
@@ -518,15 +521,31 @@ class Store {
                     let modPrice    = ( item.price == 0.00 )? '': '$' + this.numberWithCommas(item.price);
                     let modBtnTxt   = ( item.price == 0.00 )? this.cart.cartBtnTxt.Info : this.cart.cartBtnTxt.Add;   
 
-                    shelves += `<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc" data-os="${item.type}" data-catString="${categoryStr}"><article class="feature-box prodBox" data-id="${item.id}" data-num="${i}" >   
-                                    <div class="img-container">
+                    shelves += `<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc" data-os="${item.type}" data-catString="${categoryStr}"><article class="feature-box prodBox" data-id="${item.id}" data-num="${i}" >`;
+                        
+                        if( item.image != '/' ){
+                            shelves += `<div class="img-container">
                                         <img class="img-fluid" src="https://feinberg-dev.fsm.northwestern.edu/it-new/${item.image}" alt="${item.title}-image" />
-                                    </div>
-                                    <div class="feature-copy">
-                                        <h6>${item.title}</h6>
-                                        <p>${ modPrice }</p>
-                                        <a class="specs" data-id="${item.id}">Read product specs</a>
                                     </div>`;
+                        }
+
+                        shelves += `<div class="feature-copy">
+                                        <div>
+                                            <h6>${item.title}</h6>
+                                            <p>${ modPrice }</p>
+                                            <a class="specs" data-id="${item.id}">Read product specs</a>
+                                        </div>`;
+
+                                        if( categoryStr == 'software' ){
+                                            shelves += `<div class="renewSelect">
+                                                        <labelPurchase or Renew
+                                                        Software Licenc</label>
+                                                        <select>
+                                                            <option>New</option>
+                                                            <option>Renew</option>
+                                                        </select></div>`;
+                                        }
+                    shelves +=      `</div>`;
 
                     shelves += `<a class="button atcBtn`;
                         if( item.onCart ){
