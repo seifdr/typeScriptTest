@@ -1208,13 +1208,12 @@ section.shelves article.prodBox {
       section.shelves article.prodBox div.feature-copy div a.specs:hover {
         text-decoration: underline; }
   section.shelves article.prodBox div.renewSelect {
-    height: 75px;
-    -webkit-box-flex: 2 0 0;
-        -ms-flex-positive: 2 0 0;
-            flex-grow: 2 0 0;
-    max-height: 100%; }
+    margin-top: 1.5em; }
+    section.shelves article.prodBox div.renewSelect label {
+      display: block;
+      width: 100%; }
     section.shelves article.prodBox div.renewSelect select {
-      margin-top: .75em;
+      margin-top: .25em;
       padding-top: .25em; }
 
 a.onCart {

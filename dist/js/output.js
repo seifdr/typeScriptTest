@@ -640,7 +640,7 @@ function () {
                 shelves_1 += "<div class=\"feature-copy\">\n                                        <div>\n                                            <h6>" + item.title + "</h6>\n                                            <p>" + modPrice + "</p>\n                                            <a class=\"specs\" data-id=\"" + item.id + "\">Read product specs</a>\n                                        </div>";
 
                 if (categoryStr == 'software') {
-                  shelves_1 += "<div class=\"renewSelect\">\n                                                        <labelPurchase or Renew\n                                                        Software Licenc</label>\n                                                        <select>\n                                                            <option>New</option>\n                                                            <option>Renew</option>\n                                                        </select></div>";
+                  shelves_1 += "<div class=\"renewSelect\">\n                                                        <label>Purchase or Renew\n                                                        Software Licence: </label>\n                                                        <select>\n                                                            <option>New</option>\n                                                            <option>Renew</option>\n                                                        </select></div>";
                 }
 
                 shelves_1 += "</div>";

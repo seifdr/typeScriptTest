@@ -538,8 +538,8 @@ class Store {
 
                                         if( categoryStr == 'software' ){
                                             shelves += `<div class="renewSelect">
-                                                        <labelPurchase or Renew
-                                                        Software Licenc</label>
+                                                        <label>Purchase or Renew
+                                                        Software Licence: </label>
                                                         <select>
                                                             <option>New</option>
                                                             <option>Renew</option>

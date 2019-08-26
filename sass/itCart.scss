@@ -310,12 +310,15 @@ section.shelves {
         }
         
         div.renewSelect {
-            height: 75px;
-            flex-grow: 2 0 0;
-            max-height: 100%;
+            margin-top: 1.5em;
+
+            label {
+                display: block;
+                width: 100%;
+            }
 
             select {
-                margin-top: .75em;
+                margin-top: .25em;
                 padding-top: .25em;
             }
         }
