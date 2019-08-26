@@ -540,7 +540,7 @@ class Store {
                                             shelves += `<div class="renewSelect">
                                                         <label>Purchase or Renew
                                                         Software Licence: </label>
-                                                        <select>
+                                                        <select class="renewInput">
                                                             <option>New</option>
                                                             <option>Renew</option>
                                                         </select></div>`;
@@ -612,6 +612,21 @@ class Store {
                     }
                 });
             }   
+
+            
+            //add software select 
+
+            // let renewInputEl = document.getElementsByClassName('renewInput');
+
+            for( let elrenew of document.getElementsByClassName('renewInput') ){
+                
+                elrenew.addEventListener('click', (e) => {
+                    alert('hello there');
+
+                    e.preventDefault();
+                    e.stopPropagation();
+                });
+            }
             
             //filter dropdowns 
             const filterCat = document.getElementById('filterCat');

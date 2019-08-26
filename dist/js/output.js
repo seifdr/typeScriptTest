@@ -599,19 +599,19 @@ function () {
 
   Store.prototype.stockTheShelves = function () {
     return __awaiter(this, void 0, void 0, function () {
-      var result, shelves_1, _loop_3, _i, _a, el, _loop_4, _b, _c, elBtn, filterCat_1, filterOS_1;
+      var result, shelves_1, _loop_3, _i, _a, el, _loop_4, _b, _c, elBtn, _d, _e, elrenew, filterCat_1, filterOS_1;
 
       var _this = this;
 
-      return __generator(this, function (_d) {
-        switch (_d.label) {
+      return __generator(this, function (_f) {
+        switch (_f.label) {
           case 0:
             return [4
             /*yield*/
             , this.loadProducts()];
 
           case 1:
-            result = _d.sent();
+            result = _f.sent();
 
             if (result) {
               shelves_1 = "<div class=\"bootstrap-wrapper\">\n                            <div class=\"container-fluid\">\n                                <section id=\"filterChecks\">\n                                    <form class=\"row\">\n                                        <div class=\"col-6\">\n                                                <label>Filter by Category:</label>\n                                                <select id=\"filterCat\" class=\"filterOptions\">\n                                                    <option value=\"all\">Show All</option>\n                                                    <option value=\"bundles\">Bundles</option>\n                                                    <option value=\"desktops\">Desktops</option>\n                                                    <option value=\"laptops\">Laptops</option>\n                                                    <option value=\"monitors\">Monitors</option>\n                                                    <option value=\"apple desktops\">Apple Desktops</option>\n                                                    <option value=\"apple laptops\">Apple Laptops</option>\n                                                    <option value=\"ipads\">iPads</option>\n                                                    <option value=\"tablets\">Tablets</option>\n                                                    <option value=\"printers\">Printers</option>\n                                                    <option value=\"software\">Software</option>\n                                                    <option value=\"accessories\">Peripheral Accessories</option>\n                                                </select>\n                                        </div>\n                                        <div class=\"col-6\">\n                                            <label>Filter by OS:</label>\n                                            <select id=\"filterOS\" class=\"filterOptions\">\n                                                <option value=\"all\">Show All</option>\n                                                <option value=\"apple\">Apple</option>\n                                                <option value=\"pc\">PC</option>\n                                            </select>\n                                        </div>   \n                                    </form>\n                                </section>\n                                <section class=\"shelves\"><div class=\"row\">"; // <img src="assets/png/300x200.png" />
@@ -640,7 +640,7 @@ function () {
                 shelves_1 += "<div class=\"feature-copy\">\n                                        <div>\n                                            <h6>" + item.title + "</h6>\n                                            <p>" + modPrice + "</p>\n                                            <a class=\"specs\" data-id=\"" + item.id + "\">Read product specs</a>\n                                        </div>";
 
                 if (categoryStr == 'software') {
-                  shelves_1 += "<div class=\"renewSelect\">\n                                                        <label>Purchase or Renew\n                                                        Software Licence: </label>\n                                                        <select>\n                                                            <option>New</option>\n                                                            <option>Renew</option>\n                                                        </select></div>";
+                  shelves_1 += "<div class=\"renewSelect\">\n                                                        <label>Purchase or Renew\n                                                        Software Licence: </label>\n                                                        <select class=\"renewInput\">\n                                                            <option>New</option>\n                                                            <option>Renew</option>\n                                                        </select></div>";
                 }
 
                 shelves_1 += "</div>";
@@ -723,6 +723,17 @@ function () {
                 elBtn = _c[_b];
 
                 _loop_4(elBtn);
+              } //add software select 
+              // let renewInputEl = document.getElementsByClassName('renewInput');
+
+
+              for (_d = 0, _e = document.getElementsByClassName('renewInput'); _d < _e.length; _d++) {
+                elrenew = _e[_d];
+                elrenew.addEventListener('click', function (e) {
+                  alert('hello there');
+                  e.preventDefault();
+                  e.stopPropagation();
+                });
               }
 
               filterCat_1 = document.getElementById('filterCat');
