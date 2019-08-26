@@ -498,7 +498,13 @@ function () {
       this.basket.forEach(function (row, i) {
         // <img src="http://feinberg-dev.fsm.northwestern.edu/it-new/images/placeholder/placeholder-140x140.png" />
         console.log(row.image);
-        cartlistOutput_1 += "<div class=\"cartRow\">\n                    <div class=\"crImg\">\n                        <img src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + row.image + "\" alt=\"" + row.title + "-image\" />\n                    </div>\n                    <div class=\"crDesc\">\n                        <p>" + row.title + "</p>\n                        <a class=\"crDeleteEmbed\" data-basket-position=\"" + i + "\" >Delete</a>\n                    </div>\n                    <div class=\"crDelete\"> \n                        <p><a class=\"crDeleteBtn\" data-basket-position=\"" + i + "\" href=\"\">Delete</a></p>\n                    </div>\n                    <div><p>$" + _this.numberWithCommas(row.price, false) + "</p></div>\n                </div>";
+        cartlistOutput_1 += "<div class=\"cartRow\">\n                    <div class=\"crImg\">";
+
+        if (row.image != '/') {
+          cartlistOutput_1 += "<img src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + row.image + "\" alt=\"" + row.title + "-image\" />";
+        }
+
+        cartlistOutput_1 += "</div>\n                    <div class=\"crDesc\">\n                        <p>" + row.title + "</p>\n                        <a class=\"crDeleteEmbed\" data-basket-position=\"" + i + "\" >Delete</a>\n                    </div>\n                    <div class=\"crDelete\"> \n                        <p><a class=\"crDeleteBtn\" data-basket-position=\"" + i + "\" href=\"\">Delete</a></p>\n                    </div>\n                    <div><p>$" + _this.numberWithCommas(row.price, false) + "</p></div>\n                </div>";
       });
       cartlistOutput_1 += "\n                <div class=\"cartRow\">\n                    <div class=\"crImg\">&nbsp;</div>\n                    <div class=\"crDesc\">&nbsp;</div>\n                    <div class=\"crDelete\">Total:</div>\n                    <div>$" + this.numberWithCommas(this.totalCart(), true) + "</div>\n                </div>\n                <div class=\"cartRow\">\n                    <div class=\"checkoutRow\">\n                        <a id=\"checkoutNow\" href=\"#\" class=\"button\">Checkout Now</a> \n                    </div>\n                </div>\n            ";
       cartlistOutput_1 += '</div>';
@@ -599,7 +605,7 @@ function () {
 
   Store.prototype.stockTheShelves = function () {
     return __awaiter(this, void 0, void 0, function () {
-      var result, shelves_1, _loop_3, _i, _a, el, _loop_4, _b, _c, elBtn, _d, _e, elrenew, filterCat_1, filterOS_1;
+      var result, shelves_1, _loop_3, _i, _a, el, _loop_4, _b, _c, elBtn, _loop_5, _d, _e, elrenew, filterCat_1, filterOS_1;
 
       var _this = this;
 
@@ -640,7 +646,7 @@ function () {
                 shelves_1 += "<div class=\"feature-copy\">\n                                        <div>\n                                            <h6>" + item.title + "</h6>\n                                            <p>" + modPrice + "</p>\n                                            <a class=\"specs\" data-id=\"" + item.id + "\">Read product specs</a>\n                                        </div>";
 
                 if (categoryStr == 'software') {
-                  shelves_1 += "<div class=\"renewSelect\">\n                                                        <label>Purchase or Renew\n                                                        Software Licence: </label>\n                                                        <select class=\"renewInput\">\n                                                            <option>New</option>\n                                                            <option>Renew</option>\n                                                        </select></div>";
+                  shelves_1 += "<div class=\"renewSelect\">\n                                                        <label>Purchase or Renew\n                                                        Software Licence: </label>\n                                                        <select class=\"renewInput\">\n                                                            <option value=\"new\">New</option>\n                                                            <option value=\"renew\">Renew</option>\n                                                        </select></div>";
                 }
 
                 shelves_1 += "</div>";
@@ -723,17 +729,21 @@ function () {
                 elBtn = _c[_b];
 
                 _loop_4(elBtn);
-              } //add software select 
-              // let renewInputEl = document.getElementsByClassName('renewInput');
+              }
+
+              _loop_5 = function _loop_5(elrenew) {
+                elrenew.addEventListener('click', function (e) {
+                  var selectVal = elrenew.options[filterOS_1.selectedIndex].value;
+                  e.preventDefault();
+                  e.stopPropagation();
+                });
+              }; //add software select addEventListner, and stop event propagation 
 
 
               for (_d = 0, _e = document.getElementsByClassName('renewInput'); _d < _e.length; _d++) {
                 elrenew = _e[_d];
-                elrenew.addEventListener('click', function (e) {
-                  alert('hello there');
-                  e.preventDefault();
-                  e.stopPropagation();
-                });
+
+                _loop_5(elrenew);
               }
 
               filterCat_1 = document.getElementById('filterCat');
@@ -756,6 +766,7 @@ function () {
 
   Store.prototype.addToCartToggle = function (num, elBtn) {
     var cartResult = this.cart.addOrRemoveFromCart(this.items[num]);
+    alert('hello');
 
     if (cartResult) {
       this.items[num].onCart = true;

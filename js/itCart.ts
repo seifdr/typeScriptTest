@@ -343,9 +343,13 @@ class Cart {
                 console.log( row.image );
 
                 cartlistOutput += `<div class="cartRow">
-                    <div class="crImg">
-                        <img src="https://feinberg-dev.fsm.northwestern.edu/it-new/${row.image}" alt="${row.title}-image" />
-                    </div>
+                    <div class="crImg">`
+
+                    if( row.image != '/' ){
+                        cartlistOutput += `<img src="https://feinberg-dev.fsm.northwestern.edu/it-new/${row.image}" alt="${row.title}-image" />`;
+                    }
+        
+                cartlistOutput += `</div>
                     <div class="crDesc">
                         <p>${row.title}</p>
                         <a class="crDeleteEmbed" data-basket-position="${ i }" >Delete</a>
@@ -541,8 +545,8 @@ class Store {
                                                         <label>Purchase or Renew
                                                         Software Licence: </label>
                                                         <select class="renewInput">
-                                                            <option>New</option>
-                                                            <option>Renew</option>
+                                                            <option value="new">New</option>
+                                                            <option value="renew">Renew</option>
                                                         </select></div>`;
                                         }
                     shelves +=      `</div>`;
@@ -613,16 +617,10 @@ class Store {
                 });
             }   
 
-            
-            //add software select 
-
-            // let renewInputEl = document.getElementsByClassName('renewInput');
-
+            //add software select addEventListner, and stop event propagation 
             for( let elrenew of document.getElementsByClassName('renewInput') ){
-                
                 elrenew.addEventListener('click', (e) => {
-                    alert('hello there');
-
+                    let selectVal = elrenew.options[filterOS.selectedIndex].value;
                     e.preventDefault();
                     e.stopPropagation();
                 });
@@ -644,6 +642,8 @@ class Store {
 
     addToCartToggle(num, elBtn){
         let cartResult = this.cart.addOrRemoveFromCart( this.items[num] );
+
+        alert('hello');
 
         if( cartResult ){
             this.items[num].onCart = true;
