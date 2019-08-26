@@ -1,4 +1,9 @@
 
+function removeSpecialChars( inputVal ){
+    //allow periods
+    return inputVal.replace(/[`~!@#$%^&*()_|+\-=?;:'",<>\{\}\[\]\\\/]/gi, '');
+}
+
 // var pmg = document.body.querySelector('g#Layer_1');
 // var svg = document.getElementById('prevMedJewel');
 interface product {
@@ -31,12 +36,12 @@ class Item implements product {
         this.type = item.type;
         this.categories = item.categories;
 
-        let tempPrice = this.removeSpecialChars( item.price );
+        let tempPrice = removeSpecialChars( item.price );
 
         if( isNaN( tempPrice ) ){
             item.price = 0.00;
         } else {
-            this.price = this.removeSpecialChars( tempPrice );
+            this.price = removeSpecialChars( tempPrice );
         }
         
         this.image = item.image['path'];
@@ -74,11 +79,6 @@ class Item implements product {
 
     numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-
-    removeSpecialChars( inputVal ){
-        //allow periods
-        return inputVal.replace(/[`~!@#$%^&*()_|+\-=?;:'",<>\{\}\[\]\\\/]/gi, '');
     }
 }
 
@@ -190,7 +190,7 @@ class Cart {
             let cartTotal = 0;
 
             this.basket.forEach( (item) => {
-                cartTotal += parseFloat( this.removeSpecialChars( item.price ) );
+                cartTotal += parseFloat( removeSpecialChars( item.price ) );
             });
 
             return cartTotal;
@@ -386,11 +386,6 @@ class Cart {
         } else {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") ;
         }
-    }
-
-    removeSpecialChars( inputVal ){
-        //allow periods
-        return inputVal.replace(/[`~!@#$%^&*()_|+\-=?;:'",<>\{\}\[\]\\\/]/gi, '');
     }
 
     makeCheckoutURL(){
@@ -669,11 +664,6 @@ class Store {
 
     numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-
-    removeSpecialChars( inputVal ){
-        //allow periods
-        return inputVal.replace(/[`~!@#$%^&*()_|+\-=?;:'",<>\{\}\[\]\\\/]/gi, '');
     }
 }
 
