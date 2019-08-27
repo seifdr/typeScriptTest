@@ -462,7 +462,8 @@ class Store {
     }
 
     loadProducts() {
-        let existingItemsInCookie = <number[]> this.cookie.getJSONfromCookieAsArray();
+        const existingItemsInCookie = <number[]> this.cookie.getJSONfromCookieAsArray();
+        const softwareRenewIds = this.softwareCookie.getJSONfromCookieAsArray();
 
         return fetch( this.apiURL ).then( (response) => {
             //if you dont do another then, code executes before promise returns
@@ -479,6 +480,11 @@ class Store {
                     if( existingItemsInCookie.length > 0 ){
                         if( existingItemsInCookie.includes( row.id ) ){
                             row.onCart = true;
+
+                            if( softwareRenewIds.includes( row.id ) ){
+                                row.renew = true;
+                            }
+
                             this.cart.addOrRemoveFromCart( new Item( row ) );
                         } else {
                             row.onCart = false;
@@ -545,7 +551,6 @@ class Store {
                     } else {
                         categoryStr = item.categories['value'];
                     }
-
                     
                     let modPrice    = ( item.price == 0.00 )? '': '$' + this.numberWithCommas(item.price);
                     let modBtnTxt   = ( item.price == 0.00 )? this.cart.cartBtnTxt.Info : this.cart.cartBtnTxt.Add;   
@@ -571,8 +576,17 @@ class Store {
                                                         Software Licence: </label>
                                                         <select class="renewInput">
                                                             <option value="new">New</option>
-                                                            <option value="renew">Renew</option>
-                                                        </select></div>`;
+                                                            <option value="renew" `;
+
+                                                            //come back here 3
+                                                            if( categoryStr.includes('software') ){
+                                                                if( item.renew ){
+                                                                    shelves += ` selected="selected" `;
+                                                                }
+                                                            }
+
+
+                                            shelves += `>Renew</option></select></div>`;
                                         }
                     shelves +=      `</div>`;
 
@@ -841,4 +855,6 @@ window.onload=function() {
     let shoppingCart = new Cart( shoppingModal, shoppingCookie, softwareCookie );
 
     let store = new Store('shopping-cart', shoppingCart, shoppingModal, shoppingCookie, softwareCookie );
+
+    console.log( softwareCookie.getJSONfromCookieAsArray() );
 };

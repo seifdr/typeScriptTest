@@ -593,6 +593,7 @@ function () {
     var _this = this;
 
     var existingItemsInCookie = this.cookie.getJSONfromCookieAsArray();
+    var softwareRenewIds = this.softwareCookie.getJSONfromCookieAsArray();
     return fetch(this.apiURL).then(function (response) {
       //if you dont do another then, code executes before promise returns
       return response.json();
@@ -605,6 +606,10 @@ function () {
           if (existingItemsInCookie.length > 0) {
             if (existingItemsInCookie.includes(row.id)) {
               row.onCart = true;
+
+              if (softwareRenewIds.includes(row.id)) {
+                row.renew = true;
+              }
 
               _this.cart.addOrRemoveFromCart(new Item(row));
             } else {
@@ -664,7 +669,15 @@ function () {
                 shelves_1 += "<div class=\"feature-copy\">\n                                        <div>\n                                            <h6>" + item.title + "</h6>\n                                            <p>" + modPrice + "</p>\n                                            <a class=\"specs\" data-id=\"" + item.id + "\">Read product specs</a>\n                                        </div>";
 
                 if (categoryStr == 'software') {
-                  shelves_1 += "<div class=\"renewSelect\">\n                                                        <label>Purchase or Renew\n                                                        Software Licence: </label>\n                                                        <select class=\"renewInput\">\n                                                            <option value=\"new\">New</option>\n                                                            <option value=\"renew\">Renew</option>\n                                                        </select></div>";
+                  shelves_1 += "<div class=\"renewSelect\">\n                                                        <label>Purchase or Renew\n                                                        Software Licence: </label>\n                                                        <select class=\"renewInput\">\n                                                            <option value=\"new\">New</option>\n                                                            <option value=\"renew\" "; //come back here 3
+
+                  if (categoryStr.includes('software')) {
+                    if (item.renew) {
+                      shelves_1 += " selected=\"selected\" ";
+                    }
+                  }
+
+                  shelves_1 += ">Renew</option></select></div>";
                 }
 
                 shelves_1 += "</div>";
@@ -949,4 +962,5 @@ window.onload = function () {
   var shoppingModal = new Modal();
   var shoppingCart = new Cart(shoppingModal, shoppingCookie, softwareCookie);
   var store = new Store('shopping-cart', shoppingCart, shoppingModal, shoppingCookie, softwareCookie);
+  console.log(softwareCookie.getJSONfromCookieAsArray());
 };
