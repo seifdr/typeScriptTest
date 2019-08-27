@@ -84,27 +84,27 @@ class Item implements product {
         if( this.price != '0.00' ){
             
             // COME BACK
-            output += `<div class="renewModalSelect">
-                            <label>Purchase or Renew
-                            Software Licence: </label>
-                            <select class="renewModalInput" data-id="${this.id}" `;
-                    
-                                if( this.onCart ){
-                                    output += ` disabled `;
-                                }
-                                
-                            output += `>
-                                <option value="new">New</option>
-                                <option value="renew" `;
+            if( this.categories.value == 'software' ){
+                output += `<div class="renewModalSelect">
+                    <label>Purchase or Renew
+                    Software Licence: </label>
+                    <select class="renewModalInput" data-id="${this.id}" `;
+            
+                        if( this.onCart ){
+                            output += ` disabled `;
+                        }
+                        
+                    output += `>
+                        <option value="new">New</option>
+                        <option value="renew" `;
 
-                                //come back here 3
-                                if( this.categories.values == 'software' ){
-                                    if( this.renew ){
-                                        output += ` selected="selected" `;
-                                    }
-                                }
-                            output += `>Renew</option></select>`
-            output += `</div>`;
+                        //come back here 3
+                            if( this.renew ){
+                                output += ` selected="selected" `;
+                            }
+                    output += `>Renew</option></select>`
+                output += `</div>`;
+            }
 
             output += `<a id="atcModalBtn" class="button ${optClass}" href="#" data-num="${num}" >${ btnText }</a>`;
         }
