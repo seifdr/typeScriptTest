@@ -167,6 +167,7 @@ function () {
     this.image = item.image['path'];
     this.desc = item.desc;
     this.onCart = item.onCart ? true : false;
+    this.renew = item.renew ? true : false;
   }
 
   Item.prototype.outputOverlay = function (num) {
@@ -238,6 +239,7 @@ function () {
   };
 
   Cart.prototype.addOrRemoveFromCart = function (item) {
+    //come back here 3
     var positionInBasket;
 
     if (this.basket.length > 0) {
@@ -246,7 +248,6 @@ function () {
           positionInBasket = i;
         }
       });
-      console.log(positionInBasket);
 
       if (positionInBasket === -1 || positionInBasket === undefined) {
         var result = this.addToBasket(item);
@@ -496,8 +497,6 @@ function () {
     if (this.cartCount > 0) {
       var cartlistOutput_1 = '<div id="cartList">';
       this.basket.forEach(function (row, i) {
-        // <img src="http://feinberg-dev.fsm.northwestern.edu/it-new/images/placeholder/placeholder-140x140.png" />
-        console.log(row.image);
         cartlistOutput_1 += "<div class=\"cartRow\">\n                    <div class=\"crImg\">";
 
         if (row.image != '/') {
@@ -574,11 +573,13 @@ function () {
   Store.prototype.loadProducts = function () {
     var _this = this;
 
-    var existingItemsInCookie = this.cookie.getJSONfromCookieAsArray();
+    var existingItemsInCookie = this.cookie.getJSONfromCookieAsArray(); //console.log( "What Im loading from the cookie: ", existingItemsInCookie );
+
     return fetch(this.apiURL).then(function (response) {
       //if you dont do another then, code executes before promise returns
       return response.json();
     }).then(function (myJson) {
+      console.log('The list: ', myJson.items);
       var result = myJson.items;
 
       if (result.length > 0) {
@@ -637,7 +638,7 @@ function () {
 
                 var modPrice = item.price == 0.00 ? '' : '$' + _this.numberWithCommas(item.price);
                 var modBtnTxt = item.price == 0.00 ? _this.cart.cartBtnTxt.Info : _this.cart.cartBtnTxt.Add;
-                shelves_1 += "<div class=\"col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc\" data-os=\"" + item.type + "\" data-catString=\"" + categoryStr + "\"><article class=\"feature-box prodBox\" data-id=\"" + item.id + "\" data-num=\"" + i + "\" >";
+                shelves_1 += "<div class=\"col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc\" data-os=\"" + item.type + "\" data-catString=\"" + categoryStr + "\">\n                            <article class=\"feature-box prodBox\" data-id=\"" + item.id + "\" data-num=\"" + i + "\" data-catString=\"" + categoryStr + "\" >";
 
                 if (item.image != '/') {
                   shelves_1 += "<div class=\"img-container\">\n                                        <img class=\"img-fluid\" src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + item.image + "\" alt=\"" + item.title + "-image\" />\n                                    </div>";
@@ -646,19 +647,32 @@ function () {
                 shelves_1 += "<div class=\"feature-copy\">\n                                        <div>\n                                            <h6>" + item.title + "</h6>\n                                            <p>" + modPrice + "</p>\n                                            <a class=\"specs\" data-id=\"" + item.id + "\">Read product specs</a>\n                                        </div>";
 
                 if (categoryStr == 'software') {
-                  shelves_1 += "<div class=\"renewSelect\">\n                                                        <label>Purchase or Renew\n                                                        Software Licence: </label>\n                                                        <select class=\"renewInput\">\n                                                            <option value=\"new\">New</option>\n                                                            <option value=\"renew\">Renew</option>\n                                                        </select></div>";
+                  shelves_1 += "<div class=\"renewSelect\">\n                                                        <label>Purchase or Renew\n                                                        Software Licence: </label>\n                                                        <select class=\"renewInput\">\n                                                            <option value=\"new\">New</option>\n                                                            <option value=\"renew\" ";
+
+                  if (item.renew) {
+                    shelves_1 += " selected=\"selected\" ";
+                  }
+
+                  shelves_1 += ">Renew</option>\n                                                        </select></div>";
                 }
 
                 shelves_1 += "</div>";
                 shelves_1 += "<a class=\"button atcBtn";
 
                 if (item.onCart) {
-                  shelves_1 += " onCart "; // come back here
-
+                  shelves_1 += " onCart ";
                   modBtnTxt = _this.cart.cartBtnTxt.Remove;
                 }
 
-                shelves_1 += " \" data-num=\"" + i + "\" data-id=\"" + item.id + "\" data-isCartBtn=\"true\" href=\"#\">" + modBtnTxt + "</a></article></div>";
+                shelves_1 += " \" data-num=\"" + i + "\" data-id=\"" + item.id + "\" ";
+
+                if (categoryStr) {
+                  if (categoryStr.includes('software')) {
+                    shelves_1 += " data-alt-id=\"" + item.renewElement + "\" ";
+                  }
+                }
+
+                shelves_1 += " data-isCartBtn=\"true\" href=\"#\">" + modBtnTxt + "</a></article></div>";
               });
               shelves_1 += "</div></section>\n                            </div></div>";
               this.containerEL.insertAdjacentHTML('beforeend', shelves_1);
@@ -710,6 +724,8 @@ function () {
                   var num = elBtn.getAttribute('data-num');
 
                   if (_this.items[num].price != '0.00') {
+                    var id = elBtn.getAttribute('data-id');
+
                     _this.addToCartToggle(num, elBtn);
 
                     e.preventDefault();
@@ -723,7 +739,8 @@ function () {
                     e.stopPropagation();
                   }
                 });
-              };
+              }; //ATC buttons on main page (not modal)
+
 
               for (_b = 0, _c = document.getElementsByClassName('atcBtn'); _b < _c.length; _b++) {
                 elBtn = _c[_b];
@@ -765,8 +782,9 @@ function () {
   };
 
   Store.prototype.addToCartToggle = function (num, elBtn) {
-    var cartResult = this.cart.addOrRemoveFromCart(this.items[num]);
-    alert('hello');
+    //come back here 2
+    var cartResult = this.cart.addOrRemoveFromCart(this.items[num]); //happening when on modal or on main page
+    //if software, grab new/renew select value 
 
     if (cartResult) {
       this.items[num].onCart = true;
@@ -781,7 +799,6 @@ function () {
     var products = document.getElementsByClassName('pbc');
     var selectedCat = filterCat.options[filterCat.selectedIndex].value;
     var selectedOS = filterOS.options[filterOS.selectedIndex].value;
-    console.log('Selected OS: ', selectedOS);
     this.showAllProducts(products);
 
     if (selectedCat != 'all') {

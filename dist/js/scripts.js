@@ -10,26 +10,32 @@ interface product {
     id: number;
     title: string;
     element: string;
-    renewElement: string;
     type: string;
     categories: [];
     price: number;
     image: string;
     desc: string;
     onCart: boolean;
+
+    //for software only
+    renewElement: string;
+    renew: boolean;
 }
 
 class Item implements product {
     id;
     title;
     element;
-    renewElement;
     type;
     categories;
     price;
     image:string;
     desc;
     onCart;
+
+    //for software only
+    renewElement;
+    renew;
 
     constructor( item:product ){
         this.id = item.id;
@@ -51,6 +57,8 @@ class Item implements product {
         this.desc = item.desc;
 
         this.onCart = ( item.onCart )? true : false; 
+
+        this.renew = ( item.renew )? true : false;
     }
 
     outputOverlay( num = null ){
@@ -129,6 +137,7 @@ class Cart {
     }
 
     addOrRemoveFromCart( item:product ){
+        //come back here 3
         let positionInBasket:number;
 
         if( this.basket.length > 0 ){
@@ -138,8 +147,6 @@ class Cart {
                     positionInBasket = i;
                 }
             });
-
-            console.log( positionInBasket );
 
             if( positionInBasket === -1 || positionInBasket === undefined ){
                 let result = this.addToBasket(item);
@@ -337,11 +344,6 @@ class Cart {
             let cartlistOutput = '<div id="cartList">';
 
             this.basket.forEach( (row:Item, i) => {
-
-                // <img src="http://feinberg-dev.fsm.northwestern.edu/it-new/images/placeholder/placeholder-140x140.png" />
-
-                console.log( row.image );
-
                 cartlistOutput += `<div class="cartRow">
                     <div class="crImg">`
 
@@ -439,11 +441,15 @@ class Store {
     loadProducts() {
         let existingItemsInCookie = <number[]> this.cookie.getJSONfromCookieAsArray();
 
+        //console.log( "What Im loading from the cookie: ", existingItemsInCookie );
+
         return fetch( this.apiURL ).then( (response) => {
             //if you dont do another then, code executes before promise returns
             return response.json();
         }).then( (myJson) => {
             
+            console.log('The list: ', myJson.items );
+
             let result = myJson.items;
 
             if(result.length > 0){
@@ -510,7 +516,7 @@ class Store {
 
             // <img src="assets/png/300x200.png" />
                 this.items.forEach( ( item, i ) => {
-
+            
                     let categoryStr = "";
 
                     if( typeof item.categories['value'] == 'object' ){
@@ -525,7 +531,8 @@ class Store {
                     let modPrice    = ( item.price == 0.00 )? '': '$' + this.numberWithCommas(item.price);
                     let modBtnTxt   = ( item.price == 0.00 )? this.cart.cartBtnTxt.Info : this.cart.cartBtnTxt.Add;   
 
-                    shelves += `<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc" data-os="${item.type}" data-catString="${categoryStr}"><article class="feature-box prodBox" data-id="${item.id}" data-num="${i}" >`;
+                    shelves += `<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc" data-os="${item.type}" data-catString="${categoryStr}">
+                            <article class="feature-box prodBox" data-id="${item.id}" data-num="${i}" data-catString="${categoryStr}" >`;
                         
                         if( item.image != '/' ){
                             shelves += `<div class="img-container">
@@ -546,18 +553,31 @@ class Store {
                                                         Software Licence: </label>
                                                         <select class="renewInput">
                                                             <option value="new">New</option>
-                                                            <option value="renew">Renew</option>
+                                                            <option value="renew" `
+                                                
+                                                            if( item.renew ){
+                                                                shelves += ` selected="selected" `;
+                                                            }
+                                                            
+                                            shelves +=  `>Renew</option>
                                                         </select></div>`;
                                         }
                     shelves +=      `</div>`;
 
                     shelves += `<a class="button atcBtn`;
                         if( item.onCart ){
-                            shelves += ` onCart `
-                            // come back here
+                            shelves += ` onCart `;
                             modBtnTxt = this.cart.cartBtnTxt.Remove;
                         }
-                    shelves +=  ` " data-num="${i}" data-id="${item.id}" data-isCartBtn="true" href="#">${modBtnTxt}</a></article></div>`;
+                    shelves +=  ` " data-num="${i}" data-id="${item.id}" `;
+                    
+                    if( categoryStr ){
+                        if( categoryStr.includes('software') ){
+                            shelves += ` data-alt-id="${item.renewElement}" `;
+                        }
+                    }
+                    
+                    shelves += ` data-isCartBtn="true" href="#">${modBtnTxt}</a></article></div>`;
                 });
 
             shelves += `</div></section>
@@ -599,13 +619,16 @@ class Store {
                 });
             }
 
+            //ATC buttons on main page (not modal)
             for( let elBtn of document.getElementsByClassName('atcBtn') ){
                 elBtn.addEventListener('click', (e) => {
 
                     let num = elBtn.getAttribute('data-num');
 
                     if( this.items[num].price != '0.00' ){
-                        this.addToCartToggle(num, elBtn);
+                        const id = elBtn.getAttribute('data-id');
+
+                        this.addToCartToggle( num, elBtn );
                         e.preventDefault();
                         e.stopPropagation();
                     } else {
@@ -640,10 +663,12 @@ class Store {
         }
     }
 
-    addToCartToggle(num, elBtn){
+    addToCartToggle( num, elBtn ){
+        //come back here 2
         let cartResult = this.cart.addOrRemoveFromCart( this.items[num] );
 
-        alert('hello');
+        //happening when on modal or on main page
+        //if software, grab new/renew select value 
 
         if( cartResult ){
             this.items[num].onCart = true;
@@ -658,9 +683,7 @@ class Store {
         let products = document.getElementsByClassName('pbc');
         let selectedCat = filterCat.options[filterCat.selectedIndex].value;
         let selectedOS  = filterOS.options[filterOS.selectedIndex].value;
-
-        console.log( 'Selected OS: ', selectedOS );
-
+        
         this.showAllProducts(products);
 
         if( selectedCat != 'all'){
