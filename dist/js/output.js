@@ -167,6 +167,7 @@ function () {
     this.image = item.image['path'];
     this.desc = item.desc;
     this.onCart = item.onCart ? true : false;
+    this.renew = item.renew ? true : false;
   }
 
   Item.prototype.outputOverlay = function (num) {
@@ -211,6 +212,7 @@ function () {
     this.machformBase = 'https://forms.feinberg.northwestern.edu/view.php?id=48491';
     this.basket = [];
     this.mappedBasket = [];
+    this.softwareAltIds = [];
     this.cartCount = 0;
     this.cartTotal = 0; //button text 
 
@@ -227,6 +229,12 @@ function () {
   Cart.prototype.mapCart = function () {
     this.mappedBasket = this.basket.map(function (row) {
       return row.id;
+    }); //map basket again to track software
+
+    this.softwareAltIds = this.basket.map(function (row) {
+      if (row.renew) {
+        return row.id;
+      }
     });
 
     if (this.mappedBasket.length > 0) {

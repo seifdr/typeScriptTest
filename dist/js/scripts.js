@@ -17,6 +17,7 @@ interface product {
     image: string;
     desc: string;
     onCart: boolean;
+    renew: boolean;
 }
 
 class Item implements product {
@@ -30,6 +31,7 @@ class Item implements product {
     image:string;
     desc;
     onCart;
+    renew: boolean;
 
     constructor( item:product ){
         this.id = item.id;
@@ -51,6 +53,8 @@ class Item implements product {
         this.desc = item.desc;
 
         this.onCart = ( item.onCart )? true : false; 
+        
+        this.renew = ( item.renew )? true : false;
     }
 
     outputOverlay( num = null ){
@@ -95,6 +99,7 @@ class Cart {
     private machformBase = 'https://forms.feinberg.northwestern.edu/view.php?id=48491';
     public basket = [];
     public mappedBasket = [];
+    public softwareAltIds = [];
 
     public cartCount: number = 0;
     public cartTotal: number = 0;
@@ -118,6 +123,13 @@ class Cart {
     mapCart(){
         this.mappedBasket = this.basket.map( ( row:Item ) => {
             return row.id;
+        });
+
+        //map basket again to track software
+        this.softwareAltIds = this.basket.map( ( row:Item ) => {
+            if( row.renew ){
+                return row.id;
+            }
         });
 
         if( this.mappedBasket.length > 0 ){
