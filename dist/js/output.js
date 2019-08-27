@@ -266,7 +266,14 @@ function () {
       console.log(positionInBasket);
 
       if (positionInBasket === -1 || positionInBasket === undefined) {
-        var result = this.addToBasket(item);
+        var result = this.addToBasket(item); //update the disable software select
+
+        if (item.categories.value == 'software') {
+          if (result) {
+            this.disableSoftwareSelect(item.id);
+          }
+        }
+
         this.updateCartTotalAndCount();
         return result;
       } else {
@@ -279,6 +286,7 @@ function () {
 
           if (deletedItem['id'] == dataId) {
             this.toggleATCbutton(atcBtns[i], false);
+            this.unRenewSelect(dataId);
           }
         }
 
@@ -288,9 +296,40 @@ function () {
     } else {
       if (item.id != null || item.id != null) {
         var result = this.addToBasket(item);
+
+        if (result) {
+          this.disableSoftwareSelect(item.id);
+        }
+
         this.updateCartTotalAndCount();
         return result;
       }
+    }
+  };
+
+  Cart.prototype.disableSoftwareSelect = function (id) {
+    if (id === void 0) {
+      id = null;
+    }
+
+    if (id) {
+      var theSelect = document.querySelector(' select[data-id="' + id + '"] ');
+      theSelect.setAttribute('disabled', 'disabled');
+    }
+  };
+
+  Cart.prototype.unRenewSelect = function (id) {
+    if (id === void 0) {
+      id = null;
+    }
+
+    console.log('the select id: ', id);
+
+    if (id) {
+      var theSelect = document.querySelector(' select[data-id="' + id + '"] '); // theSelect.options[ theSelect.selectedIndex ].value = 'new';
+
+      theSelect.selectedIndex = 0;
+      theSelect.removeAttribute('disabled');
     }
   };
 
@@ -669,7 +708,13 @@ function () {
                 shelves_1 += "<div class=\"feature-copy\">\n                                        <div>\n                                            <h6>" + item.title + "</h6>\n                                            <p>" + modPrice + "</p>\n                                            <a class=\"specs\" data-id=\"" + item.id + "\">Read product specs</a>\n                                        </div>";
 
                 if (categoryStr == 'software') {
-                  shelves_1 += "<div class=\"renewSelect\">\n                                                        <label>Purchase or Renew\n                                                        Software Licence: </label>\n                                                        <select class=\"renewInput\">\n                                                            <option value=\"new\">New</option>\n                                                            <option value=\"renew\" "; //come back here 3
+                  shelves_1 += "<div class=\"renewSelect\">\n                                                        <label>Purchase or Renew\n                                                        Software Licence: </label>\n                                                        <select class=\"renewInput\" data-id=\"" + item.id + "\" ";
+
+                  if (item.onCart) {
+                    shelves_1 += " disabled ";
+                  }
+
+                  shelves_1 += ">\n                                                            <option value=\"new\">New</option>\n                                                            <option value=\"renew\" "; //come back here 3
 
                   if (categoryStr.includes('software')) {
                     if (item.renew) {
@@ -813,7 +858,9 @@ function () {
       this.cart.toggleATCbutton(elBtn, true);
     } else {
       this.items[num].onCart = false;
-      this.cart.toggleATCbutton(elBtn, false);
+      this.cart.toggleATCbutton(elBtn, false); //if its coming off the cart then you need to clear the renew selection too.
+
+      this.items[num].renew = false;
     }
   };
 

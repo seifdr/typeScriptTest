@@ -166,6 +166,14 @@ class Cart {
 
             if( positionInBasket === -1 || positionInBasket === undefined ){
                 let result = this.addToBasket(item);
+
+                //update the disable software select
+                if( item.categories.value  == 'software' ){
+                    if( result ){
+                        this.disableSoftwareSelect(item.id);
+                    }
+                }
+
                 this.updateCartTotalAndCount();
                 return result;
             } else {
@@ -179,6 +187,7 @@ class Cart {
 
                     if( deletedItem['id'] == dataId ){
                         this.toggleATCbutton( atcBtns[i], false );
+                        this.unRenewSelect( dataId );
                     }
                 }
                 this.updateCartTotalAndCount();
@@ -188,11 +197,35 @@ class Cart {
         } else {
             if( item.id != null || item.id != null ){
                 let result = this.addToBasket(item);
+
+                if( result ){
+                    this.disableSoftwareSelect(item.id);
+                }
+
                 this.updateCartTotalAndCount();
                 return result;
             }
         }
     
+    }
+
+    disableSoftwareSelect( id = null ){
+        if( id ){
+            const theSelect = <HTMLSelectElement> document.querySelector(' select[data-id="'+ id +'"] ');
+            theSelect.setAttribute('disabled', 'disabled');
+        }
+    }
+
+    unRenewSelect( id = null ){
+
+        console.log('the select id: ', id);
+
+        if( id ){
+            const theSelect = document.querySelector(' select[data-id="'+ id +'"] ');
+            // theSelect.options[ theSelect.selectedIndex ].value = 'new';
+            theSelect.selectedIndex = 0;
+            theSelect.removeAttribute('disabled');
+        }
     }
 
     addToBasket( item:product ){
@@ -574,7 +607,13 @@ class Store {
                                             shelves += `<div class="renewSelect">
                                                         <label>Purchase or Renew
                                                         Software Licence: </label>
-                                                        <select class="renewInput">
+                                                        <select class="renewInput" data-id="${item.id}" `;
+                                                        
+                                                        if( item.onCart ){
+                                                            shelves += ` disabled `;
+                                                        }
+                                                        
+                                            shelves += `>
                                                             <option value="new">New</option>
                                                             <option value="renew" `;
 
@@ -672,7 +711,7 @@ class Store {
                     let selectVal = elrenew.options[filterOS.selectedIndex].value;
                     e.preventDefault();
                     e.stopPropagation();
-                });
+                });                
             }
             
             //filter dropdowns 
@@ -700,6 +739,8 @@ class Store {
         } else {
             this.items[num].onCart = false;
             this.cart.toggleATCbutton( elBtn, false );
+            //if its coming off the cart then you need to clear the renew selection too.
+            this.items[num].renew  = false;
         }
     }
 
