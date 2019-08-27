@@ -192,24 +192,22 @@ function () {
 
     if (this.price != '0.00') {
       // COME BACK
-      // output += `<div class="renewModalSelect">
-      //                 <label>Purchase or Renew
-      //                 Software Licence: </label>
-      //                 <select class="renewModalInput" data-id="${this.id}" `;
-      //                     if( this.onCart ){
-      //                         output += ` disabled `;
-      //                     }
-      //                 output += `>
-      //                     <option value="new">New</option>
-      //                     <option value="renew" `;
-      //                     //come back here 3
-      //                     if( this.categories.values == 'software' ){
-      //                         if( this.renew ){
-      //                             output += ` selected="selected" `;
-      //                         }
-      //                     }
-      //                 output += `>Renew</option></select>`
-      // output += `</div>`;
+      output += "<div class=\"renewModalSelect\">\n                            <label>Purchase or Renew\n                            Software Licence: </label>\n                            <select class=\"renewModalInput\" data-id=\"" + this.id + "\" ";
+
+      if (this.onCart) {
+        output += " disabled ";
+      }
+
+      output += ">\n                                <option value=\"new\">New</option>\n                                <option value=\"renew\" "; //come back here 3
+
+      if (this.categories.values == 'software') {
+        if (this.renew) {
+          output += " selected=\"selected\" ";
+        }
+      }
+
+      output += ">Renew</option></select>";
+      output += "</div>";
       output += "<a id=\"atcModalBtn\" class=\"button " + optClass + "\" href=\"#\" data-num=\"" + num + "\" >" + btnText + "</a>";
     }
 

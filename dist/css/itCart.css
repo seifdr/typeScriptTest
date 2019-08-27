@@ -1244,6 +1244,14 @@ div#overlayGuts {
       justify-self: center;
       padding-right: 1em;
       max-width: 300px; }
+    div#overlayGuts div#overlayPad div.renewModalSelect {
+      margin-bottom: 1.5em; }
+      div#overlayGuts div#overlayPad div.renewModalSelect label {
+        display: block;
+        width: 100%; }
+      div#overlayGuts div#overlayPad div.renewModalSelect select {
+        margin-top: .25em;
+        padding-top: .25em; }
     @media screen and (max-width: 875px) {
       div#overlayGuts div#overlayPad {
         -webkit-box-orient: vertical;
