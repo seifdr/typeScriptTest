@@ -106,6 +106,7 @@ class Cart {
 
     private modal: Modal;
     private cookie: Cookie;
+    private softwareCookie: Cookie;
 
     //button text 
     public cartBtnTxt = {
@@ -114,9 +115,10 @@ class Cart {
         'Info'      : 'More Info'
     }
 
-    constructor( modal, cookie ) {
+    constructor( modal, cookie, softwareCookie ) {
         this.modal = modal;
         this.cookie = cookie;
+        this.softwareCookie = softwareCookie;
         this.makeCartInBrowser();
     }
 
@@ -135,8 +137,17 @@ class Cart {
         if( this.mappedBasket.length > 0 ){
             let mappedBasketToCookie = JSON.stringify( this.mappedBasket );
             this.cookie.setCookie( mappedBasketToCookie, 1 );
+
+            if( this.softwareAltIds.length > 0 ){
+                let softwareAltCookie = JSON.stringify( this.mappedBasket );
+                this.softwareCookie.setCookie( softwareAltCookie, 1 );
+            } else {
+                this.softwareCookie.deleteCookie();
+            }
+
         } else {
             this.cookie.deleteCookie();
+            this.softwareCookie.deleteCookie();
         }
     }
 
@@ -439,10 +450,12 @@ class Store {
     private cart:Cart;
     private modal: Modal;
     private cookie: Cookie;
+    private softwareCookie: Cookie;
 
-    constructor( containerID, cart, modal, cookie ) {
+    constructor( containerID, cart, modal, cookie, softwareCookie ) {
         this.modal = modal;
         this.cookie = cookie;
+        this.softwareCookie = softwareCookie;
         this.cart = cart;
         this.containerEL = document.getElementById( containerID );
         this.stockTheShelves();
@@ -611,12 +624,22 @@ class Store {
                 });
             }
 
+            //atc buttons on page (not modal)
             for( let elBtn of document.getElementsByClassName('atcBtn') ){
                 elBtn.addEventListener('click', (e) => {
 
                     let num = elBtn.getAttribute('data-num');
-
+                
                     if( this.items[num].price != '0.00' ){
+
+                        //check if it's software
+                        if( this.items[num].categories.value.includes('software') ){
+                            //it is software, check selector value, and set the item.renew property
+                            const selectInput = document.querySelector('article[data-id="'+ this.items[num].id +'"] select.renewInput' );
+                            const selectVal = selectInput.options[selectInput.selectedIndex].value;
+                            this.items[num].renew = ( selectVal == 'renew' )? true : false;
+                        }
+
                         this.addToCartToggle(num, elBtn);
                         e.preventDefault();
                         e.stopPropagation();
@@ -810,11 +833,12 @@ class Cookie {
 }
 
 window.onload=function() {
-    let shoppingCookie = new Cookie( 'fsmITPurchasing' );
+    const shoppingCookie = new Cookie( 'fsmITPurchasing' );
+    const softwareCookie = new Cookie( 'fsmITPurchasingSoftware' );
 
     let shoppingModal = new Modal();
 
-    let shoppingCart = new Cart( shoppingModal, shoppingCookie );
+    let shoppingCart = new Cart( shoppingModal, shoppingCookie, softwareCookie );
 
-    let store = new Store('shopping-cart', shoppingCart, shoppingModal, shoppingCookie );
+    let store = new Store('shopping-cart', shoppingCart, shoppingModal, shoppingCookie, softwareCookie );
 };

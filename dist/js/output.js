@@ -208,7 +208,7 @@ function () {
 var Cart =
 /** @class */
 function () {
-  function Cart(modal, cookie) {
+  function Cart(modal, cookie, softwareCookie) {
     this.machformBase = 'https://forms.feinberg.northwestern.edu/view.php?id=48491';
     this.basket = [];
     this.mappedBasket = [];
@@ -223,6 +223,7 @@ function () {
     };
     this.modal = modal;
     this.cookie = cookie;
+    this.softwareCookie = softwareCookie;
     this.makeCartInBrowser();
   }
 
@@ -240,8 +241,16 @@ function () {
     if (this.mappedBasket.length > 0) {
       var mappedBasketToCookie = JSON.stringify(this.mappedBasket);
       this.cookie.setCookie(mappedBasketToCookie, 1);
+
+      if (this.softwareAltIds.length > 0) {
+        var softwareAltCookie = JSON.stringify(this.mappedBasket);
+        this.softwareCookie.setCookie(softwareAltCookie, 1);
+      } else {
+        this.softwareCookie.deleteCookie();
+      }
     } else {
       this.cookie.deleteCookie();
+      this.softwareCookie.deleteCookie();
     }
   };
 
@@ -569,11 +578,12 @@ function () {
 var Store =
 /** @class */
 function () {
-  function Store(containerID, cart, modal, cookie) {
+  function Store(containerID, cart, modal, cookie, softwareCookie) {
     this.apiURL = 'https://feinberg-dev.fsm.northwestern.edu/it-new/ws/purchasing-api.php';
     this.items = [{}];
     this.modal = modal;
     this.cookie = cookie;
+    this.softwareCookie = softwareCookie;
     this.cart = cart;
     this.containerEL = document.getElementById(containerID);
     this.stockTheShelves();
@@ -718,6 +728,14 @@ function () {
                   var num = elBtn.getAttribute('data-num');
 
                   if (_this.items[num].price != '0.00') {
+                    //check if it's software
+                    if (_this.items[num].categories.value.includes('software')) {
+                      //it is software, check selector value, and set the item.renew property
+                      var selectInput = document.querySelector('article[data-id="' + _this.items[num].id + '"] select.renewInput');
+                      var selectVal = selectInput.options[selectInput.selectedIndex].value;
+                      _this.items[num].renew = selectVal == 'renew' ? true : false;
+                    }
+
                     _this.addToCartToggle(num, elBtn);
 
                     e.preventDefault();
@@ -731,7 +749,8 @@ function () {
                     e.stopPropagation();
                   }
                 });
-              };
+              }; //atc buttons on page (not modal)
+
 
               for (_b = 0, _c = document.getElementsByClassName('atcBtn'); _b < _c.length; _b++) {
                 elBtn = _c[_b];
@@ -926,7 +945,8 @@ function () {
 
 window.onload = function () {
   var shoppingCookie = new Cookie('fsmITPurchasing');
+  var softwareCookie = new Cookie('fsmITPurchasingSoftware');
   var shoppingModal = new Modal();
-  var shoppingCart = new Cart(shoppingModal, shoppingCookie);
-  var store = new Store('shopping-cart', shoppingCart, shoppingModal, shoppingCookie);
+  var shoppingCart = new Cart(shoppingModal, shoppingCookie, softwareCookie);
+  var store = new Store('shopping-cart', shoppingCart, shoppingModal, shoppingCookie, softwareCookie);
 };
