@@ -191,6 +191,25 @@ function () {
     }
 
     if (this.price != '0.00') {
+      // COME BACK
+      // output += `<div class="renewModalSelect">
+      //                 <label>Purchase or Renew
+      //                 Software Licence: </label>
+      //                 <select class="renewModalInput" data-id="${this.id}" `;
+      //                     if( this.onCart ){
+      //                         output += ` disabled `;
+      //                     }
+      //                 output += `>
+      //                     <option value="new">New</option>
+      //                     <option value="renew" `;
+      //                     //come back here 3
+      //                     if( this.categories.values == 'software' ){
+      //                         if( this.renew ){
+      //                             output += ` selected="selected" `;
+      //                         }
+      //                     }
+      //                 output += `>Renew</option></select>`
+      // output += `</div>`;
       output += "<a id=\"atcModalBtn\" class=\"button " + optClass + "\" href=\"#\" data-num=\"" + num + "\" >" + btnText + "</a>";
     }
 
@@ -266,7 +285,7 @@ function () {
       console.log(positionInBasket);
 
       if (positionInBasket === -1 || positionInBasket === undefined) {
-        var result = this.addToBasket(item); //update the disable software select
+        var result = this.addToBasket(item); //update the disable software select for software items only
 
         if (item.categories.value == 'software') {
           if (result) {
@@ -314,7 +333,10 @@ function () {
 
     if (id) {
       var theSelect = document.querySelector(' select[data-id="' + id + '"] ');
-      theSelect.setAttribute('disabled', 'disabled');
+
+      if (theSelect) {
+        theSelect.setAttribute('disabled', 'disabled');
+      }
     }
   };
 

@@ -82,6 +82,30 @@ class Item implements product {
                     
         
         if( this.price != '0.00' ){
+            
+            // COME BACK
+            // output += `<div class="renewModalSelect">
+            //                 <label>Purchase or Renew
+            //                 Software Licence: </label>
+            //                 <select class="renewModalInput" data-id="${this.id}" `;
+                    
+            //                     if( this.onCart ){
+            //                         output += ` disabled `;
+            //                     }
+                                
+            //                 output += `>
+            //                     <option value="new">New</option>
+            //                     <option value="renew" `;
+
+            //                     //come back here 3
+            //                     if( this.categories.values == 'software' ){
+            //                         if( this.renew ){
+            //                             output += ` selected="selected" `;
+            //                         }
+            //                     }
+            //                 output += `>Renew</option></select>`
+            // output += `</div>`;
+
             output += `<a id="atcModalBtn" class="button ${optClass}" href="#" data-num="${num}" >${ btnText }</a>`;
         }
 
@@ -167,7 +191,7 @@ class Cart {
             if( positionInBasket === -1 || positionInBasket === undefined ){
                 let result = this.addToBasket(item);
 
-                //update the disable software select
+                //update the disable software select for software items only
                 if( item.categories.value  == 'software' ){
                     if( result ){
                         this.disableSoftwareSelect(item.id);
@@ -212,7 +236,10 @@ class Cart {
     disableSoftwareSelect( id = null ){
         if( id ){
             const theSelect = <HTMLSelectElement> document.querySelector(' select[data-id="'+ id +'"] ');
-            theSelect.setAttribute('disabled', 'disabled');
+            
+            if( theSelect ){
+                theSelect.setAttribute('disabled', 'disabled');
+            }
         }
     }
 
