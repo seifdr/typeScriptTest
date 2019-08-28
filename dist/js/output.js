@@ -622,7 +622,15 @@ function () {
       var url = this.machformBase + '&';
 
       for (var i = 0; i < this.basket.length; i++) {
-        url += this.basket[i].element + '=1';
+        if (this.basket[i].catStr.includes('software')) {
+          if (this.basket[i].renew) {
+            url += this.basket[i].renewElement + '=1';
+          } else {
+            url += this.basket[i].element + '=1';
+          }
+        } else {
+          url += this.basket[i].element + '=1';
+        }
 
         if (i + 1 < this.basket.length) {
           url += '&';
