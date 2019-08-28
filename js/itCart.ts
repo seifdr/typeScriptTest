@@ -652,8 +652,6 @@ class Store {
                                                                     shelves += ` selected="selected" `;
                                                                 }
                                                             }
-
-
                                             shelves += `>Renew</option></select></div>`;
                                         }
                     shelves +=      `</div>`;
