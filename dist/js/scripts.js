@@ -10,28 +10,23 @@ interface product {
     id: number;
     title: string;
     element: string;
+    renewElement: string;
     type: string;
     categories;
     price: number;
     image: string;
     desc: string;
     onCart: boolean;
-<<<<<<< HEAD
-
-    //for software only
-    renewElement: string;
-    renew: boolean;
-=======
     renew: boolean;
 
     catStr: string
->>>>>>> itCartMod
 }
 
 class Item implements product {
     id;
     title;
-    element; 
+    element;
+    renewElement;
     type;
     categories;
     price;
@@ -41,10 +36,6 @@ class Item implements product {
     renew: boolean;
 
     catStr: string;
-
-    //for software only
-    renewElement;
-    renew;
 
     constructor( item:product ){
         this.id = item.id;
@@ -142,7 +133,7 @@ class Item implements product {
                             data-catstr="${this.catStr}"    
                         >${ btnText }</a>`;
         }
- 
+
         output += `</div>
             </div>`;
         return output;
@@ -210,7 +201,6 @@ class Cart {
     }
 
     addOrRemoveFromCart( item:product ){
-        //come back here 3
         let positionInBasket:number;
 
         if( this.basket.length > 0 ){
@@ -445,6 +435,7 @@ class Cart {
             let cartlistOutput = '<div id="cartList">';
 
             this.basket.forEach( (row:Item, i) => {
+
                 cartlistOutput += `<div class="cartRow">
                     <div class="crImg">`
 
@@ -561,13 +552,11 @@ class Store {
         const existingItemsInCookie = <number[]> this.cookie.getJSONfromCookieAsArray();
         const softwareRenewIds = this.softwareCookie.getJSONfromCookieAsArray();
 
-        //console.log( "What Im loading from the cookie: ", existingItemsInCookie );
-
         return fetch( this.apiURL ).then( (response) => {
             //if you dont do another then, code executes before promise returns
             return response.json();
         }).then( (myJson) => {
-
+            
             let result = myJson.items;
 
             if(result.length > 0){
@@ -689,18 +678,11 @@ class Store {
 
                     shelves += `<a class="button atcBtn`;
                         if( item.onCart ){
-                            shelves += ` onCart `;
+                            shelves += ` onCart `
+                            // come back here
                             modBtnTxt = this.cart.cartBtnTxt.Remove;
                         }
-                    shelves +=  ` " data-num="${i}" data-id="${item.id}" `;
-                    
-                    if( categoryStr ){
-                        if( categoryStr.includes('software') ){
-                            shelves += ` data-alt-id="${item.renewElement}" `;
-                        }
-                    }
-                    
-                    shelves += ` data-isCartBtn="true" href="#">${modBtnTxt}</a></article></div>`;
+                    shelves +=  ` " data-num="${i}" data-id="${item.id}" data-isCartBtn="true" href="#">${modBtnTxt}</a></article></div>`;
                 });
 
             shelves += `</div></section>
@@ -800,8 +782,7 @@ class Store {
         }
     }
 
-    addToCartToggle( num, elBtn ){
-        //come back here 2
+    addToCartToggle(num, elBtn){
         let cartResult = this.cart.addOrRemoveFromCart( this.items[num] );
 
         if( cartResult ){
@@ -819,6 +800,7 @@ class Store {
         let products = document.getElementsByClassName('pbc');
         let selectedCat = filterCat.options[filterCat.selectedIndex].value;
         let selectedOS  = filterOS.options[filterOS.selectedIndex].value;
+
         this.showAllProducts(products);
 
         if( selectedCat != 'all'){

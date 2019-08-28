@@ -287,7 +287,6 @@ function () {
   };
 
   Cart.prototype.addOrRemoveFromCart = function (item) {
-    //come back here 3
     var positionInBasket;
 
     if (this.basket.length > 0) {
@@ -665,8 +664,7 @@ function () {
     var _this = this;
 
     var existingItemsInCookie = this.cookie.getJSONfromCookieAsArray();
-    var softwareRenewIds = this.softwareCookie.getJSONfromCookieAsArray(); //console.log( "What Im loading from the cookie: ", existingItemsInCookie );
-
+    var softwareRenewIds = this.softwareCookie.getJSONfromCookieAsArray();
     return fetch(this.apiURL).then(function (response) {
       //if you dont do another then, code executes before promise returns
       return response.json();
@@ -751,19 +749,12 @@ function () {
                 shelves_1 += "<a class=\"button atcBtn";
 
                 if (item.onCart) {
-                  shelves_1 += " onCart ";
+                  shelves_1 += " onCart "; // come back here
+
                   modBtnTxt = _this.cart.cartBtnTxt.Remove;
                 }
 
-                shelves_1 += " \" data-num=\"" + i + "\" data-id=\"" + item.id + "\" ";
-
-                if (categoryStr) {
-                  if (categoryStr.includes('software')) {
-                    shelves_1 += " data-alt-id=\"" + item.renewElement + "\" ";
-                  }
-                }
-
-                shelves_1 += " data-isCartBtn=\"true\" href=\"#\">" + modBtnTxt + "</a></article></div>";
+                shelves_1 += " \" data-num=\"" + i + "\" data-id=\"" + item.id + "\" data-isCartBtn=\"true\" href=\"#\">" + modBtnTxt + "</a></article></div>";
               });
               shelves_1 += "</div></section>\n                            </div></div>";
               this.containerEL.insertAdjacentHTML('beforeend', shelves_1);
@@ -902,7 +893,6 @@ function () {
   };
 
   Store.prototype.addToCartToggle = function (num, elBtn) {
-    //come back here 2
     var cartResult = this.cart.addOrRemoveFromCart(this.items[num]);
 
     if (cartResult) {
