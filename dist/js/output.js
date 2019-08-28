@@ -184,7 +184,7 @@ function () {
 
     var btnText = this.onCart ? 'Remove From Cart' : 'Add To Cart';
     var optClass = this.onCart ? 'onCart' : '';
-    var output = "\n            <div id=\"overlayPad\" data-id=\"" + this.id + "\" >";
+    var output = "<div id=\"overlayPad\" data-id=\"" + this.id + "\" >";
 
     if (this.image != '/') {
       output += "<div class=\"overlayImg\">\n                        <img src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + this.image + "\" />\n                    </div>";
@@ -848,7 +848,8 @@ function () {
                     e.preventDefault();
                     e.stopPropagation();
                   } else {
-                    var output = _this.items[num].outputOverlay(num);
+                    var theeItem = _this.items[num];
+                    var output = theeItem.outputOverlay(num);
 
                     _this.modal.openOverlay(output);
 

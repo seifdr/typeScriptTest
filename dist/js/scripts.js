@@ -74,15 +74,14 @@ class Item implements product {
         // <img src="assets/png/300x200.png" />
         const btnText = ( this.onCart )? 'Remove From Cart' : 'Add To Cart';
         const optClass = (this.onCart)? 'onCart':'';
-
-        let output:string = `
-            <div id="overlayPad" data-id="${this.id}" >`;
+ 
+        let output:string = `<div id="overlayPad" data-id="${this.id}" >`;
 
                 if( this.image != '/' ){   
                     output += `<div class="overlayImg">
                         <img src="https://feinberg-dev.fsm.northwestern.edu/it-new/${this.image}" />
-                    </div>`;
-                }    
+                    </div>`; 
+                }     
         output += `<div class="overlayText">
                     <h3>${this.title}`;
 
@@ -754,7 +753,8 @@ class Store {
                         e.preventDefault();
                         e.stopPropagation();
                     } else {
-                        let output = this.items[num].outputOverlay(num);
+                        let theeItem = <Item>this.items[num]; 
+                        let output = theeItem.outputOverlay(num);
                         this.modal.openOverlay( output );
                         e.preventDefault();
                         e.stopPropagation();
