@@ -11,27 +11,36 @@ interface product {
     title: string;
     element: string;
     type: string;
-    categories: [];
+    categories;
     price: number;
     image: string;
     desc: string;
     onCart: boolean;
+<<<<<<< HEAD
 
     //for software only
     renewElement: string;
     renew: boolean;
+=======
+    renew: boolean;
+
+    catStr: string
+>>>>>>> itCartMod
 }
 
 class Item implements product {
     id;
     title;
-    element;
+    element; 
     type;
     categories;
     price;
     image:string;
     desc;
     onCart;
+    renew: boolean;
+
+    catStr: string;
 
     //for software only
     renewElement;
@@ -57,8 +66,17 @@ class Item implements product {
         this.desc = item.desc;
 
         this.onCart = ( item.onCart )? true : false; 
-
+        
         this.renew = ( item.renew )? true : false;
+
+        //output categories as a string
+        if( this.categories ){
+            try {
+                this.catStr = this.categories.value.join(' ');
+            } catch (error) {
+                this.catStr = this.categories.value;
+            }
+        }
     }
 
     outputOverlay( num = null ){
@@ -67,12 +85,19 @@ class Item implements product {
         const optClass = (this.onCart)? 'onCart':'';
 
         let output:string = `
-            <div id="overlayPad">
+            <div id="overlayPad" data-id="${this.id}" >
                 <div class="overlayImg">
                     <img src="https://feinberg-dev.fsm.northwestern.edu/it-new/${this.image}" />
                 </div>
                 <div class="overlayText">
-                    <h3>${this.title}</h3>`
+                    <h3>${this.title}`;
+
+                    if( this.catStr.includes('software') ){
+                        if( this.renew ){
+                            output += ` - Renewing`;
+                        }
+                    }       
+        output += `</h3>`
 
                     if( this.price != '0.00' ){
                         output += `<h6>$${ this.numberWithCommas( this.price ) }</h6>`;
@@ -86,9 +111,38 @@ class Item implements product {
                     
         
         if( this.price != '0.00' ){
-            output += `<a id="atcModalBtn" class="button ${optClass}" href="#" data-num="${num}" >${ btnText }</a>`;
-        }
+            
+            // COME BACK
+            if( this.catStr.includes('software') ){
+                output += `<div class="renewModalSelect">
+                    <label>Purchase or Renew
+                    Software Licence: </label>
+                    <select class="renewModalInput" data-id="${this.id}" `;
+            
+                        if( this.onCart ){
+                            output += ` disabled `;
+                        }
+                        
+                    output += `>
+                        <option value="new">New</option>
+                        <option value="renew" `;
 
+                        //come back here 3
+                        if( this.renew ){
+                            output += ` selected="selected" `;
+                        }
+                    output += `>Renew</option></select>`
+                output += `</div>`;
+            }
+
+            output += `<a id="atcModalBtn" href="#" 
+                            class="button ${optClass}" 
+                            data-num="${num}" 
+                            data-id="${this.id}"
+                            data-catstr="${this.catStr}"    
+                        >${ btnText }</a>`;
+        }
+ 
         output += `</div>
             </div>`;
         return output;
@@ -103,12 +157,14 @@ class Cart {
     private machformBase = 'https://forms.feinberg.northwestern.edu/view.php?id=48491';
     public basket = [];
     public mappedBasket = [];
+    public softwareAltIds = [];
 
     public cartCount: number = 0;
     public cartTotal: number = 0;
 
     private modal: Modal;
     private cookie: Cookie;
+    private softwareCookie: Cookie;
 
     //button text 
     public cartBtnTxt = {
@@ -117,9 +173,10 @@ class Cart {
         'Info'      : 'More Info'
     }
 
-    constructor( modal, cookie ) {
+    constructor( modal, cookie, softwareCookie ) {
         this.modal = modal;
         this.cookie = cookie;
+        this.softwareCookie = softwareCookie;
         this.makeCartInBrowser();
     }
 
@@ -128,11 +185,27 @@ class Cart {
             return row.id;
         });
 
+        //map basket again to track software
+        this.softwareAltIds = this.basket.map( ( row:Item ) => {
+            if( row.renew ){
+                return row.id;
+            }
+        });
+
         if( this.mappedBasket.length > 0 ){
             let mappedBasketToCookie = JSON.stringify( this.mappedBasket );
             this.cookie.setCookie( mappedBasketToCookie, 1 );
+
+            if( this.softwareAltIds.length > 0 ){
+                let softwareAltCookie = JSON.stringify( this.mappedBasket );
+                this.softwareCookie.setCookie( softwareAltCookie, 1 );
+            } else {
+                this.softwareCookie.deleteCookie();
+            }
+
         } else {
             this.cookie.deleteCookie();
+            this.softwareCookie.deleteCookie();
         }
     }
 
@@ -150,10 +223,16 @@ class Cart {
 
             if( positionInBasket === -1 || positionInBasket === undefined ){
                 let result = this.addToBasket(item);
+
+                //update the disable software select for software items only
+                if( result ){
+                    // this.disableSoftwareSelect(item);
+                    this.toggleSoftwareSelects( item.id );
+                }
+
                 this.updateCartTotalAndCount();
                 return result;
             } else {
-                // console.log("Already in cart. Remove");
                 const deletedItem = this.removeFromBasket( positionInBasket )[0];
                 
                 let atcBtns = document.getElementsByClassName('atcBtn');
@@ -163,6 +242,9 @@ class Cart {
 
                     if( deletedItem['id'] == dataId ){
                         this.toggleATCbutton( atcBtns[i], false );
+    
+                        //this.unRenewSelect( dataId );
+                        this.toggleSoftwareSelects(dataId);
                     }
                 }
                 this.updateCartTotalAndCount();
@@ -172,6 +254,11 @@ class Cart {
         } else {
             if( item.id != null || item.id != null ){
                 let result = this.addToBasket(item);
+
+                if( result ){
+                    this.toggleSoftwareSelects( item.id );
+                }
+
                 this.updateCartTotalAndCount();
                 return result;
             }
@@ -179,25 +266,42 @@ class Cart {
     
     }
 
+    //if item is within the basket then it disables the select box(es), if not, it enables the selects
+    toggleSoftwareSelects( id ){
+        if( id ){
+            const selectDropDowns = document.querySelectorAll('select[data-id="'+ id +'"]');
+
+            if( this.inBasket(id) != -1 ){
+                selectDropDowns.forEach( selectEl => {
+                    selectEl.setAttribute('disabled', 'disabled');
+                });
+            } else {
+                selectDropDowns.forEach( selectEl => {
+                    selectEl.removeAttribute('disabled');
+                });
+            }
+        }
+    }
+
     addToBasket( item:product ){
         this.basket.push( item );
-        console.log( "Basket: ", this.basket );
         return true;
     }
 
     removeFromBasket( positionInBasket ){
-        console.log( 'Removing this: ', positionInBasket);
         return this.basket.splice(positionInBasket, 1);
     }
 
     inBasket( incomingID ){
-        // let mappedArr = this.basket.map( ( x ) => {
-        //     return x['id'];
-        // });
-
+        let result = -1;
+        
         this.basket.forEach( (basketItem, i ) => {
-            return ( basketItem.id === incomingID )? i : false;
+            if( basketItem.id === incomingID ){
+                result = i; 
+            }
         });
+
+        return result;
     }
 
     totalCart(){
@@ -214,7 +318,6 @@ class Cart {
     }
 
     countCart(){
-        console.log( 'Cart count: ', this.cartCount );
         return this.basket.length;
     }
 
@@ -227,8 +330,6 @@ class Cart {
             document.getElementById('cart').style.height = "75px";
 
             let cartInfoTxt = '';
-
-            console.log('Cart Count: ', this.cartCount );
 
             if( this.cartCount >=2 ){
                 cartInfoTxt += `<p>${this.cartCount} items<br />`;
@@ -353,7 +454,13 @@ class Cart {
         
                 cartlistOutput += `</div>
                     <div class="crDesc">
-                        <p>${row.title}</p>
+                        <p>${row.title}`;
+                            if( row.catStr.includes('software') ){
+                                if( row.renew ){
+                                    cartlistOutput += ` - Renewing`;
+                                }
+                            }       
+                cartlistOutput += `</p>
                         <a class="crDeleteEmbed" data-basket-position="${ i }" >Delete</a>
                     </div>
                     <div class="crDelete"> 
@@ -408,7 +515,17 @@ class Cart {
             let url = this.machformBase + '&'
 
             for (let i = 0; i < this.basket.length; i++) {
-                url += this.basket[i].element + '=1';
+                
+                if( this.basket[i].catStr.includes('software') ){
+                    if(this.basket[i].renew ){
+                        url += this.basket[i].renewElement + '=1';
+                    } else {
+                        url += this.basket[i].element + '=1';
+                    }
+                } else {
+                    url += this.basket[i].element + '=1';
+                }
+               
 
                 if( (i + 1) < this.basket.length ){
                     url += '&'
@@ -429,17 +546,20 @@ class Store {
     private cart:Cart;
     private modal: Modal;
     private cookie: Cookie;
+    private softwareCookie: Cookie;
 
-    constructor( containerID, cart, modal, cookie ) {
+    constructor( containerID, cart, modal, cookie, softwareCookie ) {
         this.modal = modal;
         this.cookie = cookie;
+        this.softwareCookie = softwareCookie;
         this.cart = cart;
         this.containerEL = document.getElementById( containerID );
         this.stockTheShelves();
     }
 
     loadProducts() {
-        let existingItemsInCookie = <number[]> this.cookie.getJSONfromCookieAsArray();
+        const existingItemsInCookie = <number[]> this.cookie.getJSONfromCookieAsArray();
+        const softwareRenewIds = this.softwareCookie.getJSONfromCookieAsArray();
 
         //console.log( "What Im loading from the cookie: ", existingItemsInCookie );
 
@@ -447,8 +567,6 @@ class Store {
             //if you dont do another then, code executes before promise returns
             return response.json();
         }).then( (myJson) => {
-            
-            console.log('The list: ', myJson.items );
 
             let result = myJson.items;
 
@@ -460,6 +578,11 @@ class Store {
                     if( existingItemsInCookie.length > 0 ){
                         if( existingItemsInCookie.includes( row.id ) ){
                             row.onCart = true;
+
+                            if( softwareRenewIds.includes( row.id ) ){
+                                row.renew = true;
+                            }
+
                             this.cart.addOrRemoveFromCart( new Item( row ) );
                         } else {
                             row.onCart = false;
@@ -516,23 +639,16 @@ class Store {
 
             // <img src="assets/png/300x200.png" />
                 this.items.forEach( ( item, i ) => {
-            
-                    let categoryStr = "";
-
-                    if( typeof item.categories['value'] == 'object' ){
-                        item.categories['value'].forEach( value => {
-                            if( value ){ categoryStr =  categoryStr + '' + value + ' '; }
-                        });
-                    } else {
-                        categoryStr = item.categories['value'];
-                    }
-
-                    
                     let modPrice    = ( item.price == 0.00 )? '': '$' + this.numberWithCommas(item.price);
                     let modBtnTxt   = ( item.price == 0.00 )? this.cart.cartBtnTxt.Info : this.cart.cartBtnTxt.Add;   
 
-                    shelves += `<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc" data-os="${item.type}" data-catString="${categoryStr}">
-                            <article class="feature-box prodBox" data-id="${item.id}" data-num="${i}" data-catString="${categoryStr}" >`;
+                    shelves += `<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc" 
+                            data-os="${item.type}" 
+                            data-catString="${item.catStr}">
+                        <article class="feature-box prodBox" 
+                            data-id="${item.id}" 
+                            data-num="${i}" 
+                            data-catString="${item.catStr}">`;
                         
                         if( item.image != '/' ){
                             shelves += `<div class="img-container">
@@ -547,20 +663,27 @@ class Store {
                                             <a class="specs" data-id="${item.id}">Read product specs</a>
                                         </div>`;
 
-                                        if( categoryStr == 'software' ){
+                                        if( item.catStr.includes('software') ){
                                             shelves += `<div class="renewSelect">
                                                         <label>Purchase or Renew
                                                         Software Licence: </label>
-                                                        <select class="renewInput">
+                                                        <select class="renewInput" data-id="${item.id}" `;
+                                                        
+                                                        if( item.onCart ){
+                                                            shelves += ` disabled `;
+                                                        }
+                                                        
+                                            shelves += `>
                                                             <option value="new">New</option>
-                                                            <option value="renew" `
-                                                
-                                                            if( item.renew ){
-                                                                shelves += ` selected="selected" `;
+                                                            <option value="renew" `;
+
+                                                            //come back here 3
+                                                            if( item.catStr.includes('software') ){
+                                                                if( item.renew ){
+                                                                    shelves += ` selected="selected" `;
+                                                                }
                                                             }
-                                                            
-                                            shelves +=  `>Renew</option>
-                                                        </select></div>`;
+                                            shelves += `>Renew</option></select></div>`;
                                         }
                     shelves +=      `</div>`;
 
@@ -586,7 +709,7 @@ class Store {
 
             //add event listener to all product item feature boxes
             for( let el of document.getElementsByClassName('prodBox') ){
-                el.addEventListener('click', (e) => {
+                el.addEventListener('click',(e) => {
                         e.preventDefault();
                         let num = el.getAttribute('data-num');
                         let output = this.items[num].outputOverlay(num);
@@ -595,40 +718,54 @@ class Store {
                         let atcModalBtn = document.getElementById('atcModalBtn');
 
                         if( atcModalBtn != null ){
-                            atcModalBtn.addEventListener('click', (e) => {        
+                            atcModalBtn.addEventListener('click', async (e) => {        
                                 //Change the modal atc button 
-                                this.addToCartToggle(num, atcModalBtn);
+                                await this.addToCartToggle(num, atcModalBtn);
 
-                                    //the cart toggle above only applies the modal add to cart button so...
-                                    //once it's been added to cart and the modal cart button has been toggled
-                                    //map the cart
-                                    this.cart.mapCart();
+                                //check if item is software, if so toggle the select disable attribute 
+                                //depending on if its on the cart or not
+                                if( this.items[num].catStr.includes('software') ){    
+                                    // this.cart.toggleSoftwareSelects( this.items[num].id );
+                                    this.cart.toggleSoftwareSelects( this.items[num]['id'] );          
+                                }
 
-                                
-                                    //withe the cart mapped by id, we can check for it and update the prod box id appropiately
-                                    if( this.cart.mappedBasket.includes( this.items[num].id ) ){
-                                        //the item is on the cart, change the prodbox btn to orange
-                                        this.cart.toggleATCbutton( el.getElementsByClassName('atcBtn')[0], true );
-                                    } else {
-                                        //the item is not on the cart, change the prodbox btn to purple
-                                        this.cart.toggleATCbutton( el.getElementsByClassName('atcBtn')[0], false );
-                                    }
+                                //the cart toggle above only applies the modal add to cart button so...
+                                //once it's been added to cart and the modal cart button has been toggled
+                                //map the cart
+                                this.cart.mapCart();
+
+                            
+                                //withe the cart mapped by id, we can check for it and update the prod box id appropiately
+                                if( this.cart.mappedBasket.includes( this.items[num].id ) ){
+                                    //the item is on the cart, change the prodbox btn to orange
+                                    this.cart.toggleATCbutton( el.getElementsByClassName('atcBtn')[0], true );
+                                } else {
+                                    //the item is not on the cart, change the prodbox btn to purple
+                                    this.cart.toggleATCbutton( el.getElementsByClassName('atcBtn')[0], false );
+                                }
                             });
                         }
                         //wireup event listener to ATC button 
                 });
             }
 
-            //ATC buttons on main page (not modal)
+            //atc buttons on page (not modal)
             for( let elBtn of document.getElementsByClassName('atcBtn') ){
                 elBtn.addEventListener('click', (e) => {
 
                     let num = elBtn.getAttribute('data-num');
-
+                
                     if( this.items[num].price != '0.00' ){
-                        const id = elBtn.getAttribute('data-id');
 
-                        this.addToCartToggle( num, elBtn );
+                        //check if it's software
+                        if( this.items[num].categories.value.includes('software') ){
+                            //it is software, check selector value, and set the item.renew property
+                            const selectInput = document.querySelector('article[data-id="'+ this.items[num].id +'"] select.renewInput' );
+                            const selectVal = selectInput.options[selectInput.selectedIndex].value;
+                            this.items[num].renew = ( selectVal == 'renew' )? true : false;
+                        }
+
+                        this.addToCartToggle(num, elBtn);
                         e.preventDefault();
                         e.stopPropagation();
                     } else {
@@ -646,7 +783,7 @@ class Store {
                     let selectVal = elrenew.options[filterOS.selectedIndex].value;
                     e.preventDefault();
                     e.stopPropagation();
-                });
+                });                
             }
             
             //filter dropdowns 
@@ -667,15 +804,14 @@ class Store {
         //come back here 2
         let cartResult = this.cart.addOrRemoveFromCart( this.items[num] );
 
-        //happening when on modal or on main page
-        //if software, grab new/renew select value 
-
         if( cartResult ){
             this.items[num].onCart = true;
             this.cart.toggleATCbutton( elBtn, true );
         } else {
             this.items[num].onCart = false;
             this.cart.toggleATCbutton( elBtn, false );
+            //if its coming off the cart then you need to clear the renew selection too.
+            this.items[num].renew  = false;
         }
     }
 
@@ -683,7 +819,6 @@ class Store {
         let products = document.getElementsByClassName('pbc');
         let selectedCat = filterCat.options[filterCat.selectedIndex].value;
         let selectedOS  = filterOS.options[filterOS.selectedIndex].value;
-        
         this.showAllProducts(products);
 
         if( selectedCat != 'all'){
@@ -821,11 +956,13 @@ class Cookie {
 }
 
 window.onload=function() {
-    let shoppingCookie = new Cookie( 'fsmITPurchasing' );
+    const shoppingCookie = new Cookie( 'fsmITPurchasing' );
+    const softwareCookie = new Cookie( 'fsmITPurchasingSoftware' );
 
     let shoppingModal = new Modal();
 
-    let shoppingCart = new Cart( shoppingModal, shoppingCookie );
+    let shoppingCart = new Cart( shoppingModal, shoppingCookie, softwareCookie );
 
-    let store = new Store('shopping-cart', shoppingCart, shoppingModal, shoppingCookie );
+    let store = new Store('shopping-cart', shoppingCart, shoppingModal, shoppingCookie, softwareCookie );
+
 };

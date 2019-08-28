@@ -362,6 +362,20 @@ div#overlayGuts {
             max-width: 300px;
         }
 
+        div.renewModalSelect {
+            margin-bottom: 1.5em;
+            
+            label {
+                display: block;
+                width: 100%;
+            }
+
+            select {
+                margin-top: .25em;
+                padding-top: .25em;
+            }
+        }
+
         @media screen and (max-width: $break-large) {
             flex-direction: column;
             justify-content: center;

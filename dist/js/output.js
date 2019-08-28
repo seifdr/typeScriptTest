@@ -1,7 +1,5 @@
 "use strict";
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 var __awaiter = void 0 && (void 0).__awaiter || function (thisArg, _arguments, P, generator) {
   return new (P || (P = Promise))(function (resolve, reject) {
     function fulfilled(value) {
@@ -167,7 +165,15 @@ function () {
     this.image = item.image['path'];
     this.desc = item.desc;
     this.onCart = item.onCart ? true : false;
-    this.renew = item.renew ? true : false;
+    this.renew = item.renew ? true : false; //output categories as a string
+
+    if (this.categories) {
+      try {
+        this.catStr = this.categories.value.join(' ');
+      } catch (error) {
+        this.catStr = this.categories.value;
+      }
+    }
   }
 
   Item.prototype.outputOverlay = function (num) {
@@ -178,7 +184,15 @@ function () {
 
     var btnText = this.onCart ? 'Remove From Cart' : 'Add To Cart';
     var optClass = this.onCart ? 'onCart' : '';
-    var output = "\n            <div id=\"overlayPad\">\n                <div class=\"overlayImg\">\n                    <img src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + this.image + "\" />\n                </div>\n                <div class=\"overlayText\">\n                    <h3>" + this.title + "</h3>";
+    var output = "\n            <div id=\"overlayPad\" data-id=\"" + this.id + "\" >\n                <div class=\"overlayImg\">\n                    <img src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + this.image + "\" />\n                </div>\n                <div class=\"overlayText\">\n                    <h3>" + this.title;
+
+    if (this.catStr.includes('software')) {
+      if (this.renew) {
+        output += " - Renewing";
+      }
+    }
+
+    output += "</h3>";
 
     if (this.price != '0.00') {
       output += "<h6>$" + this.numberWithCommas(this.price) + "</h6>";
@@ -191,7 +205,25 @@ function () {
     }
 
     if (this.price != '0.00') {
-      output += "<a id=\"atcModalBtn\" class=\"button " + optClass + "\" href=\"#\" data-num=\"" + num + "\" >" + btnText + "</a>";
+      // COME BACK
+      if (this.catStr.includes('software')) {
+        output += "<div class=\"renewModalSelect\">\n                    <label>Purchase or Renew\n                    Software Licence: </label>\n                    <select class=\"renewModalInput\" data-id=\"" + this.id + "\" ";
+
+        if (this.onCart) {
+          output += " disabled ";
+        }
+
+        output += ">\n                        <option value=\"new\">New</option>\n                        <option value=\"renew\" "; //come back here 3
+
+        if (this.renew) {
+          output += " selected=\"selected\" ";
+        }
+
+        output += ">Renew</option></select>";
+        output += "</div>";
+      }
+
+      output += "<a id=\"atcModalBtn\" href=\"#\" \n                            class=\"button " + optClass + "\" \n                            data-num=\"" + num + "\" \n                            data-id=\"" + this.id + "\"\n                            data-catstr=\"" + this.catStr + "\"    \n                        >" + btnText + "</a>";
     }
 
     output += "</div>\n            </div>";
@@ -208,10 +240,11 @@ function () {
 var Cart =
 /** @class */
 function () {
-  function Cart(modal, cookie) {
+  function Cart(modal, cookie, softwareCookie) {
     this.machformBase = 'https://forms.feinberg.northwestern.edu/view.php?id=48491';
     this.basket = [];
     this.mappedBasket = [];
+    this.softwareAltIds = [];
     this.cartCount = 0;
     this.cartTotal = 0; //button text 
 
@@ -222,19 +255,34 @@ function () {
     };
     this.modal = modal;
     this.cookie = cookie;
+    this.softwareCookie = softwareCookie;
     this.makeCartInBrowser();
   }
 
   Cart.prototype.mapCart = function () {
     this.mappedBasket = this.basket.map(function (row) {
       return row.id;
+    }); //map basket again to track software
+
+    this.softwareAltIds = this.basket.map(function (row) {
+      if (row.renew) {
+        return row.id;
+      }
     });
 
     if (this.mappedBasket.length > 0) {
       var mappedBasketToCookie = JSON.stringify(this.mappedBasket);
       this.cookie.setCookie(mappedBasketToCookie, 1);
+
+      if (this.softwareAltIds.length > 0) {
+        var softwareAltCookie = JSON.stringify(this.mappedBasket);
+        this.softwareCookie.setCookie(softwareAltCookie, 1);
+      } else {
+        this.softwareCookie.deleteCookie();
+      }
     } else {
       this.cookie.deleteCookie();
+      this.softwareCookie.deleteCookie();
     }
   };
 
@@ -250,11 +298,16 @@ function () {
       });
 
       if (positionInBasket === -1 || positionInBasket === undefined) {
-        var result = this.addToBasket(item);
+        var result = this.addToBasket(item); //update the disable software select for software items only
+
+        if (result) {
+          // this.disableSoftwareSelect(item);
+          this.toggleSoftwareSelects(item.id);
+        }
+
         this.updateCartTotalAndCount();
         return result;
       } else {
-        // console.log("Already in cart. Remove");
         var deletedItem = this.removeFromBasket(positionInBasket)[0];
         var atcBtns = document.getElementsByClassName('atcBtn');
 
@@ -262,7 +315,9 @@ function () {
           var dataId = atcBtns[i].getAttribute('data-id');
 
           if (deletedItem['id'] == dataId) {
-            this.toggleATCbutton(atcBtns[i], false);
+            this.toggleATCbutton(atcBtns[i], false); //this.unRenewSelect( dataId );
+
+            this.toggleSoftwareSelects(dataId);
           }
         }
 
@@ -272,30 +327,51 @@ function () {
     } else {
       if (item.id != null || item.id != null) {
         var result = this.addToBasket(item);
+
+        if (result) {
+          this.toggleSoftwareSelects(item.id);
+        }
+
         this.updateCartTotalAndCount();
         return result;
+      }
+    }
+  }; //if item is within the basket then it disables the select box(es), if not, it enables the selects
+
+
+  Cart.prototype.toggleSoftwareSelects = function (id) {
+    if (id) {
+      var selectDropDowns = document.querySelectorAll('select[data-id="' + id + '"]');
+
+      if (this.inBasket(id) != -1) {
+        selectDropDowns.forEach(function (selectEl) {
+          selectEl.setAttribute('disabled', 'disabled');
+        });
+      } else {
+        selectDropDowns.forEach(function (selectEl) {
+          selectEl.removeAttribute('disabled');
+        });
       }
     }
   };
 
   Cart.prototype.addToBasket = function (item) {
     this.basket.push(item);
-    console.log("Basket: ", this.basket);
     return true;
   };
 
   Cart.prototype.removeFromBasket = function (positionInBasket) {
-    console.log('Removing this: ', positionInBasket);
     return this.basket.splice(positionInBasket, 1);
   };
 
   Cart.prototype.inBasket = function (incomingID) {
-    // let mappedArr = this.basket.map( ( x ) => {
-    //     return x['id'];
-    // });
+    var result = -1;
     this.basket.forEach(function (basketItem, i) {
-      return basketItem.id === incomingID ? i : false;
+      if (basketItem.id === incomingID) {
+        result = i;
+      }
     });
+    return result;
   };
 
   Cart.prototype.totalCart = function () {
@@ -309,7 +385,6 @@ function () {
   };
 
   Cart.prototype.countCart = function () {
-    console.log('Cart count: ', this.cartCount);
     return this.basket.length;
   };
 
@@ -321,7 +396,6 @@ function () {
     if (this.cartCount > 0) {
       document.getElementById('cart').style.height = "75px";
       var cartInfoTxt = '';
-      console.log('Cart Count: ', this.cartCount);
 
       if (this.cartCount >= 2) {
         cartInfoTxt += "<p>" + this.cartCount + " items<br />";
@@ -503,7 +577,15 @@ function () {
           cartlistOutput_1 += "<img src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + row.image + "\" alt=\"" + row.title + "-image\" />";
         }
 
-        cartlistOutput_1 += "</div>\n                    <div class=\"crDesc\">\n                        <p>" + row.title + "</p>\n                        <a class=\"crDeleteEmbed\" data-basket-position=\"" + i + "\" >Delete</a>\n                    </div>\n                    <div class=\"crDelete\"> \n                        <p><a class=\"crDeleteBtn\" data-basket-position=\"" + i + "\" href=\"\">Delete</a></p>\n                    </div>\n                    <div><p>$" + _this.numberWithCommas(row.price, false) + "</p></div>\n                </div>";
+        cartlistOutput_1 += "</div>\n                    <div class=\"crDesc\">\n                        <p>" + row.title;
+
+        if (row.catStr.includes('software')) {
+          if (row.renew) {
+            cartlistOutput_1 += " - Renewing";
+          }
+        }
+
+        cartlistOutput_1 += "</p>\n                        <a class=\"crDeleteEmbed\" data-basket-position=\"" + i + "\" >Delete</a>\n                    </div>\n                    <div class=\"crDelete\"> \n                        <p><a class=\"crDeleteBtn\" data-basket-position=\"" + i + "\" href=\"\">Delete</a></p>\n                    </div>\n                    <div><p>$" + _this.numberWithCommas(row.price, false) + "</p></div>\n                </div>";
       });
       cartlistOutput_1 += "\n                <div class=\"cartRow\">\n                    <div class=\"crImg\">&nbsp;</div>\n                    <div class=\"crDesc\">&nbsp;</div>\n                    <div class=\"crDelete\">Total:</div>\n                    <div>$" + this.numberWithCommas(this.totalCart(), true) + "</div>\n                </div>\n                <div class=\"cartRow\">\n                    <div class=\"checkoutRow\">\n                        <a id=\"checkoutNow\" href=\"#\" class=\"button\">Checkout Now</a> \n                    </div>\n                </div>\n            ";
       cartlistOutput_1 += '</div>';
@@ -541,7 +623,15 @@ function () {
       var url = this.machformBase + '&';
 
       for (var i = 0; i < this.basket.length; i++) {
-        url += this.basket[i].element + '=1';
+        if (this.basket[i].catStr.includes('software')) {
+          if (this.basket[i].renew) {
+            url += this.basket[i].renewElement + '=1';
+          } else {
+            url += this.basket[i].element + '=1';
+          }
+        } else {
+          url += this.basket[i].element + '=1';
+        }
 
         if (i + 1 < this.basket.length) {
           url += '&';
@@ -560,11 +650,12 @@ function () {
 var Store =
 /** @class */
 function () {
-  function Store(containerID, cart, modal, cookie) {
+  function Store(containerID, cart, modal, cookie, softwareCookie) {
     this.apiURL = 'https://feinberg-dev.fsm.northwestern.edu/it-new/ws/purchasing-api.php';
     this.items = [{}];
     this.modal = modal;
     this.cookie = cookie;
+    this.softwareCookie = softwareCookie;
     this.cart = cart;
     this.containerEL = document.getElementById(containerID);
     this.stockTheShelves();
@@ -573,13 +664,13 @@ function () {
   Store.prototype.loadProducts = function () {
     var _this = this;
 
-    var existingItemsInCookie = this.cookie.getJSONfromCookieAsArray(); //console.log( "What Im loading from the cookie: ", existingItemsInCookie );
+    var existingItemsInCookie = this.cookie.getJSONfromCookieAsArray();
+    var softwareRenewIds = this.softwareCookie.getJSONfromCookieAsArray(); //console.log( "What Im loading from the cookie: ", existingItemsInCookie );
 
     return fetch(this.apiURL).then(function (response) {
       //if you dont do another then, code executes before promise returns
       return response.json();
     }).then(function (myJson) {
-      console.log('The list: ', myJson.items);
       var result = myJson.items;
 
       if (result.length > 0) {
@@ -588,6 +679,10 @@ function () {
           if (existingItemsInCookie.length > 0) {
             if (existingItemsInCookie.includes(row.id)) {
               row.onCart = true;
+
+              if (softwareRenewIds.includes(row.id)) {
+                row.renew = true;
+              }
 
               _this.cart.addOrRemoveFromCart(new Item(row));
             } else {
@@ -624,21 +719,9 @@ function () {
               shelves_1 = "<div class=\"bootstrap-wrapper\">\n                            <div class=\"container-fluid\">\n                                <section id=\"filterChecks\">\n                                    <form class=\"row\">\n                                        <div class=\"col-6\">\n                                                <label>Filter by Category:</label>\n                                                <select id=\"filterCat\" class=\"filterOptions\">\n                                                    <option value=\"all\">Show All</option>\n                                                    <option value=\"bundles\">Bundles</option>\n                                                    <option value=\"desktops\">Desktops</option>\n                                                    <option value=\"laptops\">Laptops</option>\n                                                    <option value=\"monitors\">Monitors</option>\n                                                    <option value=\"apple desktops\">Apple Desktops</option>\n                                                    <option value=\"apple laptops\">Apple Laptops</option>\n                                                    <option value=\"ipads\">iPads</option>\n                                                    <option value=\"tablets\">Tablets</option>\n                                                    <option value=\"printers\">Printers</option>\n                                                    <option value=\"software\">Software</option>\n                                                    <option value=\"accessories\">Peripheral Accessories</option>\n                                                </select>\n                                        </div>\n                                        <div class=\"col-6\">\n                                            <label>Filter by OS:</label>\n                                            <select id=\"filterOS\" class=\"filterOptions\">\n                                                <option value=\"all\">Show All</option>\n                                                <option value=\"apple\">Apple</option>\n                                                <option value=\"pc\">PC</option>\n                                            </select>\n                                        </div>   \n                                    </form>\n                                </section>\n                                <section class=\"shelves\"><div class=\"row\">"; // <img src="assets/png/300x200.png" />
 
               this.items.forEach(function (item, i) {
-                var categoryStr = "";
-
-                if (_typeof(item.categories['value']) == 'object') {
-                  item.categories['value'].forEach(function (value) {
-                    if (value) {
-                      categoryStr = categoryStr + '' + value + ' ';
-                    }
-                  });
-                } else {
-                  categoryStr = item.categories['value'];
-                }
-
                 var modPrice = item.price == 0.00 ? '' : '$' + _this.numberWithCommas(item.price);
                 var modBtnTxt = item.price == 0.00 ? _this.cart.cartBtnTxt.Info : _this.cart.cartBtnTxt.Add;
-                shelves_1 += "<div class=\"col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc\" data-os=\"" + item.type + "\" data-catString=\"" + categoryStr + "\">\n                            <article class=\"feature-box prodBox\" data-id=\"" + item.id + "\" data-num=\"" + i + "\" data-catString=\"" + categoryStr + "\" >";
+                shelves_1 += "<div class=\"col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc\" \n                            data-os=\"" + item.type + "\" \n                            data-catString=\"" + item.catStr + "\">\n                        <article class=\"feature-box prodBox\" \n                            data-id=\"" + item.id + "\" \n                            data-num=\"" + i + "\" \n                            data-catString=\"" + item.catStr + "\">";
 
                 if (item.image != '/') {
                   shelves_1 += "<div class=\"img-container\">\n                                        <img class=\"img-fluid\" src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + item.image + "\" alt=\"" + item.title + "-image\" />\n                                    </div>";
@@ -646,14 +729,22 @@ function () {
 
                 shelves_1 += "<div class=\"feature-copy\">\n                                        <div>\n                                            <h6>" + item.title + "</h6>\n                                            <p>" + modPrice + "</p>\n                                            <a class=\"specs\" data-id=\"" + item.id + "\">Read product specs</a>\n                                        </div>";
 
-                if (categoryStr == 'software') {
-                  shelves_1 += "<div class=\"renewSelect\">\n                                                        <label>Purchase or Renew\n                                                        Software Licence: </label>\n                                                        <select class=\"renewInput\">\n                                                            <option value=\"new\">New</option>\n                                                            <option value=\"renew\" ";
+                if (item.catStr.includes('software')) {
+                  shelves_1 += "<div class=\"renewSelect\">\n                                                        <label>Purchase or Renew\n                                                        Software Licence: </label>\n                                                        <select class=\"renewInput\" data-id=\"" + item.id + "\" ";
 
-                  if (item.renew) {
-                    shelves_1 += " selected=\"selected\" ";
+                  if (item.onCart) {
+                    shelves_1 += " disabled ";
                   }
 
-                  shelves_1 += ">Renew</option>\n                                                        </select></div>";
+                  shelves_1 += ">\n                                                            <option value=\"new\">New</option>\n                                                            <option value=\"renew\" "; //come back here 3
+
+                  if (item.catStr.includes('software')) {
+                    if (item.renew) {
+                      shelves_1 += " selected=\"selected\" ";
+                    }
+                  }
+
+                  shelves_1 += ">Renew</option></select></div>";
                 }
 
                 shelves_1 += "</div>";
@@ -690,22 +781,45 @@ function () {
 
                   if (atcModalBtn != null) {
                     atcModalBtn.addEventListener('click', function (e) {
-                      //Change the modal atc button 
-                      _this.addToCartToggle(num, atcModalBtn); //the cart toggle above only applies the modal add to cart button so...
-                      //once it's been added to cart and the modal cart button has been toggled
-                      //map the cart
+                      return __awaiter(_this, void 0, void 0, function () {
+                        return __generator(this, function (_a) {
+                          switch (_a.label) {
+                            case 0:
+                              //Change the modal atc button 
+                              return [4
+                              /*yield*/
+                              , this.addToCartToggle(num, atcModalBtn)];
+
+                            case 1:
+                              //Change the modal atc button 
+                              _a.sent(); //check if item is software, if so toggle the select disable attribute 
+                              //depending on if its on the cart or not
 
 
-                      _this.cart.mapCart(); //withe the cart mapped by id, we can check for it and update the prod box id appropiately
+                              if (this.items[num].catStr.includes('software')) {
+                                // this.cart.toggleSoftwareSelects( this.items[num].id );
+                                this.cart.toggleSoftwareSelects(this.items[num]['id']);
+                              } //the cart toggle above only applies the modal add to cart button so...
+                              //once it's been added to cart and the modal cart button has been toggled
+                              //map the cart
 
 
-                      if (_this.cart.mappedBasket.includes(_this.items[num].id)) {
-                        //the item is on the cart, change the prodbox btn to orange
-                        _this.cart.toggleATCbutton(el.getElementsByClassName('atcBtn')[0], true);
-                      } else {
-                        //the item is not on the cart, change the prodbox btn to purple
-                        _this.cart.toggleATCbutton(el.getElementsByClassName('atcBtn')[0], false);
-                      }
+                              this.cart.mapCart(); //withe the cart mapped by id, we can check for it and update the prod box id appropiately
+
+                              if (this.cart.mappedBasket.includes(this.items[num].id)) {
+                                //the item is on the cart, change the prodbox btn to orange
+                                this.cart.toggleATCbutton(el.getElementsByClassName('atcBtn')[0], true);
+                              } else {
+                                //the item is not on the cart, change the prodbox btn to purple
+                                this.cart.toggleATCbutton(el.getElementsByClassName('atcBtn')[0], false);
+                              }
+
+                              return [2
+                              /*return*/
+                              ];
+                          }
+                        });
+                      });
                     });
                   } //wireup event listener to ATC button 
 
@@ -724,7 +838,13 @@ function () {
                   var num = elBtn.getAttribute('data-num');
 
                   if (_this.items[num].price != '0.00') {
-                    var id = elBtn.getAttribute('data-id');
+                    //check if it's software
+                    if (_this.items[num].categories.value.includes('software')) {
+                      //it is software, check selector value, and set the item.renew property
+                      var selectInput = document.querySelector('article[data-id="' + _this.items[num].id + '"] select.renewInput');
+                      var selectVal = selectInput.options[selectInput.selectedIndex].value;
+                      _this.items[num].renew = selectVal == 'renew' ? true : false;
+                    }
 
                     _this.addToCartToggle(num, elBtn);
 
@@ -739,7 +859,7 @@ function () {
                     e.stopPropagation();
                   }
                 });
-              }; //ATC buttons on main page (not modal)
+              }; //atc buttons on page (not modal)
 
 
               for (_b = 0, _c = document.getElementsByClassName('atcBtn'); _b < _c.length; _b++) {
@@ -783,15 +903,16 @@ function () {
 
   Store.prototype.addToCartToggle = function (num, elBtn) {
     //come back here 2
-    var cartResult = this.cart.addOrRemoveFromCart(this.items[num]); //happening when on modal or on main page
-    //if software, grab new/renew select value 
+    var cartResult = this.cart.addOrRemoveFromCart(this.items[num]);
 
     if (cartResult) {
       this.items[num].onCart = true;
       this.cart.toggleATCbutton(elBtn, true);
     } else {
       this.items[num].onCart = false;
-      this.cart.toggleATCbutton(elBtn, false);
+      this.cart.toggleATCbutton(elBtn, false); //if its coming off the cart then you need to clear the renew selection too.
+
+      this.items[num].renew = false;
     }
   };
 
@@ -935,7 +1056,8 @@ function () {
 
 window.onload = function () {
   var shoppingCookie = new Cookie('fsmITPurchasing');
+  var softwareCookie = new Cookie('fsmITPurchasingSoftware');
   var shoppingModal = new Modal();
-  var shoppingCart = new Cart(shoppingModal, shoppingCookie);
-  var store = new Store('shopping-cart', shoppingCart, shoppingModal, shoppingCookie);
+  var shoppingCart = new Cart(shoppingModal, shoppingCookie, softwareCookie);
+  var store = new Store('shopping-cart', shoppingCart, shoppingModal, shoppingCookie, softwareCookie);
 };
