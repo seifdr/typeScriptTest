@@ -223,7 +223,6 @@ class Cart {
                 this.updateCartTotalAndCount();
                 return result;
             } else {
-                // console.log("Already in cart. Remove");
                 const deletedItem = this.removeFromBasket( positionInBasket )[0];
                 
                 let atcBtns = document.getElementsByClassName('atcBtn');
@@ -261,8 +260,6 @@ class Cart {
     toggleSoftwareSelects( id ){
         if( id ){
             const selectDropDowns = document.querySelectorAll('select[data-id="'+ id +'"]');
-            
-            console.log( 'In basket: ', this.inBasket(id) );
 
             if( this.inBasket(id) != -1 ){
                 selectDropDowns.forEach( selectEl => {

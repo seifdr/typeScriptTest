@@ -307,7 +307,6 @@ function () {
         this.updateCartTotalAndCount();
         return result;
       } else {
-        // console.log("Already in cart. Remove");
         var deletedItem = this.removeFromBasket(positionInBasket)[0];
         var atcBtns = document.getElementsByClassName('atcBtn');
 
@@ -342,7 +341,6 @@ function () {
   Cart.prototype.toggleSoftwareSelects = function (id) {
     if (id) {
       var selectDropDowns = document.querySelectorAll('select[data-id="' + id + '"]');
-      console.log('In basket: ', this.inBasket(id));
 
       if (this.inBasket(id) != -1) {
         selectDropDowns.forEach(function (selectEl) {
