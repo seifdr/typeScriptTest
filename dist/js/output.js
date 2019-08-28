@@ -1,7 +1,5 @@
 "use strict";
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 var __awaiter = void 0 && (void 0).__awaiter || function (thisArg, _arguments, P, generator) {
   return new (P || (P = Promise))(function (resolve, reject) {
     function fulfilled(value) {
@@ -167,7 +165,15 @@ function () {
     this.image = item.image['path'];
     this.desc = item.desc;
     this.onCart = item.onCart ? true : false;
-    this.renew = item.renew ? true : false;
+    this.renew = item.renew ? true : false; //output categories as a string
+
+    if (this.categories) {
+      try {
+        this.catStr = this.categories.value.join(' ');
+      } catch (error) {
+        this.catStr = this.categories.value;
+      }
+    }
   }
 
   Item.prototype.outputOverlay = function (num) {
@@ -178,7 +184,7 @@ function () {
 
     var btnText = this.onCart ? 'Remove From Cart' : 'Add To Cart';
     var optClass = this.onCart ? 'onCart' : '';
-    var output = "\n            <div id=\"overlayPad\">\n                <div class=\"overlayImg\">\n                    <img src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + this.image + "\" />\n                </div>\n                <div class=\"overlayText\">\n                    <h3>" + this.title + "</h3>";
+    var output = "\n            <div id=\"overlayPad\" data-id=\"" + this.id + "\" >\n                <div class=\"overlayImg\">\n                    <img src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + this.image + "\" />\n                </div>\n                <div class=\"overlayText\">\n                    <h3>" + this.title + "</h3>";
 
     if (this.price != '0.00') {
       output += "<h6>$" + this.numberWithCommas(this.price) + "</h6>";
@@ -192,7 +198,7 @@ function () {
 
     if (this.price != '0.00') {
       // COME BACK
-      if (this.categories.value == 'software') {
+      if (this.catStr.includes('software')) {
         output += "<div class=\"renewModalSelect\">\n                    <label>Purchase or Renew\n                    Software Licence: </label>\n                    <select class=\"renewModalInput\" data-id=\"" + this.id + "\" ";
 
         if (this.onCart) {
@@ -209,7 +215,7 @@ function () {
         output += "</div>";
       }
 
-      output += "<a id=\"atcModalBtn\" class=\"button " + optClass + "\" href=\"#\" data-num=\"" + num + "\" >" + btnText + "</a>";
+      output += "<a id=\"atcModalBtn\" href=\"#\" \n                            class=\"button " + optClass + "\" \n                            data-num=\"" + num + "\" \n                            data-id=\"" + this.id + "\"\n                            data-catstr=\"" + this.catStr + "\"    \n                        >" + btnText + "</a>";
     }
 
     output += "</div>\n            </div>";
@@ -286,7 +292,8 @@ function () {
         var result = this.addToBasket(item); //update the disable software select for software items only
 
         if (result) {
-          this.disableSoftwareSelect(item);
+          // this.disableSoftwareSelect(item);
+          this.toggleSoftwareSelects(item.id);
         }
 
         this.updateCartTotalAndCount();
@@ -300,8 +307,9 @@ function () {
           var dataId = atcBtns[i].getAttribute('data-id');
 
           if (deletedItem['id'] == dataId) {
-            this.toggleATCbutton(atcBtns[i], false);
-            this.unRenewSelect(dataId);
+            this.toggleATCbutton(atcBtns[i], false); //this.unRenewSelect( dataId );
+
+            this.toggleSoftwareSelects(dataId);
           }
         }
 
@@ -313,46 +321,29 @@ function () {
         var result = this.addToBasket(item);
 
         if (result) {
-          this.disableSoftwareSelect(item.id);
+          this.toggleSoftwareSelects(item.id);
         }
 
         this.updateCartTotalAndCount();
         return result;
       }
     }
-  };
+  }; //if item is within the basket then it disables the select box(es), if not, it enables the selects
 
-  Cart.prototype.disableSoftwareSelect = function (id) {
-    var el = document.querySelector(' article[data-id="' + id + '"] ');
 
-    if (el) {
-      var catStr = el.getAttribute('data-catstring');
+  Cart.prototype.toggleSoftwareSelects = function (id) {
+    if (id) {
+      var selectDropDowns = document.querySelectorAll('select[data-id="' + id + '"]');
+      console.log('In basket: ', this.inBasket(id));
 
-      if (catStr.includes('software')) {
-        var theSelect = document.querySelector(' select[data-id="' + id + '"] ');
-
-        if (theSelect) {
-          theSelect.setAttribute('disabled', 'disabled');
-        }
-      }
-    }
-  };
-
-  Cart.prototype.unRenewSelect = function (id) {
-    if (id === void 0) {
-      id = null;
-    }
-
-    var el = document.querySelector(' article[data-id="' + id + '"] ');
-
-    if (el) {
-      var catStr = el.getAttribute('data-catstring');
-
-      if (catStr.includes('software')) {
-        var theSelect = document.querySelector(' select[data-id="' + id + '"] '); // theSelect.options[ theSelect.selectedIndex ].value = 'new';
-
-        theSelect.selectedIndex = 0;
-        theSelect.removeAttribute('disabled');
+      if (this.inBasket(id) != -1) {
+        selectDropDowns.forEach(function (selectEl) {
+          selectEl.setAttribute('disabled', 'disabled');
+        });
+      } else {
+        selectDropDowns.forEach(function (selectEl) {
+          selectEl.removeAttribute('disabled');
+        });
       }
     }
   };
@@ -367,12 +358,13 @@ function () {
   };
 
   Cart.prototype.inBasket = function (incomingID) {
-    // let mappedArr = this.basket.map( ( x ) => {
-    //     return x['id'];
-    // });
+    var result = -1;
     this.basket.forEach(function (basketItem, i) {
-      return basketItem.id === incomingID ? i : false;
+      if (basketItem.id === incomingID) {
+        result = i;
+      }
     });
+    return result;
   };
 
   Cart.prototype.totalCart = function () {
@@ -703,21 +695,9 @@ function () {
               shelves_1 = "<div class=\"bootstrap-wrapper\">\n                            <div class=\"container-fluid\">\n                                <section id=\"filterChecks\">\n                                    <form class=\"row\">\n                                        <div class=\"col-6\">\n                                                <label>Filter by Category:</label>\n                                                <select id=\"filterCat\" class=\"filterOptions\">\n                                                    <option value=\"all\">Show All</option>\n                                                    <option value=\"bundles\">Bundles</option>\n                                                    <option value=\"desktops\">Desktops</option>\n                                                    <option value=\"laptops\">Laptops</option>\n                                                    <option value=\"monitors\">Monitors</option>\n                                                    <option value=\"apple desktops\">Apple Desktops</option>\n                                                    <option value=\"apple laptops\">Apple Laptops</option>\n                                                    <option value=\"ipads\">iPads</option>\n                                                    <option value=\"tablets\">Tablets</option>\n                                                    <option value=\"printers\">Printers</option>\n                                                    <option value=\"software\">Software</option>\n                                                    <option value=\"accessories\">Peripheral Accessories</option>\n                                                </select>\n                                        </div>\n                                        <div class=\"col-6\">\n                                            <label>Filter by OS:</label>\n                                            <select id=\"filterOS\" class=\"filterOptions\">\n                                                <option value=\"all\">Show All</option>\n                                                <option value=\"apple\">Apple</option>\n                                                <option value=\"pc\">PC</option>\n                                            </select>\n                                        </div>   \n                                    </form>\n                                </section>\n                                <section class=\"shelves\"><div class=\"row\">"; // <img src="assets/png/300x200.png" />
 
               this.items.forEach(function (item, i) {
-                var categoryStr = "";
-
-                if (_typeof(item.categories['value']) == 'object') {
-                  item.categories['value'].forEach(function (value) {
-                    if (value) {
-                      categoryStr = categoryStr + '' + value + ' ';
-                    }
-                  });
-                } else {
-                  categoryStr = item.categories['value'];
-                }
-
                 var modPrice = item.price == 0.00 ? '' : '$' + _this.numberWithCommas(item.price);
                 var modBtnTxt = item.price == 0.00 ? _this.cart.cartBtnTxt.Info : _this.cart.cartBtnTxt.Add;
-                shelves_1 += "<div class=\"col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc\" \n                            data-os=\"" + item.type + "\" \n                            data-catString=\"" + categoryStr + "\">\n                        <article class=\"feature-box prodBox\" \n                            data-id=\"" + item.id + "\" \n                            data-num=\"" + i + "\" \n                            data-catString=\"" + categoryStr + "\">";
+                shelves_1 += "<div class=\"col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc\" \n                            data-os=\"" + item.type + "\" \n                            data-catString=\"" + item.catStr + "\">\n                        <article class=\"feature-box prodBox\" \n                            data-id=\"" + item.id + "\" \n                            data-num=\"" + i + "\" \n                            data-catString=\"" + item.catStr + "\">";
 
                 if (item.image != '/') {
                   shelves_1 += "<div class=\"img-container\">\n                                        <img class=\"img-fluid\" src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + item.image + "\" alt=\"" + item.title + "-image\" />\n                                    </div>";
@@ -725,7 +705,7 @@ function () {
 
                 shelves_1 += "<div class=\"feature-copy\">\n                                        <div>\n                                            <h6>" + item.title + "</h6>\n                                            <p>" + modPrice + "</p>\n                                            <a class=\"specs\" data-id=\"" + item.id + "\">Read product specs</a>\n                                        </div>";
 
-                if (categoryStr == 'software') {
+                if (item.catStr.includes('software')) {
                   shelves_1 += "<div class=\"renewSelect\">\n                                                        <label>Purchase or Renew\n                                                        Software Licence: </label>\n                                                        <select class=\"renewInput\" data-id=\"" + item.id + "\" ";
 
                   if (item.onCart) {
@@ -734,7 +714,7 @@ function () {
 
                   shelves_1 += ">\n                                                            <option value=\"new\">New</option>\n                                                            <option value=\"renew\" "; //come back here 3
 
-                  if (categoryStr.includes('software')) {
+                  if (item.catStr.includes('software')) {
                     if (item.renew) {
                       shelves_1 += " selected=\"selected\" ";
                     }
@@ -770,22 +750,45 @@ function () {
 
                   if (atcModalBtn != null) {
                     atcModalBtn.addEventListener('click', function (e) {
-                      //Change the modal atc button 
-                      _this.addToCartToggle(num, atcModalBtn); //the cart toggle above only applies the modal add to cart button so...
-                      //once it's been added to cart and the modal cart button has been toggled
-                      //map the cart
+                      return __awaiter(_this, void 0, void 0, function () {
+                        return __generator(this, function (_a) {
+                          switch (_a.label) {
+                            case 0:
+                              //Change the modal atc button 
+                              return [4
+                              /*yield*/
+                              , this.addToCartToggle(num, atcModalBtn)];
+
+                            case 1:
+                              //Change the modal atc button 
+                              _a.sent(); //check if item is software, if so toggle the select disable attribute 
+                              //depending on if its on the cart or not
 
 
-                      _this.cart.mapCart(); //withe the cart mapped by id, we can check for it and update the prod box id appropiately
+                              if (this.items[num].catStr.includes('software')) {
+                                // this.cart.toggleSoftwareSelects( this.items[num].id );
+                                this.cart.toggleSoftwareSelects(this.items[num]['id']);
+                              } //the cart toggle above only applies the modal add to cart button so...
+                              //once it's been added to cart and the modal cart button has been toggled
+                              //map the cart
 
 
-                      if (_this.cart.mappedBasket.includes(_this.items[num].id)) {
-                        //the item is on the cart, change the prodbox btn to orange
-                        _this.cart.toggleATCbutton(el.getElementsByClassName('atcBtn')[0], true);
-                      } else {
-                        //the item is not on the cart, change the prodbox btn to purple
-                        _this.cart.toggleATCbutton(el.getElementsByClassName('atcBtn')[0], false);
-                      }
+                              this.cart.mapCart(); //withe the cart mapped by id, we can check for it and update the prod box id appropiately
+
+                              if (this.cart.mappedBasket.includes(this.items[num].id)) {
+                                //the item is on the cart, change the prodbox btn to orange
+                                this.cart.toggleATCbutton(el.getElementsByClassName('atcBtn')[0], true);
+                              } else {
+                                //the item is not on the cart, change the prodbox btn to purple
+                                this.cart.toggleATCbutton(el.getElementsByClassName('atcBtn')[0], false);
+                              }
+
+                              return [2
+                              /*return*/
+                              ];
+                          }
+                        });
+                      });
                     });
                   } //wireup event listener to ATC button 
 
@@ -869,7 +872,6 @@ function () {
 
   Store.prototype.addToCartToggle = function (num, elBtn) {
     var cartResult = this.cart.addOrRemoveFromCart(this.items[num]);
-    alert('hello');
 
     if (cartResult) {
       this.items[num].onCart = true;

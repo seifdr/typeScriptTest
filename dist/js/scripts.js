@@ -12,12 +12,14 @@ interface product {
     element: string;
     renewElement: string;
     type: string;
-    categories: [];
+    categories;
     price: number;
     image: string;
     desc: string;
     onCart: boolean;
     renew: boolean;
+
+    catStr: string
 }
 
 class Item implements product {
@@ -32,6 +34,8 @@ class Item implements product {
     desc;
     onCart;
     renew: boolean;
+
+    catStr: string;
 
     constructor( item:product ){
         this.id = item.id;
@@ -55,6 +59,15 @@ class Item implements product {
         this.onCart = ( item.onCart )? true : false; 
         
         this.renew = ( item.renew )? true : false;
+
+        //output categories as a string
+        if( this.categories ){
+            try {
+                this.catStr = this.categories.value.join(' ');
+            } catch (error) {
+                this.catStr = this.categories.value;
+            }
+        }
     }
 
     outputOverlay( num = null ){
@@ -63,7 +76,7 @@ class Item implements product {
         const optClass = (this.onCart)? 'onCart':'';
 
         let output:string = `
-            <div id="overlayPad">
+            <div id="overlayPad" data-id="${this.id}" >
                 <div class="overlayImg">
                     <img src="https://feinberg-dev.fsm.northwestern.edu/it-new/${this.image}" />
                 </div>
@@ -84,7 +97,7 @@ class Item implements product {
         if( this.price != '0.00' ){
             
             // COME BACK
-            if( this.categories.value == 'software' ){
+            if( this.catStr.includes('software') ){
                 output += `<div class="renewModalSelect">
                     <label>Purchase or Renew
                     Software Licence: </label>
@@ -106,7 +119,12 @@ class Item implements product {
                 output += `</div>`;
             }
 
-            output += `<a id="atcModalBtn" class="button ${optClass}" href="#" data-num="${num}" >${ btnText }</a>`;
+            output += `<a id="atcModalBtn" href="#" 
+                            class="button ${optClass}" 
+                            data-num="${num}" 
+                            data-id="${this.id}"
+                            data-catstr="${this.catStr}"    
+                        >${ btnText }</a>`;
         }
 
         output += `</div>
@@ -191,7 +209,8 @@ class Cart {
 
                 //update the disable software select for software items only
                 if( result ){
-                    this.disableSoftwareSelect(item);
+                    // this.disableSoftwareSelect(item);
+                    this.toggleSoftwareSelects( item.id );
                 }
 
                 this.updateCartTotalAndCount();
@@ -208,7 +227,8 @@ class Cart {
                     if( deletedItem['id'] == dataId ){
                         this.toggleATCbutton( atcBtns[i], false );
     
-                        this.unRenewSelect( dataId );
+                        //this.unRenewSelect( dataId );
+                        this.toggleSoftwareSelects(dataId);
                     }
                 }
                 this.updateCartTotalAndCount();
@@ -220,7 +240,7 @@ class Cart {
                 let result = this.addToBasket(item);
 
                 if( result ){
-                    this.disableSoftwareSelect(item.id);
+                    this.toggleSoftwareSelects( item.id );
                 }
 
                 this.updateCartTotalAndCount();
@@ -230,35 +250,22 @@ class Cart {
     
     }
 
-    disableSoftwareSelect( id ){
-        let el = document.querySelector(' article[data-id="'+ id +'"] ');
+    //if item is within the basket then it disables the select box(es), if not, it enables the selects
+    toggleSoftwareSelects( id ){
+        if( id ){
+            const selectDropDowns = document.querySelectorAll('select[data-id="'+ id +'"]');
+            
+            console.log( 'In basket: ', this.inBasket(id) );
 
-        if( el ){
-            let catStr = el.getAttribute('data-catstring');
-        
-            if( catStr.includes('software') ){
-                const theSelect = <HTMLSelectElement> document.querySelector(' select[data-id="'+ id +'"] ');
-                
-                if( theSelect ){
-                    theSelect.setAttribute('disabled', 'disabled');
-                }
+            if( this.inBasket(id) != -1 ){
+                selectDropDowns.forEach( selectEl => {
+                    selectEl.setAttribute('disabled', 'disabled');
+                });
+            } else {
+                selectDropDowns.forEach( selectEl => {
+                    selectEl.removeAttribute('disabled');
+                });
             }
-        }   
-    }
-
-    unRenewSelect( id = null ){
-
-        let el = document.querySelector(' article[data-id="'+ id +'"] ');
-
-        if( el ){
-            let catStr = el.getAttribute('data-catstring');
-
-            if( catStr.includes('software') ){
-                const theSelect = document.querySelector(' select[data-id="'+ id +'"] ');
-                // theSelect.options[ theSelect.selectedIndex ].value = 'new';
-                theSelect.selectedIndex = 0;
-                theSelect.removeAttribute('disabled');
-            } 
         }
     }
 
@@ -272,13 +279,15 @@ class Cart {
     }
 
     inBasket( incomingID ){
-        // let mappedArr = this.basket.map( ( x ) => {
-        //     return x['id'];
-        // });
-
+        let result = -1;
+        
         this.basket.forEach( (basketItem, i ) => {
-            return ( basketItem.id === incomingID )? i : false;
+            if( basketItem.id === incomingID ){
+                result = i; 
+            }
         });
+
+        return result;
     }
 
     totalCart(){
@@ -599,27 +608,16 @@ class Store {
 
             // <img src="assets/png/300x200.png" />
                 this.items.forEach( ( item, i ) => {
-
-                    let categoryStr = "";
-
-                    if( typeof item.categories['value'] == 'object' ){
-                        item.categories['value'].forEach( value => {
-                            if( value ){ categoryStr =  categoryStr + '' + value + ' '; }
-                        });
-                    } else {
-                        categoryStr = item.categories['value'];
-                    }
-                    
                     let modPrice    = ( item.price == 0.00 )? '': '$' + this.numberWithCommas(item.price);
                     let modBtnTxt   = ( item.price == 0.00 )? this.cart.cartBtnTxt.Info : this.cart.cartBtnTxt.Add;   
 
                     shelves += `<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc" 
                             data-os="${item.type}" 
-                            data-catString="${categoryStr}">
+                            data-catString="${item.catStr}">
                         <article class="feature-box prodBox" 
                             data-id="${item.id}" 
                             data-num="${i}" 
-                            data-catString="${categoryStr}">`;
+                            data-catString="${item.catStr}">`;
                         
                         if( item.image != '/' ){
                             shelves += `<div class="img-container">
@@ -634,7 +632,7 @@ class Store {
                                             <a class="specs" data-id="${item.id}">Read product specs</a>
                                         </div>`;
 
-                                        if( categoryStr == 'software' ){
+                                        if( item.catStr.includes('software') ){
                                             shelves += `<div class="renewSelect">
                                                         <label>Purchase or Renew
                                                         Software Licence: </label>
@@ -649,7 +647,7 @@ class Store {
                                                             <option value="renew" `;
 
                                                             //come back here 3
-                                                            if( categoryStr.includes('software') ){
+                                                            if( item.catStr.includes('software') ){
                                                                 if( item.renew ){
                                                                     shelves += ` selected="selected" `;
                                                                 }
@@ -675,7 +673,7 @@ class Store {
 
             //add event listener to all product item feature boxes
             for( let el of document.getElementsByClassName('prodBox') ){
-                el.addEventListener('click', (e) => {
+                el.addEventListener('click',(e) => {
                         e.preventDefault();
                         let num = el.getAttribute('data-num');
                         let output = this.items[num].outputOverlay(num);
@@ -684,24 +682,31 @@ class Store {
                         let atcModalBtn = document.getElementById('atcModalBtn');
 
                         if( atcModalBtn != null ){
-                            atcModalBtn.addEventListener('click', (e) => {        
+                            atcModalBtn.addEventListener('click', async (e) => {        
                                 //Change the modal atc button 
-                                this.addToCartToggle(num, atcModalBtn);
+                                await this.addToCartToggle(num, atcModalBtn);
 
-                                    //the cart toggle above only applies the modal add to cart button so...
-                                    //once it's been added to cart and the modal cart button has been toggled
-                                    //map the cart
-                                    this.cart.mapCart();
+                                //check if item is software, if so toggle the select disable attribute 
+                                //depending on if its on the cart or not
+                                if( this.items[num].catStr.includes('software') ){    
+                                    // this.cart.toggleSoftwareSelects( this.items[num].id );
+                                    this.cart.toggleSoftwareSelects( this.items[num]['id'] );          
+                                }
 
-                                
-                                    //withe the cart mapped by id, we can check for it and update the prod box id appropiately
-                                    if( this.cart.mappedBasket.includes( this.items[num].id ) ){
-                                        //the item is on the cart, change the prodbox btn to orange
-                                        this.cart.toggleATCbutton( el.getElementsByClassName('atcBtn')[0], true );
-                                    } else {
-                                        //the item is not on the cart, change the prodbox btn to purple
-                                        this.cart.toggleATCbutton( el.getElementsByClassName('atcBtn')[0], false );
-                                    }
+                                //the cart toggle above only applies the modal add to cart button so...
+                                //once it's been added to cart and the modal cart button has been toggled
+                                //map the cart
+                                this.cart.mapCart();
+
+                            
+                                //withe the cart mapped by id, we can check for it and update the prod box id appropiately
+                                if( this.cart.mappedBasket.includes( this.items[num].id ) ){
+                                    //the item is on the cart, change the prodbox btn to orange
+                                    this.cart.toggleATCbutton( el.getElementsByClassName('atcBtn')[0], true );
+                                } else {
+                                    //the item is not on the cart, change the prodbox btn to purple
+                                    this.cart.toggleATCbutton( el.getElementsByClassName('atcBtn')[0], false );
+                                }
                             });
                         }
                         //wireup event listener to ATC button 
@@ -761,8 +766,6 @@ class Store {
 
     addToCartToggle(num, elBtn){
         let cartResult = this.cart.addOrRemoveFromCart( this.items[num] );
-
-        alert('hello');
 
         if( cartResult ){
             this.items[num].onCart = true;
