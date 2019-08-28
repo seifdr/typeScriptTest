@@ -1223,21 +1223,41 @@ a.onCart {
 
 div#overlay-content {
   max-width: 750px; }
+  @media screen and (max-width: 875px) {
+    div#overlay-content {
+      max-width: 75%; } }
   div#overlay-content a.closebtn i {
     font-style: normal; }
 
 div#overlayGuts {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   position: relative;
   height: auto !important;
   overflow: none !important;
   padding-bottom: 0 !important;
   background-color: white; }
   div#overlayGuts div#overlayPad {
-    padding: 1em;
-    height: 100%;
     display: -webkit-box;
     display: -ms-flexbox;
+    display: flex;
+    -webkit-box-flex: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    padding: 1em;
+    height: 100%;
     display: flex; }
+    div#overlayGuts div#overlayPad > div {
+      -webkit-box-flex: 1;
+          -ms-flex: 1 0 1;
+              flex: 1 0 1; }
     div#overlayGuts div#overlayPad div.overlayImg {
       -ms-flex-item-align: center;
           align-self: center;

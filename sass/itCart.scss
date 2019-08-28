@@ -336,6 +336,10 @@ a.onCart {
 div#overlay-content {
     max-width: 750px;
 
+    @media screen and (max-width: $break-large) {
+        max-width: 75%;
+    }
+
     a.closebtn i {
         font-style: normal;
     }
@@ -343,6 +347,9 @@ div#overlay-content {
 }
 
 div#overlayGuts {
+    display: flex; 
+    justify-content: center;
+
     position: relative;
     height: auto !important;
     overflow: none !important;
@@ -350,6 +357,14 @@ div#overlayGuts {
     background-color: white;
 
     div#overlayPad {
+        display: flex;
+        flex-grow: 1;
+        justify-content: center;
+
+        & > div {
+            flex: 1 0 1;
+        }
+
         padding: 1em;
         height: 100%;
         // overflow-y: scroll;
