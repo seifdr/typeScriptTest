@@ -76,11 +76,14 @@ class Item implements product {
         const optClass = (this.onCart)? 'onCart':'';
 
         let output:string = `
-            <div id="overlayPad" data-id="${this.id}" >
-                <div class="overlayImg">
-                    <img src="https://feinberg-dev.fsm.northwestern.edu/it-new/${this.image}" />
-                </div>
-                <div class="overlayText">
+            <div id="overlayPad" data-id="${this.id}" >`;
+
+                if( this.image != '/' ){   
+                    output += `<div class="overlayImg">
+                        <img src="https://feinberg-dev.fsm.northwestern.edu/it-new/${this.image}" />
+                    </div>`;
+                }    
+        output += `<div class="overlayText">
                     <h3>${this.title}`;
 
                     if( this.catStr.includes('software') ){
@@ -207,7 +210,7 @@ class Cart {
     
             this.basket.forEach( (basketItem, i ) => {
                 if ( basketItem.id === item.id ){
-                    positionInBasket = i;
+                    positionInBasket = i; 
                 }
             });
 

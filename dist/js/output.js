@@ -184,7 +184,13 @@ function () {
 
     var btnText = this.onCart ? 'Remove From Cart' : 'Add To Cart';
     var optClass = this.onCart ? 'onCart' : '';
-    var output = "\n            <div id=\"overlayPad\" data-id=\"" + this.id + "\" >\n                <div class=\"overlayImg\">\n                    <img src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + this.image + "\" />\n                </div>\n                <div class=\"overlayText\">\n                    <h3>" + this.title;
+    var output = "\n            <div id=\"overlayPad\" data-id=\"" + this.id + "\" >";
+
+    if (this.image != '/') {
+      output += "<div class=\"overlayImg\">\n                        <img src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + this.image + "\" />\n                    </div>";
+    }
+
+    output += "<div class=\"overlayText\">\n                    <h3>" + this.title;
 
     if (this.catStr.includes('software')) {
       if (this.renew) {
