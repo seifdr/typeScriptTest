@@ -99,9 +99,9 @@ class Item implements product {
                         <option value="renew" `;
 
                         //come back here 3
-                            if( this.renew ){
-                                output += ` selected="selected" `;
-                            }
+                        if( this.renew ){
+                            output += ` selected="selected" `;
+                        }
                     output += `>Renew</option></select>`
                 output += `</div>`;
             }
@@ -186,16 +186,12 @@ class Cart {
                 }
             });
 
-            console.log( positionInBasket );
-
             if( positionInBasket === -1 || positionInBasket === undefined ){
                 let result = this.addToBasket(item);
 
                 //update the disable software select for software items only
-                if( item.categories.value  == 'software' ){
-                    if( result ){
-                        this.disableSoftwareSelect(item.id);
-                    }
+                if( result ){
+                    this.disableSoftwareSelect(item);
                 }
 
                 this.updateCartTotalAndCount();
@@ -211,6 +207,7 @@ class Cart {
 
                     if( deletedItem['id'] == dataId ){
                         this.toggleATCbutton( atcBtns[i], false );
+    
                         this.unRenewSelect( dataId );
                     }
                 }
@@ -233,36 +230,44 @@ class Cart {
     
     }
 
-    disableSoftwareSelect( id = null ){
-        if( id ){
-            const theSelect = <HTMLSelectElement> document.querySelector(' select[data-id="'+ id +'"] ');
-            
-            if( theSelect ){
-                theSelect.setAttribute('disabled', 'disabled');
+    disableSoftwareSelect( id ){
+        let el = document.querySelector(' article[data-id="'+ id +'"] ');
+
+        if( el ){
+            let catStr = el.getAttribute('data-catstring');
+        
+            if( catStr.includes('software') ){
+                const theSelect = <HTMLSelectElement> document.querySelector(' select[data-id="'+ id +'"] ');
+                
+                if( theSelect ){
+                    theSelect.setAttribute('disabled', 'disabled');
+                }
             }
-        }
+        }   
     }
 
     unRenewSelect( id = null ){
 
-        console.log('the select id: ', id);
+        let el = document.querySelector(' article[data-id="'+ id +'"] ');
 
-        if( id ){
-            const theSelect = document.querySelector(' select[data-id="'+ id +'"] ');
-            // theSelect.options[ theSelect.selectedIndex ].value = 'new';
-            theSelect.selectedIndex = 0;
-            theSelect.removeAttribute('disabled');
+        if( el ){
+            let catStr = el.getAttribute('data-catstring');
+
+            if( catStr.includes('software') ){
+                const theSelect = document.querySelector(' select[data-id="'+ id +'"] ');
+                // theSelect.options[ theSelect.selectedIndex ].value = 'new';
+                theSelect.selectedIndex = 0;
+                theSelect.removeAttribute('disabled');
+            } 
         }
     }
 
     addToBasket( item:product ){
         this.basket.push( item );
-        console.log( "Basket: ", this.basket );
         return true;
     }
 
     removeFromBasket( positionInBasket ){
-        console.log( 'Removing this: ', positionInBasket);
         return this.basket.splice(positionInBasket, 1);
     }
 
@@ -290,7 +295,6 @@ class Cart {
     }
 
     countCart(){
-        console.log( 'Cart count: ', this.cartCount );
         return this.basket.length;
     }
 
@@ -303,8 +307,6 @@ class Cart {
             document.getElementById('cart').style.height = "75px";
 
             let cartInfoTxt = '';
-
-            console.log('Cart Count: ', this.cartCount );
 
             if( this.cartCount >=2 ){
                 cartInfoTxt += `<p>${this.cartCount} items<br />`;
@@ -420,10 +422,6 @@ class Cart {
             let cartlistOutput = '<div id="cartList">';
 
             this.basket.forEach( (row:Item, i) => {
-
-                // <img src="http://feinberg-dev.fsm.northwestern.edu/it-new/images/placeholder/placeholder-140x140.png" />
-
-                console.log( row.image );
 
                 cartlistOutput += `<div class="cartRow">
                     <div class="crImg">`
@@ -615,7 +613,13 @@ class Store {
                     let modPrice    = ( item.price == 0.00 )? '': '$' + this.numberWithCommas(item.price);
                     let modBtnTxt   = ( item.price == 0.00 )? this.cart.cartBtnTxt.Info : this.cart.cartBtnTxt.Add;   
 
-                    shelves += `<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc" data-os="${item.type}" data-catString="${categoryStr}"><article class="feature-box prodBox" data-id="${item.id}" data-num="${i}" >`;
+                    shelves += `<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc" 
+                            data-os="${item.type}" 
+                            data-catString="${categoryStr}">
+                        <article class="feature-box prodBox" 
+                            data-id="${item.id}" 
+                            data-num="${i}" 
+                            data-catString="${categoryStr}">`;
                         
                         if( item.image != '/' ){
                             shelves += `<div class="img-container">
@@ -776,8 +780,6 @@ class Store {
         let selectedCat = filterCat.options[filterCat.selectedIndex].value;
         let selectedOS  = filterOS.options[filterOS.selectedIndex].value;
 
-        console.log( 'Selected OS: ', selectedOS );
-
         this.showAllProducts(products);
 
         if( selectedCat != 'all'){
@@ -924,5 +926,4 @@ window.onload=function() {
 
     let store = new Store('shopping-cart', shoppingCart, shoppingModal, shoppingCookie, softwareCookie );
 
-    console.log( softwareCookie.getJSONfromCookieAsArray() );
 };

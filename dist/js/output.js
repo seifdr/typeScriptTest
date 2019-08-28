@@ -281,15 +281,12 @@ function () {
           positionInBasket = i;
         }
       });
-      console.log(positionInBasket);
 
       if (positionInBasket === -1 || positionInBasket === undefined) {
         var result = this.addToBasket(item); //update the disable software select for software items only
 
-        if (item.categories.value == 'software') {
-          if (result) {
-            this.disableSoftwareSelect(item.id);
-          }
+        if (result) {
+          this.disableSoftwareSelect(item);
         }
 
         this.updateCartTotalAndCount();
@@ -326,15 +323,17 @@ function () {
   };
 
   Cart.prototype.disableSoftwareSelect = function (id) {
-    if (id === void 0) {
-      id = null;
-    }
+    var el = document.querySelector(' article[data-id="' + id + '"] ');
 
-    if (id) {
-      var theSelect = document.querySelector(' select[data-id="' + id + '"] ');
+    if (el) {
+      var catStr = el.getAttribute('data-catstring');
 
-      if (theSelect) {
-        theSelect.setAttribute('disabled', 'disabled');
+      if (catStr.includes('software')) {
+        var theSelect = document.querySelector(' select[data-id="' + id + '"] ');
+
+        if (theSelect) {
+          theSelect.setAttribute('disabled', 'disabled');
+        }
       }
     }
   };
@@ -344,24 +343,26 @@ function () {
       id = null;
     }
 
-    console.log('the select id: ', id);
+    var el = document.querySelector(' article[data-id="' + id + '"] ');
 
-    if (id) {
-      var theSelect = document.querySelector(' select[data-id="' + id + '"] '); // theSelect.options[ theSelect.selectedIndex ].value = 'new';
+    if (el) {
+      var catStr = el.getAttribute('data-catstring');
 
-      theSelect.selectedIndex = 0;
-      theSelect.removeAttribute('disabled');
+      if (catStr.includes('software')) {
+        var theSelect = document.querySelector(' select[data-id="' + id + '"] '); // theSelect.options[ theSelect.selectedIndex ].value = 'new';
+
+        theSelect.selectedIndex = 0;
+        theSelect.removeAttribute('disabled');
+      }
     }
   };
 
   Cart.prototype.addToBasket = function (item) {
     this.basket.push(item);
-    console.log("Basket: ", this.basket);
     return true;
   };
 
   Cart.prototype.removeFromBasket = function (positionInBasket) {
-    console.log('Removing this: ', positionInBasket);
     return this.basket.splice(positionInBasket, 1);
   };
 
@@ -385,7 +386,6 @@ function () {
   };
 
   Cart.prototype.countCart = function () {
-    console.log('Cart count: ', this.cartCount);
     return this.basket.length;
   };
 
@@ -397,7 +397,6 @@ function () {
     if (this.cartCount > 0) {
       document.getElementById('cart').style.height = "75px";
       var cartInfoTxt = '';
-      console.log('Cart Count: ', this.cartCount);
 
       if (this.cartCount >= 2) {
         cartInfoTxt += "<p>" + this.cartCount + " items<br />";
@@ -573,8 +572,6 @@ function () {
     if (this.cartCount > 0) {
       var cartlistOutput_1 = '<div id="cartList">';
       this.basket.forEach(function (row, i) {
-        // <img src="http://feinberg-dev.fsm.northwestern.edu/it-new/images/placeholder/placeholder-140x140.png" />
-        console.log(row.image);
         cartlistOutput_1 += "<div class=\"cartRow\">\n                    <div class=\"crImg\">";
 
         if (row.image != '/') {
@@ -720,7 +717,7 @@ function () {
 
                 var modPrice = item.price == 0.00 ? '' : '$' + _this.numberWithCommas(item.price);
                 var modBtnTxt = item.price == 0.00 ? _this.cart.cartBtnTxt.Info : _this.cart.cartBtnTxt.Add;
-                shelves_1 += "<div class=\"col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc\" data-os=\"" + item.type + "\" data-catString=\"" + categoryStr + "\"><article class=\"feature-box prodBox\" data-id=\"" + item.id + "\" data-num=\"" + i + "\" >";
+                shelves_1 += "<div class=\"col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc\" \n                            data-os=\"" + item.type + "\" \n                            data-catString=\"" + categoryStr + "\">\n                        <article class=\"feature-box prodBox\" \n                            data-id=\"" + item.id + "\" \n                            data-num=\"" + i + "\" \n                            data-catString=\"" + categoryStr + "\">";
 
                 if (item.image != '/') {
                   shelves_1 += "<div class=\"img-container\">\n                                        <img class=\"img-fluid\" src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + item.image + "\" alt=\"" + item.title + "-image\" />\n                                    </div>";
@@ -889,7 +886,6 @@ function () {
     var products = document.getElementsByClassName('pbc');
     var selectedCat = filterCat.options[filterCat.selectedIndex].value;
     var selectedOS = filterOS.options[filterOS.selectedIndex].value;
-    console.log('Selected OS: ', selectedOS);
     this.showAllProducts(products);
 
     if (selectedCat != 'all') {
@@ -1030,5 +1026,4 @@ window.onload = function () {
   var shoppingModal = new Modal();
   var shoppingCart = new Cart(shoppingModal, shoppingCookie, softwareCookie);
   var store = new Store('shopping-cart', shoppingCart, shoppingModal, shoppingCookie, softwareCookie);
-  console.log(softwareCookie.getJSONfromCookieAsArray());
 };
