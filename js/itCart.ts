@@ -81,7 +81,14 @@ class Item implements product {
                     <img src="https://feinberg-dev.fsm.northwestern.edu/it-new/${this.image}" />
                 </div>
                 <div class="overlayText">
-                    <h3>${this.title}</h3>`
+                    <h3>${this.title}`;
+
+                    if( this.catStr.includes('software') ){
+                        if( this.renew ){
+                            output += ` - Renewing`;
+                        }
+                    }       
+        output += `</h3>`
 
                     if( this.price != '0.00' ){
                         output += `<h6>$${ this.numberWithCommas( this.price ) }</h6>`;
@@ -441,7 +448,13 @@ class Cart {
         
                 cartlistOutput += `</div>
                     <div class="crDesc">
-                        <p>${row.title}</p>
+                        <p>${row.title}`;
+                            if( row.catStr.includes('software') ){
+                                if( row.renew ){
+                                    cartlistOutput += ` - Renewing`;
+                                }
+                            }       
+                cartlistOutput += `</p>
                         <a class="crDeleteEmbed" data-basket-position="${ i }" >Delete</a>
                     </div>
                     <div class="crDelete"> 
