@@ -184,13 +184,13 @@ function () {
 
     var btnText = this.onCart ? 'Remove From Cart' : 'Add To Cart';
     var optClass = this.onCart ? 'onCart' : '';
-    var output = "<div id=\"overlayPad\" data-id=\"" + this.id + "\" >";
+    var output = "<div id=\"overlayPad\" data-id=\"" + this.id + "\" >\n        <div class=\"bootstrap-wrapper\">\n    <div class=\"container\">\n    <div class=\"row\">";
 
     if (this.image != '/') {
-      output += "<div class=\"overlayImg\">\n                        <img src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + this.image + "\" />\n                    </div>";
+      output += "<div class=\"col-12 col-lg-6 overlayImg\">\n                        <div>\n                            <img src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + this.image + "\" />\n                        </div>\n                    </div>";
     }
 
-    output += "<div class=\"overlayText\">\n                    <h3>" + this.title;
+    output += "<div class=\"col-12 col-lg-6 overlayText\">\n                        \n                            <h3>" + this.title;
 
     if (this.catStr.includes('software')) {
       if (this.renew) {
@@ -198,7 +198,7 @@ function () {
       }
     }
 
-    output += "</h3>";
+    output += "</h3>\n                        ";
 
     if (this.price != '0.00') {
       output += "<h6>$" + this.numberWithCommas(this.price) + "</h6>";
@@ -232,7 +232,7 @@ function () {
       output += "<a id=\"atcModalBtn\" href=\"#\" \n                            class=\"button " + optClass + "\" \n                            data-num=\"" + num + "\" \n                            data-id=\"" + this.id + "\"\n                            data-catstr=\"" + this.catStr + "\"    \n                        >" + btnText + "</a>";
     }
 
-    output += "</div>\n            </div>";
+    output += "</div>\n            </div>\n            </div>\n            </div>\n        </div>";
     return output;
   };
 

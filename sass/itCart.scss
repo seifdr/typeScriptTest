@@ -348,35 +348,16 @@ div#overlay-content {
 }
 
 div#overlayGuts {
-    display: flex; 
-    justify-content: center;
-
-    position: relative;
+    // position: relative;
     height: auto !important;
     overflow: none !important;
     padding-bottom: 0 !important;
+    padding-left: 0;
     background-color: white;
 
     div#overlayPad {
-        display: flex;
-        flex-grow: 1;
-        justify-content: center;
-
-        & > div {
-            flex: 1 0 1;
-        }
-
         padding: 1em;
         height: 100%;
-        // overflow-y: scroll;
-        display: flex;
-
-        div.overlayImg {
-            align-self: center;
-            justify-self: center;
-            padding-right: 1em;
-            max-width: 300px;
-        }
 
         div.renewModalSelect {
             margin-bottom: 1.5em;
@@ -389,27 +370,6 @@ div#overlayGuts {
             select {
                 margin-top: .25em;
                 padding-top: .25em;
-            }
-        }
-
-        @media screen and (max-width: $break-large) {
-            flex-direction: column;
-            justify-content: center;
-            align-content: center;
-
-            justify-items: center;
-            align-items:center;
-
-            div.overlayImg {
-                text-align: center;
-                padding-right: 0;
-            }
-
-            div.overlayText {
-                text-align:center;
-                div {
-                    text-align: left; 
-                }
             }
         }
     }
