@@ -618,8 +618,6 @@ class Store {
                                                     <option value="desktops">Desktops</option>
                                                     <option value="laptops">Laptops</option>
                                                     <option value="monitors">Monitors</option>
-                                                    <option value="apple desktops">Apple Desktops</option>
-                                                    <option value="apple laptops">Apple Laptops</option>
                                                     <option value="ipads">iPads</option>
                                                     <option value="tablets">Tablets</option>
                                                     <option value="printers">Printers</option>

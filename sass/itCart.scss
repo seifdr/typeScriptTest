@@ -1,5 +1,14 @@
 @import "bs-grid/bootstrap-grid.scss";
 
+div#headerWrapper{
+    *,
+    *::before,
+    *::after {
+        // box-sizing: inherit;
+        // box-sizing: border-box;
+        box-sizing: content-box;
+    }
+}
 
 $break-medium:  550px;
 $break-large:  875px;
@@ -34,7 +43,7 @@ $featureBoxGrey:       #f0f0f0;
     div#cartLeft {
         flex: 1 1 0;
         display: flex;
-        justify-content: end;
+        justify-content: flex-end;
         padding: 1em 2em 1em 0;
         color: #fff;
 
@@ -53,7 +62,7 @@ $featureBoxGrey:       #f0f0f0;
     div#cartRight {
         flex: 1 1 0;
         display: flex;
-        justify-content: start;
+        justify-content: flex-start;
         padding-left: 2em; 
 
         @media screen and (max-width: $break-medium ) {
@@ -257,7 +266,6 @@ section#filterChecks > form {
 
 }
 
-
 section.shelves {
 
     div.pbc {
@@ -271,7 +279,7 @@ section.shelves {
         cursor: pointer;
         box-sizing: border-box;
         position: relative;
-
+ 
         div.img-container {
             @media screen and (min-width: $break-medium) {
                 height: 180px;
@@ -283,7 +291,6 @@ section.shelves {
             padding: 10px;
             
             img {
-                flex: 1;
                 max-height: 180px;
             }
         } 

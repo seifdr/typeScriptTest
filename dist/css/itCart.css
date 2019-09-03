@@ -916,6 +916,12 @@ html {
     max-width: 100%;
     height: auto; }
 
+div#headerWrapper *,
+div#headerWrapper *::before,
+div#headerWrapper *::after {
+  -webkit-box-sizing: content-box;
+          box-sizing: content-box; }
+
 #cart {
   display: block;
   background-color: #6357a0;
@@ -942,7 +948,7 @@ html {
     display: flex;
     -webkit-box-pack: end;
         -ms-flex-pack: end;
-            justify-content: end;
+            justify-content: flex-end;
     padding: 1em 2em 1em 0;
     color: #fff; }
     @media screen and (max-width: 550px) {
@@ -961,7 +967,7 @@ html {
     display: flex;
     -webkit-box-pack: start;
         -ms-flex-pack: start;
-            justify-content: start;
+            justify-content: flex-start;
     padding-left: 2em; }
     @media screen and (max-width: 550px) {
       #cart div#cartRight {
@@ -1184,9 +1190,6 @@ section.shelves article.prodBox {
         height: 180px;
         width: auto; } }
     section.shelves article.prodBox div.img-container img {
-      -webkit-box-flex: 1;
-          -ms-flex: 1;
-              flex: 1;
       max-height: 180px; }
   section.shelves article.prodBox div.feature-copy {
     padding: 1rem 1.5rem 1rem 1.5rem;
