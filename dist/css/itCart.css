@@ -1231,40 +1231,14 @@ div#overlay-content {
     font-style: normal; }
 
 div#overlayGuts {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  position: relative;
   height: auto !important;
   overflow: none !important;
   padding-bottom: 0 !important;
+  padding-left: 0;
   background-color: white; }
   div#overlayGuts div#overlayPad {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-flex: 1;
-        -ms-flex-positive: 1;
-            flex-grow: 1;
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
     padding: 1em;
-    height: 100%;
-    display: flex; }
-    div#overlayGuts div#overlayPad > div {
-      -webkit-box-flex: 1;
-          -ms-flex: 1 0 1;
-              flex: 1 0 1; }
-    div#overlayGuts div#overlayPad div.overlayImg {
-      -ms-flex-item-align: center;
-          align-self: center;
-      justify-self: center;
-      padding-right: 1em;
-      max-width: 300px; }
+    height: 100%; }
     div#overlayGuts div#overlayPad div.renewModalSelect {
       margin-bottom: 1.5em; }
       div#overlayGuts div#overlayPad div.renewModalSelect label {
@@ -1273,28 +1247,6 @@ div#overlayGuts {
       div#overlayGuts div#overlayPad div.renewModalSelect select {
         margin-top: .25em;
         padding-top: .25em; }
-    @media screen and (max-width: 875px) {
-      div#overlayGuts div#overlayPad {
-        -webkit-box-orient: vertical;
-        -webkit-box-direction: normal;
-            -ms-flex-direction: column;
-                flex-direction: column;
-        -webkit-box-pack: center;
-            -ms-flex-pack: center;
-                justify-content: center;
-        -ms-flex-line-pack: center;
-            align-content: center;
-        justify-items: center;
-        -webkit-box-align: center;
-            -ms-flex-align: center;
-                align-items: center; }
-        div#overlayGuts div#overlayPad div.overlayImg {
-          text-align: center;
-          padding-right: 0; }
-        div#overlayGuts div#overlayPad div.overlayText {
-          text-align: center; }
-          div#overlayGuts div#overlayPad div.overlayText div {
-            text-align: left; } }
 
 body.modal-open {
   /*block scroll for mobile;

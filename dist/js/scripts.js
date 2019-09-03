@@ -75,22 +75,30 @@ class Item implements product {
         const btnText = ( this.onCart )? 'Remove From Cart' : 'Add To Cart';
         const optClass = (this.onCart)? 'onCart':'';
  
-        let output:string = `<div id="overlayPad" data-id="${this.id}" >`;
+        let output:string = `<div id="overlayPad" data-id="${this.id}" >
+        <div class="bootstrap-wrapper">
+    <div class="container">
+    <div class="row">`;
 
                 if( this.image != '/' ){   
-                    output += `<div class="overlayImg">
-                        <img src="https://feinberg-dev.fsm.northwestern.edu/it-new/${this.image}" />
+                    output += `<div class="col-12 col-lg-6 overlayImg">
+                        <div>
+                            <img src="https://feinberg-dev.fsm.northwestern.edu/it-new/${this.image}" />
+                        </div>
                     </div>`; 
                 }     
-        output += `<div class="overlayText">
-                    <h3>${this.title}`;
+        output += `<div class="col-12 col-lg-6 overlayText">
+                        
+                            <h3>${this.title}`;
 
-                    if( this.catStr.includes('software') ){
-                        if( this.renew ){
-                            output += ` - Renewing`;
-                        }
-                    }       
-        output += `</h3>`
+                            if( this.catStr.includes('software') ){
+                                if( this.renew ){
+                                    output += ` - Renewing`;
+                                }
+                            }       
+                            output += `</h3>
+                        `;
+                        
 
                     if( this.price != '0.00' ){
                         output += `<h6>$${ this.numberWithCommas( this.price ) }</h6>`;
@@ -137,7 +145,10 @@ class Item implements product {
         }
 
         output += `</div>
-            </div>`;
+            </div>
+            </div>
+            </div>
+        </div>`;
         return output;
     }
 
