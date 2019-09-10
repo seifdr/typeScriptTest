@@ -1,5 +1,23 @@
 @import "bs-grid/bootstrap-grid.scss";
 
+section#shopping-cart {
+    .fa {
+        font-style: normal;
+    }
+}
+
+div#spinnerContainer {
+    display: flex;
+    flex-direction: column;
+    padding: .5em 0;
+    justify-content: center;
+    align-items: center;
+
+    p {
+        margin: .5em 0 !important; 
+    }
+}
+
 div#headerWrapper{
     *,
     *::before,

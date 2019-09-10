@@ -565,11 +565,25 @@ class Store {
         const existingItemsInCookie = <number[]> this.cookie.getJSONfromCookieAsArray();
         const softwareRenewIds = this.softwareCookie.getJSONfromCookieAsArray();
 
+        //place a spinner while it's loading products in the fetch
+        const spinnerHTML = `
+            <div id="spinnerContainer">
+                <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+                <p>Loading products...</p>
+                <span class="sr-only">Loading...</span>
+            </div>
+        `;
+
+        this.containerEL.insertAdjacentHTML('beforeend', spinnerHTML);
+
         return fetch( this.apiURL ).then( (response) => {
+            //hide the spinner 
+            const spinner = document.getElementById('spinnerContainer');
+            spinner.style.display = 'none';
             //if you dont do another then, code executes before promise returns
             return response.json();
         }).then( (myJson) => {
-            
+        
             let result = myJson.items;
 
             if(result.length > 0){
