@@ -543,7 +543,7 @@ class Cart {
 }
 
 class Store {
-    private apiURL = 'https://feinberg-dev.fsm.northwestern.edu/it-new/ws/purchasing-api.php';
+    private apiURL = 'https://feinberg-dev.fsm.northwestern.edu/it-new/ws/json-api.php';
     private containerEL:HTMLElement;
     private items = [<product>{}];
     private sortBy: string;

@@ -656,7 +656,7 @@ var Store =
 /** @class */
 function () {
   function Store(containerID, cart, modal, cookie, softwareCookie) {
-    this.apiURL = 'https://feinberg-dev.fsm.northwestern.edu/it-new/ws/purchasing-api.php';
+    this.apiURL = 'https://feinberg-dev.fsm.northwestern.edu/it-new/ws/json-api.php';
     this.items = [{}];
     this.modal = modal;
     this.cookie = cookie;
