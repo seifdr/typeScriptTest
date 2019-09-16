@@ -75,6 +75,9 @@ class itAlert {
     private modal: Modal;
     private trigger:HTMLElement;    
 
+    private hasAlerts:boolean;
+    private alerts: [];
+
     constructor( baseEL, modal ){
         this.modal = modal;
 
@@ -97,16 +100,14 @@ class itAlert {
         fetch('https://feinberg-dev.fsm.northwestern.edu/it-new/ws/json-api.php?type=alerts').then(function(response) {
             return response.json();
         }).then(function( results ) {
+            
+            console.log( results['homepageAlert'] );
 
-            console.log(results);
-            // let results = JSON.stringify(myJson);
+            // this.results['homepage']
+            
+            this.alerts = results;
 
-           
-
-            // console.log( results[0] );
-
-        
-
+            
         });
     }
 }

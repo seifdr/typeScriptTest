@@ -84,8 +84,9 @@ function () {
     fetch('https://feinberg-dev.fsm.northwestern.edu/it-new/ws/json-api.php?type=alerts').then(function (response) {
       return response.json();
     }).then(function (results) {
-      console.log(results); // let results = JSON.stringify(myJson);
-      // console.log( results[0] );
+      console.log(results['homepageAlert']); // this.results['homepage']
+
+      this.alerts = results;
     });
   };
 
