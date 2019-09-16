@@ -89,6 +89,8 @@ class itAlert {
 
         this.baseEL = document.getElementById( baseEL );
 
+
+        
         // if( document.getElementById('alertTrigger') ){
         //     this.trigger = document.getElementById('alertTrigger');
 
@@ -96,12 +98,26 @@ class itAlert {
         //         console.log( 'Hello there!' );
         //         e.preventDefault();
         //     });
-
         // }
     }
 
     addAlertBoxToPage (){
-        // document.getElementById( this.baseEL ).
+
+        let alertBox = `<div class="contain-1440 itAlert itDanger">
+                            <div class="contain-1120">
+                            <!-- <i class="fa fa-exclamation-triangle fa-2x">&nbsp;</i> -->
+                            <h3>`;
+                            
+                alertBox += 'Hello';        
+
+                alertBox += `</h3>
+                            <p>Estibulum et mi at mauris mattis iaculis. Nulla lectus velit, pellentesque et ante sed, consequat luctus enim. Nulla elementum commodo lorem, eu fermentum velit posuere quis. Morbi ornare est at tellus volutpat maximus. Pellentesque sapien orci, accumsan non nisl et, placerat laoreet nunc. Nam cursus pulvinar viverra.</p>
+                            <p><a id="alertTrigger" href="#">Read more</a></p>
+                            </div>  
+                        </div>`
+
+        this.baseEL.insertAdjacentHTML('afterbegin', alertBox ); 
+
     }
 
     async getAlerts(){
@@ -121,7 +137,11 @@ class itAlert {
 
         if( this.hasAlerts ){
             this.alerts = results;
-        }
+
+            if( this.hasAlerts.either ){
+                this.addAlertBoxToPage();
+            }
+        }        
     } 
     
 }
@@ -134,11 +154,3 @@ window.onload=function() {
 };
 
 
-// <div class="contain-1440 itAlert itDanger">
-// <div class="contain-1120">
-//   <!-- <i class="fa fa-exclamation-triangle fa-2x">&nbsp;</i> -->
-//   <h3>System Alert</h3>
-//   <p>Estibulum et mi at mauris mattis iaculis. Nulla lectus velit, pellentesque et ante sed, consequat luctus enim. Nulla elementum commodo lorem, eu fermentum velit posuere quis. Morbi ornare est at tellus volutpat maximus. Pellentesque sapien orci, accumsan non nisl et, placerat laoreet nunc. Nam cursus pulvinar viverra.</p>
-//   <p><a id="alertTrigger" href="#">Read more</a></p>
-// </div>
-// </div>

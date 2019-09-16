@@ -226,7 +226,11 @@ function () {
     // }
   }
 
-  itAlert.prototype.addAlertBoxToPage = function () {// document.getElementById( this.baseEL ).
+  itAlert.prototype.addAlertBoxToPage = function () {
+    var alertBox = "<div class=\"contain-1440 itAlert itDanger\">\n                            <div class=\"contain-1120\">\n                            <!-- <i class=\"fa fa-exclamation-triangle fa-2x\">&nbsp;</i> -->\n                            <h3>";
+    alertBox += 'Hello';
+    alertBox += "</h3>\n                            <p>Estibulum et mi at mauris mattis iaculis. Nulla lectus velit, pellentesque et ante sed, consequat luctus enim. Nulla elementum commodo lorem, eu fermentum velit posuere quis. Morbi ornare est at tellus volutpat maximus. Pellentesque sapien orci, accumsan non nisl et, placerat laoreet nunc. Nam cursus pulvinar viverra.</p>\n                            <p><a id=\"alertTrigger\" href=\"#\">Read more</a></p>\n                            </div>  \n                        </div>";
+    this.baseEL.insertAdjacentHTML('afterbegin', alertBox);
   };
 
   itAlert.prototype.getAlerts = function () {
@@ -256,6 +260,10 @@ function () {
 
             if (this.hasAlerts) {
               this.alerts = results;
+
+              if (this.hasAlerts.either) {
+                this.addAlertBoxToPage();
+              }
             }
 
             return [2
@@ -272,11 +280,4 @@ function () {
 window.onload = function () {
   var modal = new Modal();
   var alert = new itAlert(modal, 'homepageContent');
-}; // <div class="contain-1440 itAlert itDanger">
-// <div class="contain-1120">
-//   <!-- <i class="fa fa-exclamation-triangle fa-2x">&nbsp;</i> -->
-//   <h3>System Alert</h3>
-//   <p>Estibulum et mi at mauris mattis iaculis. Nulla lectus velit, pellentesque et ante sed, consequat luctus enim. Nulla elementum commodo lorem, eu fermentum velit posuere quis. Morbi ornare est at tellus volutpat maximus. Pellentesque sapien orci, accumsan non nisl et, placerat laoreet nunc. Nam cursus pulvinar viverra.</p>
-//   <p><a id="alertTrigger" href="#">Read more</a></p>
-// </div>
-// </div>
+};
