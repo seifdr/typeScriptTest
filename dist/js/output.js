@@ -217,13 +217,14 @@ function () {
     };
     this.modal = modal;
     this.getAlerts();
-    this.baseEL = document.getElementById(baseEL); // if( document.getElementById('alertTrigger') ){
-    //     this.trigger = document.getElementById('alertTrigger');
-    //     this.trigger.addEventListener('click', function( e ){
-    //         console.log( 'Hello there!' );
-    //         e.preventDefault();
-    //     });
-    // }
+
+    if (!document.getElementById('homepageContent')) {
+      //purchasing page
+      this.baseEL = document.getElementById('main-content');
+    } else {
+      //hompage
+      this.baseEL = document.getElementById('homepageContent');
+    }
   }
 
   itAlert.prototype.addAlertBoxToPage = function () {
@@ -231,6 +232,14 @@ function () {
     alertBox += 'Hello';
     alertBox += "</h3>\n                            <p>Estibulum et mi at mauris mattis iaculis. Nulla lectus velit, pellentesque et ante sed, consequat luctus enim. Nulla elementum commodo lorem, eu fermentum velit posuere quis. Morbi ornare est at tellus volutpat maximus. Pellentesque sapien orci, accumsan non nisl et, placerat laoreet nunc. Nam cursus pulvinar viverra.</p>\n                            <p><a id=\"alertTrigger\" href=\"#\">Read more</a></p>\n                            </div>  \n                        </div>";
     this.baseEL.insertAdjacentHTML('afterbegin', alertBox);
+
+    if (document.getElementById('alertTrigger')) {
+      this.trigger = document.getElementById('alertTrigger');
+      this.trigger.addEventListener('click', function (e) {
+        console.log('Hello there!');
+        e.preventDefault();
+      });
+    }
   };
 
   itAlert.prototype.getAlerts = function () {

@@ -71,6 +71,7 @@ class Modal {
 
 class itAlert {
     private baseEL: HTMLElement;
+    private type:string;
     private modal: Modal;
     private trigger:HTMLElement;    
 
@@ -87,18 +88,13 @@ class itAlert {
 
         this.getAlerts(); 
 
-        this.baseEL = document.getElementById( baseEL );
-
-
-        
-        // if( document.getElementById('alertTrigger') ){
-        //     this.trigger = document.getElementById('alertTrigger');
-
-        //     this.trigger.addEventListener('click', function( e ){
-        //         console.log( 'Hello there!' );
-        //         e.preventDefault();
-        //     });
-        // }
+        if( !document.getElementById('homepageContent') ){
+            //purchasing page
+            this.baseEL = document.getElementById( 'main-content' );
+        } else {
+            //hompage
+            this.baseEL = document.getElementById( 'homepageContent' );
+        }        
     }
 
     addAlertBoxToPage (){
@@ -117,6 +113,15 @@ class itAlert {
                         </div>`
 
         this.baseEL.insertAdjacentHTML('afterbegin', alertBox ); 
+
+        if( document.getElementById('alertTrigger') ){
+            this.trigger = document.getElementById('alertTrigger');
+
+            this.trigger.addEventListener('click', function( e ){
+                console.log( 'Hello there!' );
+                e.preventDefault(); 
+            });
+        }
 
     }
 
