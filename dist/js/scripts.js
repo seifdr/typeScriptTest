@@ -119,7 +119,7 @@ class itAlert {
                     <div class="contain-1120">
                     <!-- <i class="fa fa-exclamation-triangle fa-2x">&nbsp;</i> -->
                     <h3>${alert.title}</h3>
-                    <p>${alert.blurb}</p>
+                    <p>${alert.blurb[0]}</p>
                     <p><a id="alertTrigger" href="#">Read more</a></p>
                     </div>  
                 </div>`;
@@ -164,6 +164,8 @@ class itAlert {
 
         if( this.hasAlerts ){
             this.alerts = results;
+
+            console.log( results );
 
             if( this.hasAlerts.either ){
                 this.addAlertBoxToPage();

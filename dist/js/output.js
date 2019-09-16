@@ -238,7 +238,7 @@ function () {
   };
 
   itAlert.prototype.buildBox = function (alert) {
-    var alertBox = "<div class=\"contain-1440 itAlert " + this.chooseColor(alert.color) + " \">\n                    <div class=\"contain-1120\">\n                    <!-- <i class=\"fa fa-exclamation-triangle fa-2x\">&nbsp;</i> -->\n                    <h3>" + alert.title + "</h3>\n                    <p>" + alert.blurb + "</p>\n                    <p><a id=\"alertTrigger\" href=\"#\">Read more</a></p>\n                    </div>  \n                </div>";
+    var alertBox = "<div class=\"contain-1440 itAlert " + this.chooseColor(alert.color) + " \">\n                    <div class=\"contain-1120\">\n                    <!-- <i class=\"fa fa-exclamation-triangle fa-2x\">&nbsp;</i> -->\n                    <h3>" + alert.title + "</h3>\n                    <p>" + alert.blurb[0] + "</p>\n                    <p><a id=\"alertTrigger\" href=\"#\">Read more</a></p>\n                    </div>  \n                </div>";
     return alertBox;
   };
 
@@ -287,6 +287,7 @@ function () {
 
             if (this.hasAlerts) {
               this.alerts = results;
+              console.log(results);
 
               if (this.hasAlerts.either) {
                 this.addAlertBoxToPage();
