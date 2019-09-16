@@ -221,16 +221,34 @@ function () {
     if (!document.getElementById('homepageContent')) {
       //purchasing page
       this.baseEL = document.getElementById('main-content');
+      this.type = 'purchasing';
     } else {
       //hompage
       this.baseEL = document.getElementById('homepageContent');
+      this.type = 'homepage';
     }
   }
 
+  itAlert.prototype.chooseColor = function (color) {
+    if (color == "Red") {
+      return ' itDanger ';
+    } else {
+      return ' itPrimary ';
+    }
+  };
+
+  itAlert.prototype.buildBox = function (alert) {
+    var alertBox = "<div class=\"contain-1440 itAlert " + this.chooseColor(alert.color) + " \">\n                    <div class=\"contain-1120\">\n                    <!-- <i class=\"fa fa-exclamation-triangle fa-2x\">&nbsp;</i> -->\n                    <h3>" + alert.title + "</h3>\n                    <p>" + alert.blurb + "</p>\n                    <p><a id=\"alertTrigger\" href=\"#\">Read more</a></p>\n                    </div>  \n                </div>";
+    return alertBox;
+  };
+
   itAlert.prototype.addAlertBoxToPage = function () {
-    var alertBox = "<div class=\"contain-1440 itAlert itDanger\">\n                            <div class=\"contain-1120\">\n                            <!-- <i class=\"fa fa-exclamation-triangle fa-2x\">&nbsp;</i> -->\n                            <h3>";
-    alertBox += 'Hello';
-    alertBox += "</h3>\n                            <p>Estibulum et mi at mauris mattis iaculis. Nulla lectus velit, pellentesque et ante sed, consequat luctus enim. Nulla elementum commodo lorem, eu fermentum velit posuere quis. Morbi ornare est at tellus volutpat maximus. Pellentesque sapien orci, accumsan non nisl et, placerat laoreet nunc. Nam cursus pulvinar viverra.</p>\n                            <p><a id=\"alertTrigger\" href=\"#\">Read more</a></p>\n                            </div>  \n                        </div>";
+    if (this.type = 'homepage') {
+      var alertBox = this.buildBox(this.alerts['homepageAlert']);
+    } else {
+      var alertBox = this.buildBox(this.alerts['purchasingAlert']);
+    }
+
     this.baseEL.insertAdjacentHTML('afterbegin', alertBox);
 
     if (document.getElementById('alertTrigger')) {

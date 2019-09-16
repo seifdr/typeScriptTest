@@ -69,6 +69,13 @@ class Modal {
         
 }
 
+interface alert {
+    title: string;
+    color: string;
+    blurb: string;
+    modal?: string;
+}
+
 class itAlert {
     private baseEL: HTMLElement;
     private type:string;
@@ -91,26 +98,41 @@ class itAlert {
         if( !document.getElementById('homepageContent') ){
             //purchasing page
             this.baseEL = document.getElementById( 'main-content' );
+            this.type = 'purchasing';
         } else {
             //hompage
             this.baseEL = document.getElementById( 'homepageContent' );
+            this.type = 'homepage';
         }        
+    }
+
+    chooseColor( color ){
+        if( color == "Red"){
+            return ' itDanger ';
+        } else {
+            return ' itPrimary ';
+        }
+    }
+
+    buildBox( alert ){
+        let alertBox = `<div class="contain-1440 itAlert ${ this.chooseColor( alert.color ) } ">
+                    <div class="contain-1120">
+                    <!-- <i class="fa fa-exclamation-triangle fa-2x">&nbsp;</i> -->
+                    <h3>${alert.title}</h3>
+                    <p>${alert.blurb}</p>
+                    <p><a id="alertTrigger" href="#">Read more</a></p>
+                    </div>  
+                </div>`;
+        return alertBox;
     }
 
     addAlertBoxToPage (){
 
-        let alertBox = `<div class="contain-1440 itAlert itDanger">
-                            <div class="contain-1120">
-                            <!-- <i class="fa fa-exclamation-triangle fa-2x">&nbsp;</i> -->
-                            <h3>`;
-                            
-                alertBox += 'Hello';        
-
-                alertBox += `</h3>
-                            <p>Estibulum et mi at mauris mattis iaculis. Nulla lectus velit, pellentesque et ante sed, consequat luctus enim. Nulla elementum commodo lorem, eu fermentum velit posuere quis. Morbi ornare est at tellus volutpat maximus. Pellentesque sapien orci, accumsan non nisl et, placerat laoreet nunc. Nam cursus pulvinar viverra.</p>
-                            <p><a id="alertTrigger" href="#">Read more</a></p>
-                            </div>  
-                        </div>`
+        if( this.type = 'homepage' ){
+            const alertBox = this.buildBox( <alert>this.alerts['homepageAlert'] ); 
+        } else {
+            const alertBox = this.buildBox( <alert>this.alerts['purchasingAlert'] ); 
+        }  
 
         this.baseEL.insertAdjacentHTML('afterbegin', alertBox ); 
 
