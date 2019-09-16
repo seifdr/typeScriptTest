@@ -1,0 +1,48 @@
+$dangerColor:       #950515;
+$dangerBackground:  #f8d7da;
+$dangerBorder:      #f5c6cb;
+
+$primaryColor:      #004085;
+$primaryBackground: #cce5ff;
+$primaryBorder:     #b8daff;
+
+div.itAlert { 
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 1em;
+
+    h1, h2, h3, h4, h5, a {
+        text-transform: uppercase;
+    }
+    
+    a {
+        font-weight: bold;
+    }
+}
+
+div.itDanger {
+    color: $dangerColor;
+    background-color:$dangerBackground;
+    border-color:$dangerBorder;
+
+    h1, h2, h3, h4, h5, a {
+        color: $dangerColor;
+    }
+
+    h1:before, h2:before, h3:before, h4:before, h5:before {
+        font-family: FontAwesome; 
+        content:"\f071";
+        padding-right: .25em;
+    }
+} 
+
+div.itPrimary {
+    color: $primaryColor;
+    background-color: $primaryBackground;
+    border-color: $primaryBorder;   
+
+    h1, h2, h3, h4, h5, a {
+        color: $primaryColor;
+    }
+}
+

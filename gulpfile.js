@@ -111,7 +111,7 @@ options.sassmin = {
 
 // Sass
 gulp.task('sass', function() {
-    return gulp.src('./sass/itCart.scss')
+    return gulp.src('./sass/itAlert.scss')
         .pipe(plumber())
         .pipe(sass(options.sass).on('error', sass.logError))
         .pipe(autoprefixer())
@@ -122,7 +122,7 @@ gulp.task('sass', function() {
 
 // Sass-min - Release build minifies CSS after compiling Sass
 gulp.task('sass-min', function() {
-    return gulp.src('./sass/itCart.scss')
+    return gulp.src('./sass/itAlert.scss')
         .pipe(plumber())
         .pipe(sass(options.sassmin).on('error', sass.logError))
         .pipe(autoprefixer())
