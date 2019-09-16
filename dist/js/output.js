@@ -70,7 +70,7 @@ var itAlert =
 function () {
   function itAlert(baseEL, modal) {
     this.modal = modal;
-    this.checkAlerts();
+    this.getAlerts();
     this.baseEL = document.getElementById(baseEL); // if( document.getElementById('alertTrigger') ){
     //     this.trigger = document.getElementById('alertTrigger');
     //     this.trigger.addEventListener('click', function( e ){
@@ -80,12 +80,12 @@ function () {
     // }
   }
 
-  itAlert.prototype.checkAlerts = function () {
-    fetch('https://feinberg-dev.fsm.northwestern.edu/it-new/_alerts/test.json').then(function (response) {
-      console.log(response);
+  itAlert.prototype.getAlerts = function () {
+    fetch('https://feinberg-dev.fsm.northwestern.edu/it-new/ws/json-api.php?type=alerts').then(function (response) {
       return response.json();
-    }).then(function (myJson) {
-      console.log(JSON.stringify(myJson));
+    }).then(function (results) {
+      console.log(results); // let results = JSON.stringify(myJson);
+      // console.log( results[0] );
     });
   };
 
