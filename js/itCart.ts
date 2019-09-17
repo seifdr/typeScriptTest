@@ -880,7 +880,7 @@ class Modal {
     }
 
     addOverlay() {
-        let overlay = `<div id="overlay"><div id="overlay-content"><a class="closebtn"><i class="fa fa-times"> </i></a><div id="overlayGuts" class="col1of1 responsive-container"></div></div></div>`;
+        let overlay = `<div id='overlay'><div id='overlay-content'><a class='closebtn'><i class='fa fa-times'></i></a><div id='overlayGuts' class='col1of1 responsive-container'></div></div></div>`;
         
         document.getElementById('main-content').insertAdjacentHTML('beforeend', overlay);
     }
