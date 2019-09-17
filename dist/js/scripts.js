@@ -9,15 +9,8 @@ class Modal {
     }
 
     addOverlay() {
-        let overlay = `<div id="overlay"><div id="overlay-content"><a class="closebtn"><i class="fa fa-times"> </i></a><div id="overlayGuts" class="col1of1 responsive-container"></div></div></div>`;
-        
-        if( document.getElementById('main-content') ){
-            console.log('hello');
-            document.getElementById('main-content').insertAdjacentHTML('beforeend', overlay);
-        } else {
-            console.log('goodbye');
-            document.getElementById('homepageContent').insertAdjacentHTML('beforeend', overlay);
-        }
+        let overlay = `<div id="overlay"><div id="overlay-content"><a class="closebtn"><i class="fa fa-times">&nbsp;</i></a><div id="overlayGuts" class="col1of1 responsive-container"></div></div></div>`;
+        document.getElementById('main-content').insertAdjacentHTML('beforeend', overlay);
     }
 
     updateOverlayContent( output ){
@@ -90,7 +83,7 @@ class itAlert {
 
     private alerts: [];
 
-    constructor( modal, baseEL ){
+    constructor( modal ){
         this.modal = modal;
 
         this.getAlerts(); 
@@ -115,37 +108,50 @@ class itAlert {
     }
 
     buildBox( alert ){
-
-        console.log( alert );
-
         let alertBox = `<div class="contain-1440 itAlert ${ this.chooseColor( alert.color ) } ">
                     <div class="contain-1120">
                     <!-- <i class="fa fa-exclamation-triangle fa-2x">&nbsp;</i> -->
                     <h3>${alert.title}</h3>
-                    <p>${alert.desc}</p>
+                    <p>${alert.blurb}</p>
                     <p><a id="alertTrigger" href="#">Read more</a></p>
                     </div>  
                 </div>`;
         return alertBox;
     }
 
+    buildModalGuts( alert:alert ){
+        return `<div class='overlayGuts'>${alert.modal}</div>`;
+    }
+
     addAlertBoxToPage (){
+        const _modalClass = this.modal;
+        let modalBox = '';
 
         if( this.type = 'homepage' ){
             const alertBox = this.buildBox( <alert>this.alerts['homepageAlert'] ); 
+
+            if( this.alerts['homepageAlert']['modal'] != '' ){
+                modalBox = this.buildModalGuts( <alert>this.alerts['homepageAlert'] );
+            }
         } else {
             const alertBox = this.buildBox( <alert>this.alerts['purchasingAlert'] ); 
+
+            if( this.alerts['purchasingAlert']['modal'] != '' ){
+                modalBox = this.buildBox( <alert>this.alerts['purchasingAlert'] );
+            }
         }  
 
         this.baseEL.insertAdjacentHTML('afterbegin', alertBox ); 
 
-        if( document.getElementById('alertTrigger') ){
-            this.trigger = document.getElementById('alertTrigger');
-
-            this.trigger.addEventListener('click', function( e ){
-                console.log( 'Hello there!' );
-                e.preventDefault(); 
-            });
+        if( modalBox != '' ){
+            if( document.getElementById('alertTrigger') ){
+                this.trigger = document.getElementById('alertTrigger');
+    
+                this.trigger.addEventListener('click', function( e ){
+                    _modalClass.openOverlay( modalBox );
+                    e.preventDefault(); 
+                });
+            }
         }
 
     }
@@ -167,9 +173,6 @@ class itAlert {
 
         if( this.hasAlerts ){
             this.alerts = results;
-
-            console.log( results );
-
             if( this.hasAlerts.either ){
                 this.addAlertBoxToPage();
             }
@@ -181,7 +184,7 @@ class itAlert {
 window.onload=function() {
 
     let modal = new Modal();
-    let alert = new itAlert( modal, 'homepageContent' ); 
+    let alert = new itAlert( modal ); 
 
 };
 

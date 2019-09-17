@@ -150,15 +150,8 @@ function () {
   }
 
   Modal.prototype.addOverlay = function () {
-    var overlay = "<div\xA0id=\"overlay\"><div\xA0id=\"overlay-content\"><a\xA0class=\"closebtn\"><i\xA0class=\"fa\xA0fa-times\">\xA0</i></a><div\xA0id=\"overlayGuts\"\xA0class=\"col1of1\xA0responsive-container\"></div></div></div>";
-
-    if (document.getElementById('main-content')) {
-      console.log('hello');
-      document.getElementById('main-content').insertAdjacentHTML('beforeend', overlay);
-    } else {
-      console.log('goodbye');
-      document.getElementById('homepageContent').insertAdjacentHTML('beforeend', overlay);
-    }
+    var overlay = "<div\xA0id=\"overlay\"><div\xA0id=\"overlay-content\"><a\xA0class=\"closebtn\"><i\xA0class=\"fa\xA0fa-times\">&nbsp;</i></a><div\xA0id=\"overlayGuts\"\xA0class=\"col1of1\xA0responsive-container\"></div></div></div>";
+    document.getElementById('main-content').insertAdjacentHTML('beforeend', overlay);
   };
 
   Modal.prototype.updateOverlayContent = function (output) {
@@ -209,7 +202,7 @@ function () {
 var itAlert =
 /** @class */
 function () {
-  function itAlert(modal, baseEL) {
+  function itAlert(modal) {
     this.hasAlerts = {
       'either': false,
       'homepageAlert': false,
@@ -238,26 +231,43 @@ function () {
   };
 
   itAlert.prototype.buildBox = function (alert) {
-    console.log(alert);
-    var alertBox = "<div class=\"contain-1440 itAlert " + this.chooseColor(alert.color) + " \">\n                    <div class=\"contain-1120\">\n                    <!-- <i class=\"fa fa-exclamation-triangle fa-2x\">&nbsp;</i> -->\n                    <h3>" + alert.title + "</h3>\n                    <p>" + alert.desc + "</p>\n                    <p><a id=\"alertTrigger\" href=\"#\">Read more</a></p>\n                    </div>  \n                </div>";
+    var alertBox = "<div class=\"contain-1440 itAlert " + this.chooseColor(alert.color) + " \">\n                    <div class=\"contain-1120\">\n                    <!-- <i class=\"fa fa-exclamation-triangle fa-2x\">&nbsp;</i> -->\n                    <h3>" + alert.title + "</h3>\n                    <p>" + alert.blurb + "</p>\n                    <p><a id=\"alertTrigger\" href=\"#\">Read more</a></p>\n                    </div>  \n                </div>";
     return alertBox;
   };
 
+  itAlert.prototype.buildModalGuts = function (alert) {
+    return "<div class='overlayGuts'>" + alert.modal + "</div>";
+  };
+
   itAlert.prototype.addAlertBoxToPage = function () {
+    var _modalClass = this.modal;
+    var modalBox = '';
+
     if (this.type = 'homepage') {
       var alertBox = this.buildBox(this.alerts['homepageAlert']);
+
+      if (this.alerts['homepageAlert']['modal'] != '') {
+        modalBox = this.buildModalGuts(this.alerts['homepageAlert']);
+      }
     } else {
       var alertBox = this.buildBox(this.alerts['purchasingAlert']);
+
+      if (this.alerts['purchasingAlert']['modal'] != '') {
+        modalBox = this.buildBox(this.alerts['purchasingAlert']);
+      }
     }
 
     this.baseEL.insertAdjacentHTML('afterbegin', alertBox);
 
-    if (document.getElementById('alertTrigger')) {
-      this.trigger = document.getElementById('alertTrigger');
-      this.trigger.addEventListener('click', function (e) {
-        console.log('Hello there!');
-        e.preventDefault();
-      });
+    if (modalBox != '') {
+      if (document.getElementById('alertTrigger')) {
+        this.trigger = document.getElementById('alertTrigger');
+        this.trigger.addEventListener('click', function (e) {
+          _modalClass.openOverlay(modalBox);
+
+          e.preventDefault();
+        });
+      }
     }
   };
 
@@ -288,7 +298,6 @@ function () {
 
             if (this.hasAlerts) {
               this.alerts = results;
-              console.log(results);
 
               if (this.hasAlerts.either) {
                 this.addAlertBoxToPage();
@@ -308,5 +317,5 @@ function () {
 
 window.onload = function () {
   var modal = new Modal();
-  var alert = new itAlert(modal, 'homepageContent');
+  var alert = new itAlert(modal);
 };
