@@ -139,6 +139,66 @@ var __generator = void 0 && (void 0).__generator || function (thisArg, body) {
   }
 };
 
+var Modal =
+/** @class */
+function () {
+  function Modal() {
+    this.overlayContainerID = 'overlay';
+    this.overlayContainerGuts = 'overlayGuts';
+    this.isOpen = false;
+    this.addOverlay();
+  }
+
+  Modal.prototype.addOverlay = function () {
+    var overlay = "<div id='overlay'><div id='overlay-content'><a class='closebtn'><i class='fa fa-times'></i></a><div id='overlayGuts' class='col1of1 responsive-container'></div></div></div>";
+    document.getElementById('main-content').insertAdjacentHTML('beforeend', overlay);
+  };
+
+  Modal.prototype.updateOverlayContent = function (output) {
+    var el = document.getElementById(this.overlayContainerGuts);
+    el.innerHTML = output;
+  };
+
+  Modal.prototype.openOverlay = function (output) {
+    var _this = this;
+
+    var scrollPos = window.scrollY;
+    window.scroll(0, scrollPos);
+    var oel = document.getElementById(this.overlayContainerID);
+    var el = document.getElementById(this.overlayContainerGuts);
+    this.updateOverlayContent(output);
+    oel.style.height = "100%";
+    oel.style.display = "block";
+    document.body.classList.add('modal-open'); // Close modal when X btn is clicked
+
+    oel.getElementsByClassName('closebtn')[0].addEventListener('click', function (e) {
+      _this.closeOverlay(el, oel, scrollPos);
+
+      e.preventDefault();
+    }); // Close modal on ESC 
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === "Escape") {
+        _this.closeOverlay(el, oel, scrollPos);
+
+        e.preventDefault();
+      }
+    });
+    this.isOpen = true;
+  };
+
+  Modal.prototype.closeOverlay = function (el, oel, scrollPos) {
+    el.innerHTML = "";
+    oel.style.height = "0%";
+    oel.style.display = "none";
+    document.body.classList.remove('modal-open');
+    window.scroll(0, scrollPos);
+    this.isOpen = false;
+  };
+
+  return Modal;
+}();
+
 function removeSpecialChars(inputVal) {
   //allow periods
   return inputVal.replace(/[`~!@#$%^&*()_|+\-=?;:'",<>\{\}\[\]\\\/]/gi, '');
@@ -967,66 +1027,6 @@ function () {
   return Store;
 }();
 
-var Modal =
-/** @class */
-function () {
-  function Modal() {
-    this.overlayContainerID = 'overlay';
-    this.overlayContainerGuts = 'overlayGuts';
-    this.isOpen = false;
-    this.addOverlay();
-  }
-
-  Modal.prototype.addOverlay = function () {
-    var overlay = "<div id=\"overlay\"><div id=\"overlay-content\"><a class=\"closebtn\"><i class=\"fa fa-times\"> </i></a><div id=\"overlayGuts\" class=\"col1of1 responsive-container\"></div></div></div>";
-    document.getElementById('main-content').insertAdjacentHTML('beforeend', overlay);
-  };
-
-  Modal.prototype.updateOverlayContent = function (output) {
-    var el = document.getElementById(this.overlayContainerGuts);
-    el.innerHTML = output;
-  };
-
-  Modal.prototype.openOverlay = function (output) {
-    var _this = this;
-
-    var scrollPos = window.scrollY;
-    window.scroll(0, scrollPos);
-    var oel = document.getElementById(this.overlayContainerID);
-    var el = document.getElementById(this.overlayContainerGuts);
-    this.updateOverlayContent(output);
-    oel.style.height = "100%";
-    oel.style.display = "block";
-    document.body.classList.add('modal-open'); // Close modal when X btn is clicked
-
-    oel.getElementsByClassName('closebtn')[0].addEventListener('click', function (e) {
-      _this.closeOverlay(el, oel, scrollPos);
-
-      e.preventDefault();
-    }); // Close modal on ESC 
-
-    document.addEventListener('keydown', function (e) {
-      if (e.key === "Escape") {
-        _this.closeOverlay(el, oel, scrollPos);
-
-        e.preventDefault();
-      }
-    });
-    this.isOpen = true;
-  };
-
-  Modal.prototype.closeOverlay = function (el, oel, scrollPos) {
-    el.innerHTML = "";
-    oel.style.height = "0%";
-    oel.style.display = "none";
-    document.body.classList.remove('modal-open');
-    window.scroll(0, scrollPos);
-    this.isOpen = false;
-  };
-
-  return Modal;
-}();
-
 var Cookie =
 /** @class */
 function () {
@@ -1057,10 +1057,137 @@ function () {
   return Cookie;
 }();
 
+var itAlert =
+/** @class */
+function () {
+  function itAlert(modal, type) {
+    this.hasAlerts = {
+      'either': false,
+      'homepageAlert': false,
+      'purchasingAlert': false
+    };
+    this.modal = modal;
+    this.getAlerts();
+
+    if (type == 'purchasing') {
+      //purchasing page
+      this.baseEL = document.getElementById('main-content');
+      this.type = 'purchasing';
+    } else {
+      //hompage
+      this.baseEL = document.getElementById('homepageContent');
+      this.type = 'homepage';
+    }
+  }
+
+  itAlert.prototype.chooseColor = function (color) {
+    if (color == "Red") {
+      return ' itDanger ';
+    } else {
+      return ' itPrimary ';
+    }
+  };
+
+  itAlert.prototype.buildBox = function (alert) {
+    var alertBox = "<div class=\"contain-1440 itAlert " + this.chooseColor(alert.color) + " \">\n                    <div class=\"contain-1120\">\n                    <!-- <i class=\"fa fa-exclamation-triangle fa-2x\">&nbsp;</i> -->\n                    <h3>" + alert.title + "</h3>\n                    <p>" + alert.blurb + "</p>";
+
+    if (alert.modal != '') {
+      alertBox += "<p><a id=\"alertTrigger\" href=\"#\">Read more</a></p>";
+    }
+
+    alertBox += "</div>  \n                </div>";
+    console.log('inside:', alertBox);
+    return alertBox;
+  };
+
+  itAlert.prototype.buildModalGuts = function (alert) {
+    return "<div class=\"bootstrap-wrapper\"> \n                    <div class=\"container\">\n                        <div class=\"row\">\n                            <div class=\"col-12\">" + alert.modal + "</div>\n                        </div>\n                    </div>\n                </div>";
+  };
+
+  itAlert.prototype.addAlertBoxToPage = function () {
+    var _modalClass = this.modal;
+    var modalBox = '';
+
+    if (this.type == 'homepage') {
+      var alertBox = this.buildBox(this.alerts['homepageAlert']);
+
+      if (this.alerts['homepageAlert']['modal'] != '') {
+        modalBox = this.buildModalGuts(this.alerts['homepageAlert']);
+      }
+
+      this.baseEL.insertAdjacentHTML('afterbegin', alertBox);
+    } else {
+      console.log('Before: ', this.alerts['purchasingAlert']);
+      var alertBox = this.buildBox(this.alerts['purchasingAlert']);
+
+      if (this.alerts['purchasingAlert']['modal'] != '') {
+        modalBox = this.buildModalGuts(this.alerts['purchasingAlert']);
+      }
+
+      this.baseEL.querySelector('h1:first-of-type').insertAdjacentHTML('afterend', '<section>' + alertBox + '</section>');
+    }
+
+    if (modalBox != '') {
+      if (document.getElementById('alertTrigger')) {
+        this.trigger = document.getElementById('alertTrigger');
+        this.trigger.addEventListener('click', function (e) {
+          _modalClass.openOverlay(modalBox);
+
+          e.preventDefault();
+        });
+      }
+    }
+  };
+
+  itAlert.prototype.getAlerts = function () {
+    return __awaiter(this, void 0, void 0, function () {
+      var results;
+      return __generator(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            return [4
+            /*yield*/
+            , fetch('https://feinberg-dev.fsm.northwestern.edu/it-new/ws/json-api.php?type=alerts').then(function (response) {
+              return response.json();
+            }).then(function (results) {
+              return results;
+            })];
+
+          case 1:
+            results = _a.sent();
+
+            if (results['homepageAlert']) {
+              this.hasAlerts.either = this.hasAlerts.homepageAlert = true;
+            }
+
+            if (results['purchasingAlert']) {
+              this.hasAlerts.either = this.hasAlerts.purchasingAlert = true;
+            }
+
+            if (this.hasAlerts) {
+              this.alerts = results;
+
+              if (this.hasAlerts.either) {
+                this.addAlertBoxToPage();
+              }
+            }
+
+            return [2
+            /*return*/
+            ];
+        }
+      });
+    });
+  };
+
+  return itAlert;
+}();
+
 window.onload = function () {
   var shoppingCookie = new Cookie('fsmITPurchasing');
   var softwareCookie = new Cookie('fsmITPurchasingSoftware');
   var shoppingModal = new Modal();
   var shoppingCart = new Cart(shoppingModal, shoppingCookie, softwareCookie);
   var store = new Store('shopping-cart', shoppingCart, shoppingModal, shoppingCookie, softwareCookie);
+  var alert = new itAlert(shoppingModal, 'purchasing');
 };

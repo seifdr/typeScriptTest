@@ -962,6 +962,143 @@ class Cookie {
     }
 }
 
+interface alert {
+    title: string;
+    color: string;
+    blurb: string;
+    modal?: string;
+}
+
+class itAlert {
+    private baseEL: HTMLElement;
+    private type:string;
+    private modal: Modal;
+    private trigger:HTMLElement;    
+
+    private hasAlerts = {
+        'either'            : false,
+        'homepageAlert'     : false,
+        'purchasingAlert'   : false
+    };
+
+    private alerts: [];
+
+    constructor( modal, type ){
+        this.modal = modal;
+
+        this.getAlerts(); 
+
+        if( type == 'purchasing' ){
+            //purchasing page
+            this.baseEL = document.getElementById( 'main-content' );
+            this.type = 'purchasing';
+        } else {
+            //hompage
+            this.baseEL = document.getElementById( 'homepageContent' );
+            this.type = 'homepage';
+        }        
+    }
+
+    chooseColor( color ){
+        if( color == "Red"){
+            return ' itDanger ';
+        } else {
+            return ' itPrimary ';
+        }
+    }
+
+    buildBox( alert ){
+        let alertBox = `<div class="contain-1440 itAlert ${ this.chooseColor( alert.color ) } ">
+                    <div class="contain-1120">
+                    <!-- <i class="fa fa-exclamation-triangle fa-2x">&nbsp;</i> -->
+                    <h3>${alert.title}</h3>
+                    <p>${alert.blurb}</p>`;
+
+                    if( alert.modal != '' ){
+                        alertBox += `<p><a id="alertTrigger" href="#">Read more</a></p>`;
+                    }        
+            alertBox += `</div>  
+                </div>`;
+
+            console.log('inside:', alertBox );
+        return alertBox;
+    }
+
+    buildModalGuts( alert:alert ){
+
+        return `<div class="bootstrap-wrapper"> 
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">${alert.modal}</div>
+                        </div>
+                    </div>
+                </div>`;
+    }
+
+    addAlertBoxToPage (){
+        const _modalClass = this.modal;
+        let modalBox = '';
+
+        if( this.type == 'homepage' ){
+            const alertBox = this.buildBox( <alert>this.alerts['homepageAlert'] ); 
+
+            if( this.alerts['homepageAlert']['modal'] != '' ){
+                modalBox = this.buildModalGuts( <alert>this.alerts['homepageAlert'] );
+            }
+
+            this.baseEL.insertAdjacentHTML('afterbegin', alertBox ); 
+        } else {
+
+            console.log('Before: ', this.alerts['purchasingAlert']);
+
+            const alertBox = this.buildBox( <alert>this.alerts['purchasingAlert'] ); 
+
+            if( this.alerts['purchasingAlert']['modal'] != '' ){
+                modalBox = this.buildModalGuts( <alert>this.alerts['purchasingAlert'] );
+            }
+
+            this.baseEL.querySelector('h1:first-of-type').insertAdjacentHTML('afterend', '<section>' + alertBox + '</section>' ); 
+
+        }  
+
+        if( modalBox != '' ){
+            if( document.getElementById('alertTrigger') ){
+                this.trigger = document.getElementById('alertTrigger');
+    
+                this.trigger.addEventListener('click', function( e ){
+                    _modalClass.openOverlay( modalBox );
+                    e.preventDefault(); 
+                });
+            }
+        }
+
+    }
+
+    async getAlerts(){
+        const results = await fetch('https://feinberg-dev.fsm.northwestern.edu/it-new/ws/json-api.php?type=alerts').then(function(response) {
+            return response.json();
+        }).then( function( results ) {
+            return results;     
+        });
+
+        if( results['homepageAlert'] ){
+            this.hasAlerts.either = this.hasAlerts.homepageAlert = true;
+        }
+        
+        if( results['purchasingAlert'] ){
+            this.hasAlerts.either = this.hasAlerts.purchasingAlert = true;
+        }
+
+        if( this.hasAlerts ){
+            this.alerts = results;
+            if( this.hasAlerts.either ){
+                this.addAlertBoxToPage();
+            }
+        }        
+    } 
+    
+}
+
 window.onload=function() {
     const shoppingCookie = new Cookie( 'fsmITPurchasing' );
     const softwareCookie = new Cookie( 'fsmITPurchasingSoftware' );
@@ -972,4 +1109,7 @@ window.onload=function() {
 
     let store = new Store('shopping-cart', shoppingCart, shoppingModal, shoppingCookie, softwareCookie );
 
+    let alert = new itAlert( shoppingModal, 'purchasing' );
 };
+
+
