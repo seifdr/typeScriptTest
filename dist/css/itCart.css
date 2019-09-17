@@ -916,6 +916,38 @@ html {
     max-width: 100%;
     height: auto; }
 
+#main-content div.itAlert {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 1em;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box; }
+  #main-content div.itAlert h1, #main-content div.itAlert h2, #main-content div.itAlert h3, #main-content div.itAlert h4, #main-content div.itAlert h5, #main-content div.itAlert a {
+    text-transform: uppercase; }
+  #main-content div.itAlert h3 {
+    font-size: 34px;
+    font-weight: bold; }
+  #main-content div.itAlert a {
+    font-weight: bold; }
+  #main-content div.itAlert h1:before, #main-content div.itAlert h2:before, #main-content div.itAlert h3:before, #main-content div.itAlert h4:before, #main-content div.itAlert h5:before {
+    font-family: FontAwesome;
+    content: "\f071";
+    padding-right: .25em; }
+
+#main-content div.itDanger {
+  color: #950515 !important;
+  background-color: #f8d7da !important;
+  border-color: #f5c6cb !important; }
+  #main-content div.itDanger h1, #main-content div.itDanger h2, #main-content div.itDanger h3, #main-content div.itDanger h4, #main-content div.itDanger h5, #main-content div.itDanger a, #main-content div.itDanger p {
+    color: #950515 !important; }
+
+#main-content div.itPrimary {
+  color: #004085 !important;
+  background-color: #cce5ff !important;
+  border-color: #b8daff !important; }
+  #main-content div.itPrimary h1, #main-content div.itPrimary h2, #main-content div.itPrimary h3, #main-content div.itPrimary h4, #main-content div.itPrimary h5, #main-content div.itPrimary a, #main-content div.itPrimary p {
+    color: #004085 !important; }
+
 section#shopping-cart .fa {
   font-style: normal; }
 

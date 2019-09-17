@@ -1,13 +1,14 @@
 @import "bs-grid/bootstrap-grid.scss";
+@import "itAlert.scss";
 
 section#shopping-cart {
-    .fa {
+    .fa {  
         font-style: normal;
     }
-}
+} 
 
 div#spinnerContainer {
-    display: flex;
+    display: flex; 
     flex-direction: column;
     padding: .5em 0;
     justify-content: center;
@@ -39,8 +40,8 @@ $fsmOrange:            #df6426;
 $fsmOrangeHover:       #daa88f; 
 $fsmElectricBlue:      #0082bf;
 $fsmElectricBlueHover: #80c8ea;
-$featureBoxGrey:       #f0f0f0;
- 
+$featureBoxGrey:       #f0f0f0; 
+  
 #cart {
     display: block;
     // height: auto;
@@ -58,7 +59,7 @@ $featureBoxGrey:       #f0f0f0;
         align-items: center;
     }
 
-    div#cartLeft {
+    div#cartLeft { 
         flex: 1 1 0;
         display: flex;
         justify-content: flex-end;

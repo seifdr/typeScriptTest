@@ -5,7 +5,7 @@ class Modal {
     public isOpen = false;
 
     constructor(){
-        this.addOverlay();
+        this.addOverlay(); 
     }
 
     addOverlay() {

@@ -1,0 +1,53 @@
+$dangerColor:       #950515;
+$dangerBackground:  #f8d7da;
+$dangerBorder:      #f5c6cb;
+
+$primaryColor:      #004085;
+$primaryBackground: #cce5ff;
+$primaryBorder:     #b8daff;
+
+#main-content div.itAlert { 
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 1em;
+    box-sizing: border-box;
+
+    h1, h2, h3, h4, h5, a {
+        text-transform: uppercase;
+    }
+    
+    h3 {
+        font-size: 34px;
+        font-weight: bold;
+    }
+
+    a {
+        font-weight: bold;
+    }
+
+    h1:before, h2:before, h3:before, h4:before, h5:before {
+        font-family: FontAwesome; 
+        content:"\f071";
+        padding-right: .25em;
+    }
+}
+
+#main-content div.itDanger {
+    color: $dangerColor !important;
+    background-color:$dangerBackground !important;
+    border-color:$dangerBorder !important;
+    
+    h1, h2, h3, h4, h5, a, p { 
+        color: $dangerColor !important;
+    }
+} 
+
+#main-content div.itPrimary {
+    color: $primaryColor !important;
+    background-color: $primaryBackground !important;
+    border-color: $primaryBorder !important;   
+
+    h1, h2, h3, h4, h5, a, p {
+        color: $primaryColor !important;
+    }
+}
