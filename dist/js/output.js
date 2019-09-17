@@ -150,7 +150,7 @@ function () {
   }
 
   Modal.prototype.addOverlay = function () {
-    var overlay = "<div\xA0id=\"overlay\"><div\xA0id=\"overlay-content\"><a\xA0class=\"closebtn\"><i\xA0class=\"fa\xA0fa-times\">&nbsp;</i></a><div\xA0id=\"overlayGuts\"\xA0class=\"col1of1\xA0responsive-container\"></div></div></div>";
+    var overlay = "<div id='overlay'><div id='overlay-content'><a class='closebtn'><i class='fa fa-times'></i></a><div id='overlayGuts' class='col1of1 responsive-container'></div></div></div>";
     document.getElementById('main-content').insertAdjacentHTML('beforeend', overlay);
   };
 
@@ -169,13 +169,13 @@ function () {
     this.updateOverlayContent(output);
     oel.style.height = "100%";
     oel.style.display = "block";
-    document.body.classList.add('modal-open'); // Close modal when X btn is clicked
+    document.body.classList.add('modal-open'); // Close modal when X btn is clicked
 
     oel.getElementsByClassName('closebtn')[0].addEventListener('click', function (e) {
       _this.closeOverlay(el, oel, scrollPos);
 
       e.preventDefault();
-    }); // Close modal on ESC 
+    }); // Close modal on ESC 
 
     document.addEventListener('keydown', function (e) {
       if (e.key === "Escape") {
