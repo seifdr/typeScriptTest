@@ -243,7 +243,7 @@ function () {
   };
 
   itAlert.prototype.buildModalGuts = function (alert) {
-    return "<div class=\"bootstrap-wrapper\"> \n                    <div class=\"container\">\n                        <div class=\"row\">\n                            <div class=\"col-12\">" + alert.modal + "</div>\n                        </div>\n                    </div>\n                </div>";
+    return "<div class=\"bootstrap-wrapper\"> \n                    <div class=\"container\">\n                        <div class=\"row alertRow\">\n                            <div class=\"col-12\">" + alert.modal + "</div>\n                        </div>\n                    </div>\n                </div>";
   };
 
   itAlert.prototype.addAlertBoxToPage = function () {
