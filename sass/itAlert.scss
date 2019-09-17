@@ -6,15 +6,21 @@ $primaryColor:      #004085;
 $primaryBackground: #cce5ff;
 $primaryBorder:     #b8daff;
 
-div.itAlert { 
+#main-content div.itAlert { 
     margin-top: 0;
     margin-bottom: 0;
     padding: 1em;
+    box-sizing: border-box;
 
     h1, h2, h3, h4, h5, a {
         text-transform: uppercase;
     }
     
+    h3 {
+        font-size: 34px;
+        font-weight: bold;
+    }
+
     a {
         font-weight: bold;
     }
@@ -26,23 +32,22 @@ div.itAlert {
     }
 }
 
-div.itDanger {
-    color: $dangerColor;
-    background-color:$dangerBackground;
-    border-color:$dangerBorder;
-
-    h1, h2, h3, h4, h5, a {
-        color: $dangerColor;
+#main-content div.itDanger {
+    color: $dangerColor !important;
+    background-color:$dangerBackground !important;
+    border-color:$dangerBorder !important;
+    
+    h1, h2, h3, h4, h5, a, p { 
+        color: $dangerColor !important;
     }
 } 
 
-div.itPrimary {
-    color: $primaryColor;
-    background-color: $primaryBackground;
-    border-color: $primaryBorder;   
+#main-content div.itPrimary {
+    color: $primaryColor !important;
+    background-color: $primaryBackground !important;
+    border-color: $primaryBorder !important;   
 
-    h1, h2, h3, h4, h5, a {
-        color: $primaryColor;
+    h1, h2, h3, h4, h5, a, p {
+        color: $primaryColor !important;
     }
 }
-

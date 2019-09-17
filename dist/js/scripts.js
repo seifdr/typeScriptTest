@@ -50,7 +50,7 @@ class Modal {
 
         this.isOpen = true;
 
-    }
+    } 
 
     closeOverlay(el, oel, scrollPos){
         el.innerHTML = "";
