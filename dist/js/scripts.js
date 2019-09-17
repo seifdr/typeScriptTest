@@ -115,11 +115,14 @@ class itAlert {
     }
 
     buildBox( alert ){
+
+        console.log( alert );
+
         let alertBox = `<div class="contain-1440 itAlert ${ this.chooseColor( alert.color ) } ">
                     <div class="contain-1120">
                     <!-- <i class="fa fa-exclamation-triangle fa-2x">&nbsp;</i> -->
                     <h3>${alert.title}</h3>
-                    <p>${alert.blurb[0]}</p>
+                    <p>${alert.desc}</p>
                     <p><a id="alertTrigger" href="#">Read more</a></p>
                     </div>  
                 </div>`;

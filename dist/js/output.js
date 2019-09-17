@@ -238,7 +238,8 @@ function () {
   };
 
   itAlert.prototype.buildBox = function (alert) {
-    var alertBox = "<div class=\"contain-1440 itAlert " + this.chooseColor(alert.color) + " \">\n                    <div class=\"contain-1120\">\n                    <!-- <i class=\"fa fa-exclamation-triangle fa-2x\">&nbsp;</i> -->\n                    <h3>" + alert.title + "</h3>\n                    <p>" + alert.blurb[0] + "</p>\n                    <p><a id=\"alertTrigger\" href=\"#\">Read more</a></p>\n                    </div>  \n                </div>";
+    console.log(alert);
+    var alertBox = "<div class=\"contain-1440 itAlert " + this.chooseColor(alert.color) + " \">\n                    <div class=\"contain-1120\">\n                    <!-- <i class=\"fa fa-exclamation-triangle fa-2x\">&nbsp;</i> -->\n                    <h3>" + alert.title + "</h3>\n                    <p>" + alert.desc + "</p>\n                    <p><a id=\"alertTrigger\" href=\"#\">Read more</a></p>\n                    </div>  \n                </div>";
     return alertBox;
   };
 
