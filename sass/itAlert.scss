@@ -6,6 +6,10 @@ $primaryColor:      #004085;
 $primaryBackground: #cce5ff;
 $primaryBorder:     #b8daff;
 
+div.alertRow {
+    margin: 1em 0 !important;
+}
+
 #main-content div.itAlert { 
     margin-top: 0;
     margin-bottom: 0;
@@ -13,7 +17,7 @@ $primaryBorder:     #b8daff;
     box-sizing: border-box;
 
     h1, h2, h3, h4, h5, a {
-        text-transform: uppercase;
+        text-transform: uppercase; 
     }
     
     h3 {

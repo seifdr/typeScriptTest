@@ -1028,7 +1028,7 @@ class itAlert {
 
         return `<div class="bootstrap-wrapper"> 
                     <div class="container">
-                        <div class="row">
+                        <div class="row alertRow">
                             <div class="col-12">${alert.modal}</div>
                         </div>
                     </div>

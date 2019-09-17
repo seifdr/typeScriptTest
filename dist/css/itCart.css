@@ -916,6 +916,9 @@ html {
     max-width: 100%;
     height: auto; }
 
+div.alertRow {
+  margin: 1em 0 !important; }
+
 #main-content div.itAlert {
   margin-top: 0;
   margin-bottom: 0;
