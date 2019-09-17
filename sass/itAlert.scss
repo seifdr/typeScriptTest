@@ -6,6 +6,7 @@ $primaryColor:      #004085;
 $primaryBackground: #cce5ff;
 $primaryBorder:     #b8daff;
 
+#homepageContent div.itAlert,
 #main-content div.itAlert { 
     margin-top: 0;
     margin-bottom: 0;
@@ -32,6 +33,7 @@ $primaryBorder:     #b8daff;
     }
 }
 
+#homepageContent div.itDanger,
 #main-content div.itDanger {
     color: $dangerColor !important;
     background-color:$dangerBackground !important;
@@ -42,6 +44,7 @@ $primaryBorder:     #b8daff;
     }
 } 
 
+#homepageContent div.itPrimary,
 #main-content div.itPrimary {
     color: $primaryColor !important;
     background-color: $primaryBackground !important;

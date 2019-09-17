@@ -202,7 +202,7 @@ function () {
 var itAlert =
 /** @class */
 function () {
-  function itAlert(modal) {
+  function itAlert(modal, type) {
     this.hasAlerts = {
       'either': false,
       'homepageAlert': false,
@@ -211,7 +211,7 @@ function () {
     this.modal = modal;
     this.getAlerts();
 
-    if (!document.getElementById('homepageContent')) {
+    if (type == 'purchasing') {
       //purchasing page
       this.baseEL = document.getElementById('main-content');
       this.type = 'purchasing';
@@ -234,10 +234,11 @@ function () {
     var alertBox = "<div class=\"contain-1440 itAlert " + this.chooseColor(alert.color) + " \">\n                    <div class=\"contain-1120\">\n                    <!-- <i class=\"fa fa-exclamation-triangle fa-2x\">&nbsp;</i> -->\n                    <h3>" + alert.title + "</h3>\n                    <p>" + alert.blurb + "</p>";
 
     if (alert.modal != '') {
-      alertBox = "<p><a id=\"alertTrigger\" href=\"#\">Read more</a></p>";
+      alertBox += "<p><a id=\"alertTrigger\" href=\"#\">Read more</a></p>";
     }
 
-    alertBox = "</div>  \n                </div>";
+    alertBox += "</div>  \n                </div>";
+    console.log('inside:', alertBox);
     return alertBox;
   };
 
@@ -249,21 +250,24 @@ function () {
     var _modalClass = this.modal;
     var modalBox = '';
 
-    if (this.type = 'homepage') {
+    if (this.type == 'homepage') {
       var alertBox = this.buildBox(this.alerts['homepageAlert']);
 
       if (this.alerts['homepageAlert']['modal'] != '') {
         modalBox = this.buildModalGuts(this.alerts['homepageAlert']);
       }
+
+      this.baseEL.insertAdjacentHTML('afterbegin', alertBox);
     } else {
+      console.log('Before: ', this.alerts['purchasingAlert']);
       var alertBox = this.buildBox(this.alerts['purchasingAlert']);
 
       if (this.alerts['purchasingAlert']['modal'] != '') {
-        modalBox = this.buildBox(this.alerts['purchasingAlert']);
+        modalBox = this.buildModalGuts(this.alerts['purchasingAlert']);
       }
-    }
 
-    this.baseEL.insertAdjacentHTML('afterbegin', alertBox);
+      this.baseEL.querySelector('h1:first-of-type').insertAdjacentHTML('afterend', '<section>' + alertBox + '</section>');
+    }
 
     if (modalBox != '') {
       if (document.getElementById('alertTrigger')) {
@@ -323,5 +327,5 @@ function () {
 
 window.onload = function () {
   var modal = new Modal();
-  var alert = new itAlert(modal);
+  var alert = new itAlert(modal, 'homepage');
 };

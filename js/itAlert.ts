@@ -84,12 +84,12 @@ class itAlert {
 
     private alerts: [];
 
-    constructor( modal ){
+    constructor( modal, type ){
         this.modal = modal;
 
         this.getAlerts(); 
 
-        if( !document.getElementById('homepageContent') ){
+        if( type == 'purchasing' ){
             //purchasing page
             this.baseEL = document.getElementById( 'main-content' );
             this.type = 'purchasing';
@@ -116,10 +116,12 @@ class itAlert {
                     <p>${alert.blurb}</p>`;
 
                     if( alert.modal != '' ){
-                        alertBox = `<p><a id="alertTrigger" href="#">Read more</a></p>`;
+                        alertBox += `<p><a id="alertTrigger" href="#">Read more</a></p>`;
                     }        
-            alertBox = `</div>  
+            alertBox += `</div>  
                 </div>`;
+
+            console.log('inside:', alertBox );
         return alertBox;
     }
 
@@ -138,21 +140,27 @@ class itAlert {
         const _modalClass = this.modal;
         let modalBox = '';
 
-        if( this.type = 'homepage' ){
+        if( this.type == 'homepage' ){
             const alertBox = this.buildBox( <alert>this.alerts['homepageAlert'] ); 
 
             if( this.alerts['homepageAlert']['modal'] != '' ){
                 modalBox = this.buildModalGuts( <alert>this.alerts['homepageAlert'] );
             }
+
+            this.baseEL.insertAdjacentHTML('afterbegin', alertBox ); 
         } else {
+
+            console.log('Before: ', this.alerts['purchasingAlert']);
+
             const alertBox = this.buildBox( <alert>this.alerts['purchasingAlert'] ); 
 
             if( this.alerts['purchasingAlert']['modal'] != '' ){
-                modalBox = this.buildBox( <alert>this.alerts['purchasingAlert'] );
+                modalBox = this.buildModalGuts( <alert>this.alerts['purchasingAlert'] );
             }
-        }  
 
-        this.baseEL.insertAdjacentHTML('afterbegin', alertBox ); 
+            this.baseEL.querySelector('h1:first-of-type').insertAdjacentHTML('afterend', '<section>' + alertBox + '</section>' ); 
+
+        }  
 
         if( modalBox != '' ){
             if( document.getElementById('alertTrigger') ){
@@ -195,7 +203,7 @@ class itAlert {
 window.onload=function() {
 
     let modal = new Modal();
-    let alert = new itAlert( modal ); 
+    let alert = new itAlert( modal, 'homepage' ); 
 
 };
 
