@@ -1082,15 +1082,22 @@ class itAlert {
         });
 
         if( results['homepageAlert'] ){
-            this.hasAlerts.either = this.hasAlerts.homepageAlert = true;
+            //homepage alert is set, but check that were on the homepage page
+            if( this.type == 'homepage' ){
+                this.hasAlerts.either = this.hasAlerts.homepageAlert = true;
+            }
         }
         
         if( results['purchasingAlert'] ){
-            this.hasAlerts.either = this.hasAlerts.purchasingAlert = true;
+            //purchasing alert is set, but check that were on the purchasing page
+            if( this.type == 'purchasing' ){
+                this.hasAlerts.either = this.hasAlerts.purchasingAlert = true;
+            }
         }
 
         if( this.hasAlerts ){
             this.alerts = results;
+
             if( this.hasAlerts.either ){
                 this.addAlertBoxToPage();
             }
