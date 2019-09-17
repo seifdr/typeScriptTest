@@ -1091,7 +1091,7 @@ function () {
   itAlert.prototype.buildBox = function (alert) {
     var alertBox = "<div class=\"contain-1440 itAlert " + this.chooseColor(alert.color) + " \">\n                    <div class=\"contain-1120\">\n                    <!-- <i class=\"fa fa-exclamation-triangle fa-2x\">&nbsp;</i> -->\n                    <h3>" + alert.title + "</h3>\n                    <p>" + alert.blurb + "</p>";
 
-    if (alert.modal != '') {
+    if (typeof alert.modal !== 'undefined') {
       alertBox += "<p><a id=\"alertTrigger\" href=\"#\">Read more</a></p>";
     }
 

@@ -1014,7 +1014,7 @@ class itAlert {
                     <h3>${alert.title}</h3>
                     <p>${alert.blurb}</p>`;
 
-                    if( alert.modal != '' ){
+                    if( typeof alert.modal !== 'undefined' ){
                         alertBox += `<p><a id="alertTrigger" href="#">Read more</a></p>`;
                     }        
             alertBox += `</div>  
