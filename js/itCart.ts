@@ -1,3 +1,67 @@
+class Modal {
+    public overlayContainerID   = 'overlay';
+    public overlayContainerGuts = 'overlayGuts'; 
+
+    public isOpen = false;
+
+    constructor(){
+        this.addOverlay();
+    }
+
+    addOverlay() {
+        let overlay = `<div id='overlay'><div id='overlay-content'><a class='closebtn'><i class='fa fa-times'></i></a><div id='overlayGuts' class='col1of1 responsive-container'></div></div></div>`;
+        
+        document.getElementById('main-content').insertAdjacentHTML('beforeend', overlay);
+    }
+
+    updateOverlayContent( output ){
+        let el = document.getElementById( this.overlayContainerGuts );
+        el.innerHTML = output;
+    }
+
+    openOverlay( output ){
+
+        const scrollPos = window.scrollY;
+        window.scroll(0, scrollPos);
+
+        let oel = document.getElementById( this.overlayContainerID );
+        let el = document.getElementById( this.overlayContainerGuts );
+
+        this.updateOverlayContent( output );
+
+        oel.style.height = "100%";
+        oel.style.display = "block";
+
+        document.body.classList.add('modal-open');
+
+        // Close modal when X btn is clicked
+        oel.getElementsByClassName('closebtn')[0].addEventListener('click', (e) => {
+            this.closeOverlay(el, oel, scrollPos);
+            e.preventDefault();
+        });
+
+        // Close modal on ESC 
+        document.addEventListener('keydown', (e) => {
+            if(e.key === "Escape") {
+                this.closeOverlay(el, oel, scrollPos);
+                e.preventDefault();
+            }
+        });
+
+        this.isOpen = true;
+
+    }
+
+    closeOverlay(el, oel, scrollPos){
+        el.innerHTML = "";
+        oel.style.height = "0%";
+        oel.style.display = "none";
+        document.body.classList.remove('modal-open');
+        window.scroll(0, scrollPos);
+        this.isOpen = false;
+    }
+
+}
 
 function removeSpecialChars( inputVal ){
     //allow periods
@@ -867,71 +931,6 @@ class Store {
     numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
-}
-
-class Modal {
-    public overlayContainerID   = 'overlay';
-    public overlayContainerGuts = 'overlayGuts'; 
-
-    public isOpen = false;
-
-    constructor(){
-        this.addOverlay();
-    }
-
-    addOverlay() {
-        let overlay = `<div id='overlay'><div id='overlay-content'><a class='closebtn'><i class='fa fa-times'></i></a><div id='overlayGuts' class='col1of1 responsive-container'></div></div></div>`;
-        
-        document.getElementById('main-content').insertAdjacentHTML('beforeend', overlay);
-    }
-
-    updateOverlayContent( output ){
-        let el = document.getElementById( this.overlayContainerGuts );
-        el.innerHTML = output;
-    }
-
-    openOverlay( output ){
-
-        const scrollPos = window.scrollY;
-        window.scroll(0, scrollPos);
-
-        let oel = document.getElementById( this.overlayContainerID );
-        let el = document.getElementById( this.overlayContainerGuts );
-
-        this.updateOverlayContent( output );
-
-        oel.style.height = "100%";
-        oel.style.display = "block";
-
-        document.body.classList.add('modal-open');
-
-        // Close modal when X btn is clicked
-        oel.getElementsByClassName('closebtn')[0].addEventListener('click', (e) => {
-            this.closeOverlay(el, oel, scrollPos);
-            e.preventDefault();
-        });
-
-        // Close modal on ESC 
-        document.addEventListener('keydown', (e) => {
-            if(e.key === "Escape") {
-                this.closeOverlay(el, oel, scrollPos);
-                e.preventDefault();
-            }
-        });
-
-        this.isOpen = true;
-
-    }
-
-    closeOverlay(el, oel, scrollPos){
-        el.innerHTML = "";
-        oel.style.height = "0%";
-        oel.style.display = "none";
-        document.body.classList.remove('modal-open');
-        window.scroll(0, scrollPos);
-        this.isOpen = false;
-    }
-
 }
 
 class Cookie {
