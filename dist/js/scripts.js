@@ -113,15 +113,25 @@ class itAlert {
                     <div class="contain-1120">
                     <!-- <i class="fa fa-exclamation-triangle fa-2x">&nbsp;</i> -->
                     <h3>${alert.title}</h3>
-                    <p>${alert.blurb}</p>
-                    <p><a id="alertTrigger" href="#">Read more</a></p>
-                    </div>  
+                    <p>${alert.blurb}</p>`;
+
+                    if( alert.modal != '' ){
+                        alertBox = `<p><a id="alertTrigger" href="#">Read more</a></p>`;
+                    }        
+            alertBox = `</div>  
                 </div>`;
         return alertBox;
     }
 
     buildModalGuts( alert:alert ){
-        return `<div class='overlayGuts'>${alert.modal}</div>`;
+
+        return `<div class="bootstrap-wrapper"> 
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">${alert.modal}</div>
+                        </div>
+                    </div>
+                </div>`;
     }
 
     addAlertBoxToPage (){

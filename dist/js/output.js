@@ -231,12 +231,18 @@ function () {
   };
 
   itAlert.prototype.buildBox = function (alert) {
-    var alertBox = "<div class=\"contain-1440 itAlert " + this.chooseColor(alert.color) + " \">\n                    <div class=\"contain-1120\">\n                    <!-- <i class=\"fa fa-exclamation-triangle fa-2x\">&nbsp;</i> -->\n                    <h3>" + alert.title + "</h3>\n                    <p>" + alert.blurb + "</p>\n                    <p><a id=\"alertTrigger\" href=\"#\">Read more</a></p>\n                    </div>  \n                </div>";
+    var alertBox = "<div class=\"contain-1440 itAlert " + this.chooseColor(alert.color) + " \">\n                    <div class=\"contain-1120\">\n                    <!-- <i class=\"fa fa-exclamation-triangle fa-2x\">&nbsp;</i> -->\n                    <h3>" + alert.title + "</h3>\n                    <p>" + alert.blurb + "</p>";
+
+    if (alert.modal != '') {
+      alertBox = "<p><a id=\"alertTrigger\" href=\"#\">Read more</a></p>";
+    }
+
+    alertBox = "</div>  \n                </div>";
     return alertBox;
   };
 
   itAlert.prototype.buildModalGuts = function (alert) {
-    return "<div class='overlayGuts'>" + alert.modal + "</div>";
+    return "<div class=\"bootstrap-wrapper\"> \n                    <div class=\"container\">\n                        <div class=\"row\">\n                            <div class=\"col-12\">" + alert.modal + "</div>\n                        </div>\n                    </div>\n                </div>";
   };
 
   itAlert.prototype.addAlertBoxToPage = function () {
