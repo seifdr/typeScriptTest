@@ -1,94 +1,123 @@
-<html>
-<!-- <link rel="stylesheet" type="text/css" href="dist/css/flex-icons.min.css"> -->
-<link rel="stylesheet" type="text/css" href="dist/css/link-boxes.css">
-<body>
-  <div class="headingWrapper container">
-    <div>
-        <div>
-            
-            <a alt="Feinberg Homepage" href="https://www.feinberg.northwestern.edu" ><span>Feinberg School of Medicine</span><div id="NMLogoNew"></div></a>
-        </div>
-        <div>
-          <!-- Silence is golden -->
-          <div class="otherLinks"><a data-ga-region="banner-link-NM" href="http://www.nm.org">Northwestern Medicine</a> | <a data-ga-region="banner-link-NU" href="http://www.northwestern.edu" >Northwestern University</a></div>
-          <div class="fsmLinks"><a class="upper" data-ga-region="banner-link-NewsCenter" href="https://news.feinberg.northwestern.edu" >News Center</a> | <a class="upper" data-ga-region="banner-link-Faculty" href="http://www.feinberg.northwestern.edu/faculty-profiles/index.html" >Faculty Profiles</a></div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="container">
-    <section id="mainBox"></section>
-  </div>
-</body>
-<!-- <script type="text/javascript" src="js/output.js" ></script> -->
-<!-- <script type="text/javascript" src="dist/js/output.js" ></script> -->
-<script type="text/javascript">
-
-const imgDir = 'assets/icons/';
-
-const boxes = [
-  {
-    title: 'Nearpod',
-    image: 'nearpod.png',
-    link: 'https://nearpod.com/login/'
-  },
-  {
-    title: 'eMerge',
-    image: '#',
-    icon: '<i class="far fa-calendar-alt"></i>',
-    link: 'https://ads-fed.northwestern.edu/adfs/ls/?wtrealm=https%3a%2f%2feMerg.fsm.northwestern.edu&wctx=WsFedOwinState%3dAyxRTRcnTF93PJSMAcU2eFMjtC726GNwGxVE_j5jaZVWx5Kj7fKGTyGn3pGMIyS6tmrbhBuJQd-Y-nNtBwBcKsQZg5lRFLwWKoPjtPl37RbE-nN0yUR6I60IHsScMH_1c38uU0JzpgzkPm1TVr7YgA&wa=wsignin1.0&wreply=https%3a%2f%2femerg.fsm.northwestern.edu%2f'
-  },
-  {
-    title: 'NMH Web Paging',
-    image: '#',
-    icon: '<i class="fas fa-pager"></i>',
-    link: 'https://nmpaging.nm.org/cgi-bin/cgiip.exe/WService=webmessaging/webmessaging.html'
-  },
-  {
-    title: 'Path Presenter',
-    image: 'path-presenter.png',
-    link: 'https://www.pathpresenter.net/'
-  },
-  {
-    title: 'Google',
-    image: 'Google.png',
-    link: 'https://www.google.com'
-  },
-  {
-    title: 'NMH Access',
-    image: 'nm.png',
-    link: 'https://access.nmh.org'
-  },
-
-];
-
-window.addEventListener('load', () => {
+<html> 
+  <!doctype html>
+   <!--Style for eblast begins-->
+  <style type="text/css">
   
-  const mainBox = document.getElementById('mainBox');
-
-  for (let i = 0; i < boxes.length; i++) {
-    const row = boxes[i];
-
-    let box = document.createElement('article');
-
-    let boxCode = `<a href="${ row.link }"><div class="box">`;
-    
-      if( row.icon ){
-      boxCode += row.icon;
-    } else {
-      boxCode += `<img src="${ imgDir + row.image }" alt="${ row.title + '-logo' }" />`;
-    }
-
-    boxCode += `</div><p>${ row.title }</p></a>`;
-
-    box.innerHTML = boxCode;
-
-    mainBox.appendChild(box);
+  /* grey behind whole table */
+  body{
+    margin:0;
+    padding:0;
+    background-color: #ffffff;} 
+  
+  /* unvisited link */
+  a:link {
+    text-decoration: underline;
+       color: #514689;
   }
-
+  
+  /* visited link */
+  a:visited {
+       text-decoration:none;
+     color: #514689;
+  }
+  
+  /* footer */
+  #purple-bkgd {
+    background-color: #DFDAE8;
+  }
   
   
-});
+  /* headline on whole page */
+  p.headline {
+    font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif ;
+    font-size: 28px;
+    color: #514689;
+    margin: 20px 10px 0 0;
+    padding: 0;
+  }
+  
+  /* sub heading */
+  p.subhead {
+    font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif ;
+    font-size: 22px;
+    color: #748283;
+    font-weight: lighter;
+  }
+  
+  /* text on whole page */
+  p.text {
+    font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif ;
+    font-size: 16px;
+    color: #54585A;
+      margin: 0;
+      padding: 0;
+  }
+  /* names under signature, bold the name */
+  p.nametext {
+    font-family: "Calibri";
+    font-size: 14px;
+    color: #a9abac;
+      margin: 0;
+      padding: 0;
+  }
+  </style>
+  </head>
+  <!--Styles end-->
+  
+  <!--Body Begins-->
+  <body style="margin: 0;padding: 0;background-color: #ffffff;">
+  <table bgcolor="#FFFFFF" cellpadding="0" cellspacing="0" width="600" border="0">
+    <tbody>
+  <tr cellpadding="10">
+    <td width="21">&nbsp;</td>
+   <td width="488"><p class="headline" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 28px;color: #514689;margin: 20px 10px 0 0;padding: 0;">Information Sessions<br>HHMI Investigator Program and Hanna H. Gray Fellows Program</p>
+     <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0;">&nbsp;</p>
+     <p class="subhead" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 22px;color: #748283;font-weight: lighter;margin: 0;padding: 0;">Join Us</p>
+     <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0;">&nbsp;</p>
+     <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0;"><strong>Wednesday, December 13, 2019</strong></p>
+     <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0;">&nbsp;</p>
 
-</script>
+     <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0; text-decoration: underline;"><u><strong>Chicago Campus</strong></u></p>
+     <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0;">10:00 am - Hanna H. Gray Fellows</p>
+     <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0;">11:00 am - HHMI Investigators</p>
+     <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0;">Simpson Querrey Biomedical Research Center</p>
+     <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0;">Simpson-Querrey Auditorium</p>
+     <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0;">303 E. Superior St.</p>
+     <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0;">Chicago, Illinois</p>
+     <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0;">&nbsp;</p>
+
+     <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0; text-decoration: underline;"><u><strong>Evanston Campus</strong></u></p>
+     <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0;">2:00 pm - Hanna H. Gray Fellows</p>
+     <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0;">3:00 pm - HHMI Investigators</p>
+     <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0;">Norris Student Center</p>
+     <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0;">Room 202A</p>
+     <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0;">1999 Campus Dr</p>
+     <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0;">Evanston, IL</p>
+     <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0;">&nbsp;</p> 
+
+     <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0;">Join <strong>Dennis McKearin, PhD</strong>, Senior Scientific Office from the Howard Hughes Medical Institute (HHMI) to learn more about the HHMI Investigator Program and the Hanna H. Gray Fellows Program.</p>
+     <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0;">&nbsp;</p>
+     <p class="subhead" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 22px;color: #748283;font-weight: lighter;margin: 0;padding: 0;"><strong><a href="http://feinberg.alumni.northwestern.edu/s/1479/06-fsm/event-wide2.aspx?sid=1479&gid=6&pgid=33346&content_id=41539">Click here to RSVP for Sessions</a></strong></p>
+
+     <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0;">&nbsp;</p>
+     <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0;">This event is sponsored by Northwestern University Office of Foundation Relations and the Feinberg School of Medicine Office of Foundation Relations.</p>
+     <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0;">&nbsp;</p>
+     <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0;">For more information, contact <a href="mailto:FSMFoundations@northwestern.edu"><strong>FSMFoundations@northwestern.edu</strong></a> / 312-503-4622 (Chicago) or <a href="mailto:foundationrelations@northwestern.edu"><strong>foundationrelations@northwestern.edu</strong></a> / 847-491-4590 (Evanston).</p>
+
+     <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0;">&nbsp;</p>
+     <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0;">&nbsp;</p></td>
+     <td width="200" valign="top" align="right"><img src="http://www.feinberg.northwestern.edu/misc/images/right-gradient.png" width="200" height="382" alt=""></td>
+  </tr>
+  </tbody></table>
+  <table bgcolor="#FFFFFF" width="600" border="0">
+    <tbody><tr>
+      <td width="1">&nbsp;</td>
+      <td width="273" valign="top"><img src="http://www.feinberg.northwestern.edu/misc/images/NM-Feinberg.png" alt="Northwestern University Feinberg School of Medicine"></td>
+      <td width="274" valign="top"><p class="nametext" style="font-family: &quot;Calibri&quot;;font-size: 14px;color: #a9abac;margin: 0;padding: 0;">&nbsp;</p>      <p class="text" style="font-family: Calibri,Trebuchet,'Helvetica Neue',Arial,sans-serif;font-size: 16px;color: #54585A;margin: 0;padding: 0;">&nbsp;</p>
+  </td>
+      <td width="18">&nbsp;</td>
+    </tr>
+  
+  </tbody></table>
+  </body>
 </html>
