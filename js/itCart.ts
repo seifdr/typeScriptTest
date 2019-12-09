@@ -76,12 +76,13 @@ interface product {
     element: string;
     renewElement: string;
     type: string;
-    categories;
     price: number;
     image: string;
     desc: string;
     onCart: boolean;
     renew: boolean;
+
+    software: boolean;
 
     catStr: string
 }
@@ -92,12 +93,13 @@ class Item implements product {
     element;
     renewElement;
     type;
-    categories;
     price;
     image:string;
     desc;
     onCart;
     renew: boolean;
+
+    software:boolean;
 
     catStr: string;
 
@@ -107,7 +109,7 @@ class Item implements product {
         this.element = item.element;
         this.renewElement = item.renewElement;
         this.type = item.type;
-        this.categories = item.categories;
+        this.software = false;
 
         let tempPrice = removeSpecialChars( item.price );
 
@@ -123,15 +125,6 @@ class Item implements product {
         this.onCart = ( item.onCart )? true : false; 
         
         this.renew = ( item.renew )? true : false;
-
-        //output categories as a string
-        if( this.categories ){
-            try {
-                this.catStr = this.categories.value.join(' ');
-            } catch (error) {
-                this.catStr = this.categories.value;
-            }
-        }
     }
 
     outputOverlay( num = null ){
@@ -622,255 +615,95 @@ class Store {
         this.softwareCookie = softwareCookie;
         this.cart = cart;
         this.containerEL = document.getElementById( containerID );
-        this.stockTheShelves();
+        // this.stockTheShelves();
+        this.wireUpAddToCartClicks();
     }
 
-    loadProducts() {
-        const existingItemsInCookie = <number[]> this.cookie.getJSONfromCookieAsArray();
-        const softwareRenewIds = this.softwareCookie.getJSONfromCookieAsArray();
+    wireUpAddToCartClicks(){
+        //add event listener to all product item feature boxes
+        for( let el of document.getElementsByClassName('prodBox') ){
+            el.addEventListener('click',(e) => {
+                    e.preventDefault();
+                    let num = el.getAttribute('data-num');
 
-        //place a spinner while it's loading products in the fetch
-        const spinnerHTML = `
-            <div id="spinnerContainer">
-                <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
-                <p>Loading products...</p>
-                <span class="sr-only">Loading...</span>
-            </div>
-        `;
+                    let output = this.items[num].outputOverlay(num);
 
-        this.containerEL.insertAdjacentHTML('beforeend', spinnerHTML);
+                    this.modal.openOverlay( output );
 
-        return fetch( this.apiURL ).then( (response) => {
-            //hide the spinner 
-            const spinner = document.getElementById('spinnerContainer');
-            spinner.style.display = 'none';
-            //if you dont do another then, code executes before promise returns
-            return response.json();
-        }).then( (myJson) => {
-        
-            let result = myJson.items;
+                    let atcModalBtn = document.getElementById('atcModalBtn');
 
-            if(result.length > 0){
-                // this.items = myJson.items;
+                    if( atcModalBtn != null ){
+                        atcModalBtn.addEventListener('click', async (e) => {      
+                            
+                            //Change the modal atc button 
+                            await this.addToCartToggle(num, atcModalBtn);
 
-                myJson.items.forEach( (row:product, i) => {
-
-                    if( existingItemsInCookie.length > 0 ){
-                        if( existingItemsInCookie.includes( row.id ) ){
-                            row.onCart = true;
-
-                            if( softwareRenewIds.includes( row.id ) ){
-                                row.renew = true;
+                            //check if item is software, if so toggle the select disable attribute 
+                            //depending on if its on the cart or not
+                            if( this.items[num].catStr.includes('software') ){    
+                                // this.cart.toggleSoftwareSelects( this.items[num].id );
+                                this.cart.toggleSoftwareSelects( this.items[num]['id'] );          
                             }
 
-                            this.cart.addOrRemoveFromCart( new Item( row ) );
-                        } else {
-                            row.onCart = false;
-                        }
-                    }
-                    this.items[i] = new Item( row );
-                });
+                            //the cart toggle above only applies the modal add to cart button so...
+                            //once it's been added to cart and the modal cart button has been toggled
+                            //map the cart
+                            this.cart.mapCart();
 
-                return true;
-            } else {
-                return false;
-            }
-        });
-    }
-
-   async stockTheShelves(){
-
-        let result = await this.loadProducts();
-
-        if( result ){
-
-            let shelves = `<div class="bootstrap-wrapper">
-                            <div class="container-fluid">
-                                <section id="filterChecks">
-                                    <form class="row">
-                                        <div class="col-6">
-                                                <label>Filter by Category:</label>
-                                                <select id="filterCat" class="filterOptions">
-                                                    <option value="all">Show All</option>
-                                                    <option value="bundles">Bundles</option>
-                                                    <option value="desktops">Desktops</option>
-                                                    <option value="laptops">Laptops</option>
-                                                    <option value="monitors">Monitors</option>
-                                                    <option value="ipads">iPads</option>
-                                                    <option value="tablets">Tablets</option>
-                                                    <option value="printers">Printers</option>
-                                                    <option value="software">Software</option>
-                                                    <option value="accessories">Peripheral Accessories</option>
-                                                </select>
-                                        </div>
-                                        <div class="col-6">
-                                            <label>Filter by OS:</label>
-                                            <select id="filterOS" class="filterOptions">
-                                                <option value="all">Show All</option>
-                                                <option value="apple">Apple</option>
-                                                <option value="pc">PC</option>
-                                            </select>
-                                        </div>   
-                                    </form>
-                                </section>
-                                <section class="shelves"><div class="row">`;
-
-            // <img src="assets/png/300x200.png" />
-                this.items.forEach( ( item, i ) => {
-                    let modPrice    = ( item.price == 0.00 )? '': '$' + this.numberWithCommas(item.price);
-                    let modBtnTxt   = ( item.price == 0.00 )? this.cart.cartBtnTxt.Info : this.cart.cartBtnTxt.Add;   
-
-                    shelves += `<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc" 
-                            data-os="${item.type}" 
-                            data-catString="${item.catStr}">
-                        <article class="feature-box prodBox" 
-                            data-id="${item.id}" 
-                            data-num="${i}" 
-                            data-catString="${item.catStr}">`;
                         
-                        if( item.image != '/' ){
-                            shelves += `<div class="img-container">
-                                        <img class="img-fluid" src="https://feinberg-dev.fsm.northwestern.edu/it-new/${item.image}" alt="${item.title}-image" />
-                                    </div>`;
-                        }
-
-                        shelves += `<div class="feature-copy">
-                                        <div>
-                                            <h6>${item.title}</h6>
-                                            <p>${ modPrice }</p>
-                                            <a class="specs" data-id="${item.id}">Read product specs</a>
-                                        </div>`;
-
-                                        if( item.catStr.includes('software') ){
-                                            shelves += `<div class="renewSelect">
-                                                        <label>Purchase or Renew
-                                                        Software Licence: </label>
-                                                        <select class="renewInput" data-id="${item.id}" `;
-                                                        
-                                                        if( item.onCart ){
-                                                            shelves += ` disabled `;
-                                                        }
-                                                        
-                                            shelves += `>
-                                                            <option value="new">New</option>
-                                                            <option value="renew" `;
-
-                                                            //come back here 3
-                                                            if( item.catStr.includes('software') ){
-                                                                if( item.renew ){
-                                                                    shelves += ` selected="selected" `;
-                                                                }
-                                                            }
-                                            shelves += `>Renew</option></select></div>`;
-                                        }
-                    shelves +=      `</div>`;
-
-                    shelves += `<a class="button atcBtn`;
-                        if( item.onCart ){
-                            shelves += ` onCart `
-                            // come back here
-                            modBtnTxt = this.cart.cartBtnTxt.Remove;
-                        }
-                    shelves +=  ` " data-num="${i}" data-id="${item.id}" data-isCartBtn="true" href="#">${modBtnTxt}</a></article></div>`;
-                });
-
-            shelves += `</div></section>
-                            </div></div>`;
-            this.containerEL.insertAdjacentHTML('beforeend', shelves);
-
-            //add event listener to all product item feature boxes
-            for( let el of document.getElementsByClassName('prodBox') ){
-                el.addEventListener('click',(e) => {
-                        e.preventDefault();
-                        let num = el.getAttribute('data-num');
-                        let output = this.items[num].outputOverlay(num);
-                        this.modal.openOverlay( output );
-
-                        let atcModalBtn = document.getElementById('atcModalBtn');
-
-                        if( atcModalBtn != null ){
-                            atcModalBtn.addEventListener('click', async (e) => {        
-                                //Change the modal atc button 
-                                await this.addToCartToggle(num, atcModalBtn);
-
-                                //check if item is software, if so toggle the select disable attribute 
-                                //depending on if its on the cart or not
-                                if( this.items[num].catStr.includes('software') ){    
-                                    // this.cart.toggleSoftwareSelects( this.items[num].id );
-                                    this.cart.toggleSoftwareSelects( this.items[num]['id'] );          
-                                }
-
-                                //the cart toggle above only applies the modal add to cart button so...
-                                //once it's been added to cart and the modal cart button has been toggled
-                                //map the cart
-                                this.cart.mapCart();
-
-                            
-                                //withe the cart mapped by id, we can check for it and update the prod box id appropiately
-                                if( this.cart.mappedBasket.includes( this.items[num].id ) ){
-                                    //the item is on the cart, change the prodbox btn to orange
-                                    this.cart.toggleATCbutton( el.getElementsByClassName('atcBtn')[0], true );
-                                } else {
-                                    //the item is not on the cart, change the prodbox btn to purple
-                                    this.cart.toggleATCbutton( el.getElementsByClassName('atcBtn')[0], false );
-                                }
-                            });
-                        }
-                        //wireup event listener to ATC button 
-                });
-            }
-
-            //atc buttons on page (not modal)
-            for( let elBtn of document.getElementsByClassName('atcBtn') ){
-                elBtn.addEventListener('click', (e) => {
-
-                    let num = elBtn.getAttribute('data-num');
-                
-                    if( this.items[num].price != '0.00' ){
-
-                        //check if it's software
-                        if( this.items[num].categories.value.includes('software') ){
-                            //it is software, check selector value, and set the item.renew property
-                            const selectInput = document.querySelector('article[data-id="'+ this.items[num].id +'"] select.renewInput' );
-                            const selectVal = selectInput.options[selectInput.selectedIndex].value;
-                            this.items[num].renew = ( selectVal == 'renew' )? true : false;
-                        }
-
-                        this.addToCartToggle(num, elBtn);
-                        e.preventDefault();
-                        e.stopPropagation();
-                    } else {
-                        let theeItem = <Item>this.items[num]; 
-                        let output = theeItem.outputOverlay(num);
-                        this.modal.openOverlay( output );
-                        e.preventDefault();
-                        e.stopPropagation();
+                            //withe the cart mapped by id, we can check for it and update the prod box id appropiately
+                            if( this.cart.mappedBasket.includes( this.items[num].id ) ){
+                                //the item is on the cart, change the prodbox btn to orange
+                                this.cart.toggleATCbutton( el.getElementsByClassName('atcBtn')[0], true );
+                            } else {
+                                //the item is not on the cart, change the prodbox btn to purple
+                                this.cart.toggleATCbutton( el.getElementsByClassName('atcBtn')[0], false );
+                            }
+                        });
                     }
-                });
-            }   
-
-            //add software select addEventListner, and stop event propagation 
-            for( let elrenew of document.getElementsByClassName('renewInput') ){
-                elrenew.addEventListener('click', (e) => {
-                    let selectVal = elrenew.options[filterOS.selectedIndex].value;
-                    e.preventDefault();
-                    e.stopPropagation();
-                });                
-            }
-            
-            //filter dropdowns 
-            const filterCat = document.getElementById('filterCat');
-            const filterOS = document.getElementById('filterOS');
-
-            filterCat.addEventListener( 'change', (e) => {
-                this.filterShelves( filterCat, filterOS );
-            });
-
-            filterOS.addEventListener( 'change', (e) => {
-                this.filterShelves( filterCat, filterOS );
+                    //wireup event listener to ATC button 
             });
         }
+        
+        //atc buttons on page (not modal)
+        for( let elBtn of document.getElementsByClassName('atcBtn') ){
+            elBtn.addEventListener('click', (e) => {
+
+                let num = elBtn.getAttribute('data-num');
+            
+                if( this.items[num].price != '0.00' ){
+
+                    //check if it's software
+                    if( this.items[num].categories.value.includes('software') ){
+                        //it is software, check selector value, and set the item.renew property
+                        const selectInput = document.querySelector('article[data-id="'+ this.items[num].id +'"] select.renewInput' );
+                        const selectVal = selectInput.options[selectInput.selectedIndex].value;
+                        this.items[num].renew = ( selectVal == 'renew' )? true : false;
+                    }
+
+                    this.addToCartToggle(num, elBtn);
+                    e.preventDefault();
+                    e.stopPropagation();
+                } else {
+                    let theeItem = <Item>this.items[num]; 
+                    let output = theeItem.outputOverlay(num);
+                    this.modal.openOverlay( output );
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            });
+        }   
+
+        //add software select addEventListner, and stop event propagation 
+        for( let elrenew of document.getElementsByClassName('renewInput') ){
+            elrenew.addEventListener('click', (e) => {
+                let selectVal = elrenew.options[filterOS.selectedIndex].value;
+                e.preventDefault();
+                e.stopPropagation();
+            });                
+        }
     }
+
 
     addToCartToggle(num, elBtn){
         let cartResult = this.cart.addOrRemoveFromCart( this.items[num] );
@@ -883,48 +716,6 @@ class Store {
             this.cart.toggleATCbutton( elBtn, false );
             //if its coming off the cart then you need to clear the renew selection too.
             this.items[num].renew  = false;
-        }
-    }
-
-    filterShelves(filterCat, filterOS ){
-        let products = document.getElementsByClassName('pbc');
-        let selectedCat = filterCat.options[filterCat.selectedIndex].value;
-        let selectedOS  = filterOS.options[filterOS.selectedIndex].value;
-
-        this.showAllProducts(products);
-
-        if( selectedCat != 'all'){
-            // we have a filter
-            this.hideShowProducts(products, selectedCat, selectedOS);
-        } else if (selectedOS != 'all') {
-            // we have a filter
-            this.hideShowProducts(products, selectedCat, selectedOS);
-        } else {
-            //selected val is all, show everything
-            this.showAllProducts(products);
-        }
-    }
-
-    hideShowProducts( products, selectedCat, selectedOS ){
-        for (let i = 0; i < products.length; i++) {
-            const prod          = products[i];
-            const prodTypeAttr  = prod.getAttribute('data-catString');
-            const prodOSAttr    = prod.getAttribute('data-os');
-
-            if( selectedCat != 'all' && !prodTypeAttr.includes( selectedCat ) ){
-                prod.style.display = 'none';
-            }
-
-            if( selectedOS != 'all' && !prodOSAttr.includes( selectedOS ) ){
-                prod.style.display = 'none';
-            }
-        }
-    }
-
-    showAllProducts(products){
-        for (let i = 0; i < products.length; i++) {
-            const prod          = products[i];
-            prod.style.display = 'flex';
         }
     }
 
