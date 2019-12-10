@@ -696,11 +696,11 @@ class Store {
 
         //add software select addEventListner, and stop event propagation 
         for( let elrenew of document.getElementsByClassName('renewInput') ){
-            elrenew.addEventListener('click', (e) => {
-                let selectVal = elrenew.options[filterOS.selectedIndex].value;
-                e.preventDefault();
-                e.stopPropagation();
-            });                
+            // elrenew.addEventListener('click', (e) => {
+            //     let selectVal = elrenew.options[filterOS.selectedIndex].value;
+            //     e.preventDefault();
+            //     e.stopPropagation();
+            // });                
         }
     }
 

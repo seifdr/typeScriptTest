@@ -821,21 +821,15 @@ function () {
       var elBtn = _c[_b];
 
       _loop_4(elBtn);
-    }
-
-    var _loop_5 = function _loop_5(elrenew) {
-      elrenew.addEventListener('click', function (e) {
-        var selectVal = elrenew.options[filterOS.selectedIndex].value;
-        e.preventDefault();
-        e.stopPropagation();
-      });
-    }; //add software select addEventListner, and stop event propagation 
+    } //add software select addEventListner, and stop event propagation 
 
 
     for (var _d = 0, _e = document.getElementsByClassName('renewInput'); _d < _e.length; _d++) {
-      var elrenew = _e[_d];
-
-      _loop_5(elrenew);
+      var elrenew = _e[_d]; // elrenew.addEventListener('click', (e) => {
+      //     let selectVal = elrenew.options[filterOS.selectedIndex].value;
+      //     e.preventDefault();
+      //     e.stopPropagation();
+      // });                
     }
   };
 
