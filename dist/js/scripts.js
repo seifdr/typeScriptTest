@@ -616,7 +616,60 @@ class Store {
         this.cart = cart;
         this.containerEL = document.getElementById( containerID );
         // this.stockTheShelves();
-        this.wireUpAddToCartClicks();
+        // this.wireUpAddToCartClicks();
+        this.loadProducts();
+    }
+
+    loadProducts() {
+        const existingItemsInCookie = <number[]> this.cookie.getJSONfromCookieAsArray();
+        const softwareRenewIds = this.softwareCookie.getJSONfromCookieAsArray();
+
+        let result = document.getElementsByClassName('prodBox');
+
+        if(result.length > 0){
+            // this.items = myJson.items;
+
+            for (let i = 0; i < result.length; i++) {
+                const prodBox = result[i];
+                console.log( prodBox );
+
+                console.log( prodBox.getAttribute('data-num') );
+
+                // let row:product = {
+                //     id: [Number] prodBox.getAttribute('data-num'),
+                //     // title;
+                //     // element;
+                //     // renewElement;
+                //     // type;
+                //     // price;
+                //     // image:string;
+                //     // desc;
+                //     // onCart;
+                //     // renew: boolean;
+                // };
+
+                // console.log('This row: ', row );
+            }
+    
+
+
+            myJson.items.forEach( (row:product, i) => {
+
+                if( existingItemsInCookie.length > 0 ){
+                    if( existingItemsInCookie.includes( row.id ) ){
+                        row.onCart = true;
+
+                        if( softwareRenewIds.includes( row.id ) ){
+                            row.renew = true;
+                        }
+
+                        this.cart.addOrRemoveFromCart( new Item( row ) );
+                    } else {
+                        row.onCart = false;
+                    }
+                }
+                this.items[i] = new Item( row );
+            });
     }
 
     wireUpAddToCartClicks(){
@@ -625,6 +678,7 @@ class Store {
             el.addEventListener('click',(e) => {
                     e.preventDefault();
                     let num = el.getAttribute('data-num');
+                    let isSoftware = el.getAttribute('data-is-software');
 
                     let output = this.items[num].outputOverlay(num);
 
@@ -640,9 +694,12 @@ class Store {
 
                             //check if item is software, if so toggle the select disable attribute 
                             //depending on if its on the cart or not
-                            if( this.items[num].catStr.includes('software') ){    
+                            if( isSoftware ){    
+                                alert('Software here');
                                 // this.cart.toggleSoftwareSelects( this.items[num].id );
                                 this.cart.toggleSoftwareSelects( this.items[num]['id'] );          
+                            } else {
+                                alert('Software not here');
                             }
 
                             //the cart toggle above only applies the modal add to cart button so...

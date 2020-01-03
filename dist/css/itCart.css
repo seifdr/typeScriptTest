@@ -915,3 +915,6 @@ html {
   .bootstrap-wrapper .img-fluid {
     max-width: 100%;
     height: auto; }
+
+div.hiddenProdSpecs {
+  display: hidden; }
