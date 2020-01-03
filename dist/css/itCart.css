@@ -1216,6 +1216,10 @@ section#filterChecks > form select.filterOptions {
     section#filterChecks > form select.filterOptions {
       min-width: 150px; } }
 
+section.shelves > div.row {
+  margin-left: -30px;
+  margin-right: -30px; }
+
 section.shelves div.pbc {
   display: -webkit-box;
   display: -ms-flexbox;
