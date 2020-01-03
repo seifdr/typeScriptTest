@@ -790,29 +790,25 @@ function () {
     var _loop_4 = function _loop_4(elBtn) {
       elBtn.addEventListener('click', function (e) {
         var num = elBtn.getAttribute('data-num');
-
-        if (_this.items[num].price != '0.00') {
-          //check if it's software
-          if (_this.items[num].categories.value.includes('software')) {
-            //it is software, check selector value, and set the item.renew property
-            var selectInput = document.querySelector('article[data-id="' + _this.items[num].id + '"] select.renewInput');
-            var selectVal = selectInput.options[selectInput.selectedIndex].value;
-            _this.items[num].renew = selectVal == 'renew' ? true : false;
-          }
-
-          _this.addToCartToggle(num, elBtn);
-
-          e.preventDefault();
-          e.stopPropagation();
-        } else {
-          var theeItem = _this.items[num];
-          var output = theeItem.outputOverlay(num);
-
-          _this.modal.openOverlay(output);
-
-          e.preventDefault();
-          e.stopPropagation();
-        }
+        var isSoftware = elBtn.getAttribute('data-is-software');
+        console.log('Items here: ', _this.items); // if( this.items[num].price != '0.00' ){
+        //     //check if it's software
+        //     if( this.items[num].categories.value.includes('software') ){
+        //         //it is software, check selector value, and set the item.renew property
+        //         const selectInput = document.querySelector('article[data-id="'+ this.items[num].id +'"] select.renewInput' );
+        //         const selectVal = selectInput.options[selectInput.selectedIndex].value;
+        //         this.items[num].renew = ( selectVal == 'renew' )? true : false;
+        //     }
+        //     this.addToCartToggle(num, elBtn);
+        //     e.preventDefault();
+        //     e.stopPropagation();
+        // } else {
+        //     let theeItem = <Item>this.items[num]; 
+        //     let output = theeItem.outputOverlay(num);
+        //     this.modal.openOverlay( output );
+        //     e.preventDefault();
+        //     e.stopPropagation();
+        // }
       });
     }; //atc buttons on page (not modal)
 

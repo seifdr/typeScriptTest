@@ -670,27 +670,30 @@ class Store {
             elBtn.addEventListener('click', (e) => {
 
                 let num = elBtn.getAttribute('data-num');
+                let isSoftware = elBtn.getAttribute('data-is-software');
             
-                if( this.items[num].price != '0.00' ){
+                console.log( 'Items here: ', this.items );
 
-                    //check if it's software
-                    if( this.items[num].categories.value.includes('software') ){
-                        //it is software, check selector value, and set the item.renew property
-                        const selectInput = document.querySelector('article[data-id="'+ this.items[num].id +'"] select.renewInput' );
-                        const selectVal = selectInput.options[selectInput.selectedIndex].value;
-                        this.items[num].renew = ( selectVal == 'renew' )? true : false;
-                    }
+                // if( this.items[num].price != '0.00' ){
 
-                    this.addToCartToggle(num, elBtn);
-                    e.preventDefault();
-                    e.stopPropagation();
-                } else {
-                    let theeItem = <Item>this.items[num]; 
-                    let output = theeItem.outputOverlay(num);
-                    this.modal.openOverlay( output );
-                    e.preventDefault();
-                    e.stopPropagation();
-                }
+                //     //check if it's software
+                //     if( this.items[num].categories.value.includes('software') ){
+                //         //it is software, check selector value, and set the item.renew property
+                //         const selectInput = document.querySelector('article[data-id="'+ this.items[num].id +'"] select.renewInput' );
+                //         const selectVal = selectInput.options[selectInput.selectedIndex].value;
+                //         this.items[num].renew = ( selectVal == 'renew' )? true : false;
+                //     }
+
+                //     this.addToCartToggle(num, elBtn);
+                //     e.preventDefault();
+                //     e.stopPropagation();
+                // } else {
+                //     let theeItem = <Item>this.items[num]; 
+                //     let output = theeItem.outputOverlay(num);
+                //     this.modal.openOverlay( output );
+                //     e.preventDefault();
+                //     e.stopPropagation();
+                // }
             });
         }   
 
