@@ -201,7 +201,7 @@ function () {
 
 function removeSpecialChars(inputVal) {
   //allow periods
-  return inputVal.replace(/[`~!@#$%^&*()_|+\-=?;:'",<>\{\}\[\]\\\/]/gi, '');
+  return inputVal.toString().replace(/[`~!@#$%^&*()_|+\-=?;:'",<>\{\}\[\]\\\/]/gi, '');
 }
 
 var Item =
@@ -721,8 +721,6 @@ function () {
   }
 
   Store.prototype.loadProducts = function () {
-    var _this = this;
-
     var existingItemsInCookie = this.cookie.getJSONfromCookieAsArray();
     var softwareRenewIds = this.softwareCookie.getJSONfromCookieAsArray();
     var result = document.getElementsByClassName('prodBox');
@@ -731,23 +729,22 @@ function () {
       // this.items = myJson.items;
       for (var i = 0; i < result.length; i++) {
         var prodBox = result[i];
-        console.log(prodBox);
-        console.log(prodBox.getAttribute('data-num')); // let row:product = {
-        //     id: [Number] prodBox.getAttribute('data-num'),
-        //     // title;
-        //     // element;
-        //     // renewElement;
-        //     // type;
-        //     // price;
-        //     // image:string;
-        //     // desc;
-        //     // onCart;
-        //     // renew: boolean;
-        // };
-        // console.log('This row: ', row );
-      }
+        var row = {
+          id: parseFloat(prodBox.getAttribute('data-num')),
+          title: prodBox.querySelector('div.feature-copy div > h6').innerHTML,
+          element: prodBox.getAttribute('data-element'),
+          renewElement: prodBox.getAttribute('data-renewElement'),
+          price: parseFloat(prodBox.getAttribute('data-price')),
+          desc: prodBox.querySelector('div.feature-copy div.hiddenProdSpecs').innerHTML
+        };
+        console.log(prodBox.querySelector('div.img-container > img'));
 
-      myJson.items.forEach(function (row, i) {
+        if (prodBox.querySelector('div.img-container > img')) {
+          row.image = prodBox.querySelector('div.img-container > img')['src'];
+        } else {
+          row.image = '';
+        }
+
         if (existingItemsInCookie.length > 0) {
           if (existingItemsInCookie.includes(row.id)) {
             row.onCart = true;
@@ -756,146 +753,149 @@ function () {
               row.renew = true;
             }
 
-            _this.cart.addOrRemoveFromCart(new Item(row));
+            this.cart.addOrRemoveFromCart(new Item(row));
           } else {
             row.onCart = false;
           }
         }
 
-        _this.items[i] = new Item(row);
-      });
+        this.items[i] = new Item(row);
+      }
+
+      console.log(this.items);
     }
+  };
 
-    wireUpAddToCartClicks();
-    {
-      var _loop_3 = function _loop_3(el) {
-        el.addEventListener('click', function (e) {
-          e.preventDefault();
-          var num = el.getAttribute('data-num');
-          var isSoftware = el.getAttribute('data-is-software');
+  Store.prototype.wireUpAddToCartClicks = function () {
+    var _this = this;
 
-          var output = _this.items[num].outputOverlay(num);
+    var _loop_3 = function _loop_3(el) {
+      el.addEventListener('click', function (e) {
+        e.preventDefault();
+        var num = el.getAttribute('data-num');
+        var isSoftware = el.getAttribute('data-is-software');
 
-          _this.modal.openOverlay(output);
+        var output = _this.items[num].outputOverlay(num);
 
-          var atcModalBtn = document.getElementById('atcModalBtn');
+        _this.modal.openOverlay(output);
 
-          if (atcModalBtn != null) {
-            atcModalBtn.addEventListener('click', function (e) {
-              return __awaiter(_this, void 0, void 0, function () {
-                return __generator(this, function (_a) {
-                  switch (_a.label) {
-                    case 0:
-                      //Change the modal atc button 
-                      return [4
-                      /*yield*/
-                      , this.addToCartToggle(num, atcModalBtn)];
+        var atcModalBtn = document.getElementById('atcModalBtn');
 
-                    case 1:
-                      //Change the modal atc button 
-                      _a.sent(); //check if item is software, if so toggle the select disable attribute 
-                      //depending on if its on the cart or not
+        if (atcModalBtn != null) {
+          atcModalBtn.addEventListener('click', function (e) {
+            return __awaiter(_this, void 0, void 0, function () {
+              return __generator(this, function (_a) {
+                switch (_a.label) {
+                  case 0:
+                    //Change the modal atc button 
+                    return [4
+                    /*yield*/
+                    , this.addToCartToggle(num, atcModalBtn)];
 
-
-                      if (isSoftware) {
-                        alert('Software here'); // this.cart.toggleSoftwareSelects( this.items[num].id );
-
-                        this.cart.toggleSoftwareSelects(this.items[num]['id']);
-                      } else {
-                        alert('Software not here');
-                      } //the cart toggle above only applies the modal add to cart button so...
-                      //once it's been added to cart and the modal cart button has been toggled
-                      //map the cart
+                  case 1:
+                    //Change the modal atc button 
+                    _a.sent(); //check if item is software, if so toggle the select disable attribute 
+                    //depending on if its on the cart or not
 
 
-                      this.cart.mapCart(); //withe the cart mapped by id, we can check for it and update the prod box id appropiately
+                    if (isSoftware) {
+                      alert('Software here'); // this.cart.toggleSoftwareSelects( this.items[num].id );
 
-                      if (this.cart.mappedBasket.includes(this.items[num].id)) {
-                        //the item is on the cart, change the prodbox btn to orange
-                        this.cart.toggleATCbutton(el.getElementsByClassName('atcBtn')[0], true);
-                      } else {
-                        //the item is not on the cart, change the prodbox btn to purple
-                        this.cart.toggleATCbutton(el.getElementsByClassName('atcBtn')[0], false);
-                      }
+                      this.cart.toggleSoftwareSelects(this.items[num]['id']);
+                    } else {
+                      alert('Software not here');
+                    } //the cart toggle above only applies the modal add to cart button so...
+                    //once it's been added to cart and the modal cart button has been toggled
+                    //map the cart
 
-                      return [2
-                      /*return*/
-                      ];
-                  }
-                });
+
+                    this.cart.mapCart(); //withe the cart mapped by id, we can check for it and update the prod box id appropiately
+
+                    if (this.cart.mappedBasket.includes(this.items[num].id)) {
+                      //the item is on the cart, change the prodbox btn to orange
+                      this.cart.toggleATCbutton(el.getElementsByClassName('atcBtn')[0], true);
+                    } else {
+                      //the item is not on the cart, change the prodbox btn to purple
+                      this.cart.toggleATCbutton(el.getElementsByClassName('atcBtn')[0], false);
+                    }
+
+                    return [2
+                    /*return*/
+                    ];
+                }
               });
             });
-          } //wireup event listener to ATC button 
+          });
+        } //wireup event listener to ATC button 
 
-        });
-      }; //add event listener to all product item feature boxes
-
-
-      for (var _i = 0, _a = document.getElementsByClassName('prodBox'); _i < _a.length; _i++) {
-        var el = _a[_i];
-
-        _loop_3(el);
-      }
-
-      var _loop_4 = function _loop_4(elBtn) {
-        elBtn.addEventListener('click', function (e) {
-          var num = elBtn.getAttribute('data-num');
-          var isSoftware = elBtn.getAttribute('data-is-software');
-          console.log('Items here: ', _this.items); // if( this.items[num].price != '0.00' ){
-          //     //check if it's software
-          //     if( this.items[num].categories.value.includes('software') ){
-          //         //it is software, check selector value, and set the item.renew property
-          //         const selectInput = document.querySelector('article[data-id="'+ this.items[num].id +'"] select.renewInput' );
-          //         const selectVal = selectInput.options[selectInput.selectedIndex].value;
-          //         this.items[num].renew = ( selectVal == 'renew' )? true : false;
-          //     }
-          //     this.addToCartToggle(num, elBtn);
-          //     e.preventDefault();
-          //     e.stopPropagation();
-          // } else {
-          //     let theeItem = <Item>this.items[num]; 
-          //     let output = theeItem.outputOverlay(num);
-          //     this.modal.openOverlay( output );
-          //     e.preventDefault();
-          //     e.stopPropagation();
-          // }
-        });
-      }; //atc buttons on page (not modal)
+      });
+    }; //add event listener to all product item feature boxes
 
 
-      for (var _b = 0, _c = document.getElementsByClassName('atcBtn'); _b < _c.length; _b++) {
-        var elBtn = _c[_b];
+    for (var _i = 0, _a = document.getElementsByClassName('prodBox'); _i < _a.length; _i++) {
+      var el = _a[_i];
 
-        _loop_4(elBtn);
-      } //add software select addEventListner, and stop event propagation 
+      _loop_3(el);
+    }
 
-
-      for (var _d = 0, _e = document.getElementsByClassName('renewInput'); _d < _e.length; _d++) {
-        var elrenew = _e[_d]; // elrenew.addEventListener('click', (e) => {
-        //     let selectVal = elrenew.options[filterOS.selectedIndex].value;
+    var _loop_4 = function _loop_4(elBtn) {
+      elBtn.addEventListener('click', function (e) {
+        var num = elBtn.getAttribute('data-num');
+        var isSoftware = elBtn.getAttribute('data-is-software');
+        console.log('Items here: ', _this.items); // if( this.items[num].price != '0.00' ){
+        //     //check if it's software
+        //     if( this.items[num].categories.value.includes('software') ){
+        //         //it is software, check selector value, and set the item.renew property
+        //         const selectInput = document.querySelector('article[data-id="'+ this.items[num].id +'"] select.renewInput' );
+        //         const selectVal = selectInput.options[selectInput.selectedIndex].value;
+        //         this.items[num].renew = ( selectVal == 'renew' )? true : false;
+        //     }
+        //     this.addToCartToggle(num, elBtn);
         //     e.preventDefault();
         //     e.stopPropagation();
-        // });                
-      }
-    }
-    addToCartToggle(num, elBtn);
-    {
-      var cartResult = this.cart.addOrRemoveFromCart(this.items[num]);
+        // } else {
+        //     let theeItem = <Item>this.items[num]; 
+        //     let output = theeItem.outputOverlay(num);
+        //     this.modal.openOverlay( output );
+        //     e.preventDefault();
+        //     e.stopPropagation();
+        // }
+      });
+    }; //atc buttons on page (not modal)
 
-      if (cartResult) {
-        this.items[num].onCart = true;
-        this.cart.toggleATCbutton(elBtn, true);
-      } else {
-        this.items[num].onCart = false;
-        this.cart.toggleATCbutton(elBtn, false); //if its coming off the cart then you need to clear the renew selection too.
 
-        this.items[num].renew = false;
-      }
+    for (var _b = 0, _c = document.getElementsByClassName('atcBtn'); _b < _c.length; _b++) {
+      var elBtn = _c[_b];
+
+      _loop_4(elBtn);
+    } //add software select addEventListner, and stop event propagation 
+
+
+    for (var _d = 0, _e = document.getElementsByClassName('renewInput'); _d < _e.length; _d++) {
+      var elrenew = _e[_d]; // elrenew.addEventListener('click', (e) => {
+      //     let selectVal = elrenew.options[filterOS.selectedIndex].value;
+      //     e.preventDefault();
+      //     e.stopPropagation();
+      // });                
     }
-    numberWithCommas(x);
-    {
-      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  Store.prototype.addToCartToggle = function (num, elBtn) {
+    var cartResult = this.cart.addOrRemoveFromCart(this.items[num]);
+
+    if (cartResult) {
+      this.items[num].onCart = true;
+      this.cart.toggleATCbutton(elBtn, true);
+    } else {
+      this.items[num].onCart = false;
+      this.cart.toggleATCbutton(elBtn, false); //if its coming off the cart then you need to clear the renew selection too.
+
+      this.items[num].renew = false;
     }
+  };
+
+  Store.prototype.numberWithCommas = function (x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
   return Store;

@@ -65,7 +65,7 @@ class Modal {
 
 function removeSpecialChars( inputVal ){
     //allow periods
-    return inputVal.replace(/[`~!@#$%^&*()_|+\-=?;:'",<>\{\}\[\]\\\/]/gi, '');
+    return inputVal.toString().replace(/[`~!@#$%^&*()_|+\-=?;:'",<>\{\}\[\]\\\/]/gi, '');
 }
 
 // var pmg = document.body.querySelector('g#Layer_1');
@@ -631,29 +631,31 @@ class Store {
 
             for (let i = 0; i < result.length; i++) {
                 const prodBox = result[i];
-                console.log( prodBox );
 
-                console.log( prodBox.getAttribute('data-num') );
+                let row:product = {
+                    id: parseFloat( prodBox.getAttribute('data-num') ),
+                    title: prodBox.querySelector('div.feature-copy div > h6').innerHTML,
+                    element: prodBox.getAttribute('data-element'),
+                    renewElement: prodBox.getAttribute('data-renewElement'),
+                    price: parseFloat( prodBox.getAttribute('data-price') ),
+                    desc: prodBox.querySelector('div.feature-copy div.hiddenProdSpecs').innerHTML,
+                    // element;
+                    // renewElement;
+                    // type;
+                    // price;
+                    // image:string;
+                    // desc;
+                    // onCart;
+                    // renew: boolean;
+                };
 
-                // let row:product = {
-                //     id: [Number] prodBox.getAttribute('data-num'),
-                //     // title;
-                //     // element;
-                //     // renewElement;
-                //     // type;
-                //     // price;
-                //     // image:string;
-                //     // desc;
-                //     // onCart;
-                //     // renew: boolean;
-                // };
+                console.log( prodBox.querySelector('div.img-container > img') );
 
-                // console.log('This row: ', row );
-            }
-    
-
-
-            myJson.items.forEach( (row:product, i) => {
+                if( prodBox.querySelector('div.img-container > img') ){
+                    row.image = prodBox.querySelector('div.img-container > img')['src'];
+                } else {
+                    row.image = '';
+                }
 
                 if( existingItemsInCookie.length > 0 ){
                     if( existingItemsInCookie.includes( row.id ) ){
@@ -668,8 +670,12 @@ class Store {
                         row.onCart = false;
                     }
                 }
+
                 this.items[i] = new Item( row );
-            });
+            }
+    
+            console.log( this.items );
+        }
     }
 
     wireUpAddToCartClicks(){
