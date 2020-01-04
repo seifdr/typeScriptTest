@@ -637,7 +637,7 @@ function () {
 
         cartlistOutput_1 += "</div>\n                    <div class=\"crDesc\">\n                        <p>" + row.title;
 
-        if (row.catStr.includes('software')) {
+        if (row.software) {
           if (row.renew) {
             cartlistOutput_1 += " - Renewing";
           }
@@ -797,7 +797,7 @@ function () {
                     //Change the modal atc button 
                     return [4
                     /*yield*/
-                    , this.addToCartToggle(num, atcModalBtn)];
+                    , this.addToCartToggle(position, atcModalBtn)];
 
                   case 1:
                     //Change the modal atc button 
@@ -806,12 +806,11 @@ function () {
 
 
                     if (isSoftware) {
-                      alert('Software here'); // this.cart.toggleSoftwareSelects( this.items[num].id );
-
+                      // alert('Software here');
+                      // this.cart.toggleSoftwareSelects( this.items[num].id );
                       this.cart.toggleSoftwareSelects(this.items[position]['id']);
-                    } else {
-                      alert('Software not here');
-                    } //the cart toggle above only applies the modal add to cart button so...
+                    } else {} // alert('Software not here');
+                    //the cart toggle above only applies the modal add to cart button so...
                     //once it's been added to cart and the modal cart button has been toggled
                     //map the cart
 
@@ -850,7 +849,6 @@ function () {
         var num = elBtn.getAttribute('data-num');
         var position = elBtn.getAttribute('data-position');
         var isSoftware = elBtn.getAttribute('data-is-software');
-        console.log(position);
 
         if (_this.items[position].price != '0.00') {
           //check if it's software
@@ -859,9 +857,7 @@ function () {
             var selectInput = document.querySelector('article[data-id="' + _this.items[position].id + '"] select.renewInput');
             var selectVal = selectInput.options[selectInput.selectedIndex].value;
             _this.items[position].renew = selectVal == 'renew' ? true : false;
-          } //come back here
-          // this.addToCartToggle(num, elBtn);
-
+          }
 
           _this.addToCartToggle(position, elBtn);
 
@@ -885,61 +881,34 @@ function () {
 
       _loop_4(elBtn);
     }
-  };
 
-  Store.prototype.wireUpAddToCartClicksOld = function () {
-    var _loop_5 = function _loop_5(elBtn) {
-      elBtn.addEventListener('click', function (e) {
-        var num = elBtn.getAttribute('data-num');
-        var isSoftware = elBtn.getAttribute('data-is-software'); // if( this.items[num].price != '0.00' ){
-        //     //check if it's software
-        //     if( this.items[num].categories.value.includes('software') ){
-        //         //it is software, check selector value, and set the item.renew property
-        //         const selectInput = document.querySelector('article[data-id="'+ this.items[num].id +'"] select.renewInput' );
-        //         const selectVal = selectInput.options[selectInput.selectedIndex].value;
-        //         this.items[num].renew = ( selectVal == 'renew' )? true : false;
-        //     }
-        //     this.addToCartToggle(num, elBtn);
-        //     e.preventDefault();
-        //     e.stopPropagation();
-        // } else {
-        //     let theeItem = <Item>this.items[num]; 
-        //     let output = theeItem.outputOverlay(num);
-        //     this.modal.openOverlay( output );
-        //     e.preventDefault();
-        //     e.stopPropagation();
-        // }
+    var _loop_5 = function _loop_5(elrenew) {
+      elrenew.addEventListener('click', function (e) {
+        var selectVal = elrenew.options[filterOS.selectedIndex].value;
+        e.preventDefault();
+        e.stopPropagation();
       });
-    }; //atc buttons on page (not modal)
+    }; //add software select addEventListner, and stop event propagation 
 
 
-    for (var _i = 0, _a = document.getElementsByClassName('atcBtn'); _i < _a.length; _i++) {
-      var elBtn = _a[_i];
+    for (var _d = 0, _e = document.getElementsByClassName('renewInput'); _d < _e.length; _d++) {
+      var elrenew = _e[_d];
 
-      _loop_5(elBtn);
-    } //add software select addEventListner, and stop event propagation 
-
-
-    for (var _b = 0, _c = document.getElementsByClassName('renewInput'); _b < _c.length; _b++) {
-      var elrenew = _c[_b]; // elrenew.addEventListener('click', (e) => {
-      //     let selectVal = elrenew.options[filterOS.selectedIndex].value;
-      //     e.preventDefault();
-      //     e.stopPropagation();
-      // });                
+      _loop_5(elrenew);
     }
   };
 
-  Store.prototype.addToCartToggle = function (num, elBtn) {
-    var cartResult = this.cart.addOrRemoveFromCart(this.items[num]);
+  Store.prototype.addToCartToggle = function (position, elBtn) {
+    var cartResult = this.cart.addOrRemoveFromCart(this.items[position]);
 
     if (cartResult) {
-      this.items[num].onCart = true;
+      this.items[position].onCart = true;
       this.cart.toggleATCbutton(elBtn, true);
     } else {
-      this.items[num].onCart = false;
+      this.items[position].onCart = false;
       this.cart.toggleATCbutton(elBtn, false); //if its coming off the cart then you need to clear the renew selection too.
 
-      this.items[num].renew = false;
+      this.items[position].renew = false;
     }
   };
 

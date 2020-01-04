@@ -519,7 +519,7 @@ class Cart {
                 cartlistOutput += `</div>
                     <div class="crDesc">
                         <p>${row.title}`;
-                            if( row.catStr.includes('software') ){
+                            if( row.software ){
                                 if( row.renew ){
                                     cartlistOutput += ` - Renewing`;
                                 }
@@ -708,16 +708,16 @@ class Store {
                         atcModalBtn.addEventListener('click', async (e) => {      
                             
                             //Change the modal atc button 
-                            await this.addToCartToggle(num, atcModalBtn);
+                            await this.addToCartToggle(position, atcModalBtn);
 
                             //check if item is software, if so toggle the select disable attribute 
                             //depending on if its on the cart or not
                             if( isSoftware ){    
-                                alert('Software here');
+                                // alert('Software here');
                                 // this.cart.toggleSoftwareSelects( this.items[num].id );
                                 this.cart.toggleSoftwareSelects( this.items[position]['id'] );          
                             } else {
-                                alert('Software not here');
+                                // alert('Software not here');
                             }
 
                             //the cart toggle above only applies the modal add to cart button so...
@@ -747,8 +747,6 @@ class Store {
                 let position = elBtn.getAttribute('data-position');
                 let isSoftware = elBtn.getAttribute('data-is-software');
             
-                console.log(position);
-
                 if( this.items[position].price != '0.00' ){
 
                     //check if it's software
@@ -759,8 +757,6 @@ class Store {
                         this.items[position].renew = ( selectVal == 'renew' )? true : false;
                     }
 
-                    //come back here
-                    // this.addToCartToggle(num, elBtn);
                     this.addToCartToggle(position, elBtn);
                     e.preventDefault();
                     e.stopPropagation();
@@ -774,64 +770,28 @@ class Store {
             });
         }   
 
-
-    }
-
-    wireUpAddToCartClicksOld(){
-
-        
-        //atc buttons on page (not modal)
-        for( let elBtn of document.getElementsByClassName('atcBtn') ){
-            elBtn.addEventListener('click', (e) => {
-
-                let num = elBtn.getAttribute('data-num');
-                let isSoftware = elBtn.getAttribute('data-is-software');
-            
-                // if( this.items[num].price != '0.00' ){
-
-                //     //check if it's software
-                //     if( this.items[num].categories.value.includes('software') ){
-                //         //it is software, check selector value, and set the item.renew property
-                //         const selectInput = document.querySelector('article[data-id="'+ this.items[num].id +'"] select.renewInput' );
-                //         const selectVal = selectInput.options[selectInput.selectedIndex].value;
-                //         this.items[num].renew = ( selectVal == 'renew' )? true : false;
-                //     }
-
-                //     this.addToCartToggle(num, elBtn);
-                //     e.preventDefault();
-                //     e.stopPropagation();
-                // } else {
-                //     let theeItem = <Item>this.items[num]; 
-                //     let output = theeItem.outputOverlay(num);
-                //     this.modal.openOverlay( output );
-                //     e.preventDefault();
-                //     e.stopPropagation();
-                // }
-            });
-        }   
-
         //add software select addEventListner, and stop event propagation 
         for( let elrenew of document.getElementsByClassName('renewInput') ){
-            // elrenew.addEventListener('click', (e) => {
-            //     let selectVal = elrenew.options[filterOS.selectedIndex].value;
-            //     e.preventDefault();
-            //     e.stopPropagation();
-            // });                
+            elrenew.addEventListener('click', (e) => {
+                let selectVal = elrenew.options[filterOS.selectedIndex].value;
+                e.preventDefault();
+                e.stopPropagation();
+            });                
         }
+
     }
 
-
-    addToCartToggle(num, elBtn){
-        let cartResult = this.cart.addOrRemoveFromCart( this.items[num] );
+    addToCartToggle(position, elBtn){
+        let cartResult = this.cart.addOrRemoveFromCart( this.items[position] );
 
         if( cartResult ){
-            this.items[num].onCart = true;
+            this.items[position].onCart = true;
             this.cart.toggleATCbutton( elBtn, true );
         } else {
-            this.items[num].onCart = false;
+            this.items[position].onCart = false;
             this.cart.toggleATCbutton( elBtn, false );
             //if its coming off the cart then you need to clear the renew selection too.
-            this.items[num].renew  = false;
+            this.items[position].renew  = false;
         }
     }
 
