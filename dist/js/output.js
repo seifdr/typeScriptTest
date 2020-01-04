@@ -244,7 +244,7 @@ function () {
 
     output += "<div class=\"col-12 col-lg-6 overlayText\">\n                        \n                            <h3>" + this.title;
 
-    if (this.catStr.includes('software')) {
+    if (this.software) {
       if (this.renew) {
         output += " - Renewing";
       }
@@ -264,7 +264,7 @@ function () {
 
     if (this.price != '0.00') {
       // COME BACK
-      if (this.catStr.includes('software')) {
+      if (this.software) {
         output += "<div class=\"renewModalSelect\">\n                    <label>Purchase or Renew\n                    Software Licence: </label>\n                    <select class=\"renewModalInput\" data-id=\"" + this.id + "\" ";
 
         if (this.onCart) {
@@ -281,7 +281,7 @@ function () {
         output += "</div>";
       }
 
-      output += "<a id=\"atcModalBtn\" href=\"#\" \n                            class=\"button " + optClass + "\" \n                            data-num=\"" + num + "\" \n                            data-id=\"" + this.id + "\"\n                            data-catstr=\"" + this.catStr + "\"    \n                        >" + btnText + "</a>";
+      output += "<a id=\"atcModalBtn\" href=\"#\" \n                            class=\"button " + optClass + "\" \n                            data-num=\"" + num + "\" \n                            data-id=\"" + this.id + "\"\n                            data-is-software=\"{" + this.software + "}\"   \n                        >" + btnText + "</a>";
     }
 
     output += "</div>\n            </div>\n            </div>\n            </div>\n        </div>";
@@ -777,10 +777,10 @@ function () {
       el.addEventListener('click', function (e) {
         e.preventDefault();
         var num = el.getAttribute('data-num');
+        var position = el.getAttribute('data-position');
         var isSoftware = el.getAttribute('data-is-software');
-        console.log(num);
 
-        var output = _this.items[num].outputOverlay(num); // this.modal.openOverlay( output );
+        var output = _this.items[position].outputOverlay(num); // this.modal.openOverlay( output );
         // let atcModalBtn = document.getElementById('atcModalBtn');
         // if( atcModalBtn != null ){
         //     atcModalBtn.addEventListener('click', async (e) => {      

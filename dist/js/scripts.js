@@ -148,7 +148,7 @@ class Item implements product {
                         
                             <h3>${this.title}`;
 
-                            if( this.catStr.includes('software') ){
+                            if( this.software ){
                                 if( this.renew ){
                                     output += ` - Renewing`;
                                 }
@@ -171,7 +171,7 @@ class Item implements product {
         if( this.price != '0.00' ){
             
             // COME BACK
-            if( this.catStr.includes('software') ){
+            if( this.software ){
                 output += `<div class="renewModalSelect">
                     <label>Purchase or Renew
                     Software Licence: </label>
@@ -197,7 +197,7 @@ class Item implements product {
                             class="button ${optClass}" 
                             data-num="${num}" 
                             data-id="${this.id}"
-                            data-catstr="${this.catStr}"    
+                            data-is-software="{${this.software}}"   
                         >${ btnText }</a>`;
         }
 
@@ -691,11 +691,10 @@ class Store {
             el.addEventListener('click',(e) => {
                     e.preventDefault();
                     let num = el.getAttribute('data-num');
+                    let position = el.getAttribute('data-position');
                     let isSoftware = el.getAttribute('data-is-software');
 
-                    console.log( num );
-            
-                    let output = this.items[num].outputOverlay(num);
+                    let output = this.items[position].outputOverlay(num);
 
                     // this.modal.openOverlay( output );
 
