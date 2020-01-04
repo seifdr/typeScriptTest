@@ -718,7 +718,8 @@ function () {
     //load all the products that are present on the page
 
     this.loadProducts(); // wire up the add to cart buttons
-    // this.wireUpAddToCartClicks();
+
+    this.wireUpAddToCartClicks();
   }
 
   Store.prototype.loadProducts = function () {
@@ -729,7 +730,9 @@ function () {
     if (result.length > 0) {
       // this.items = myJson.items;
       for (var i = 0; i < result.length; i++) {
-        var prodBox = result[i];
+        var prodBox = result[i]; //add a position attr to prodBoxes. Makes it easier to find them by index val in this.items
+
+        prodBox.setAttribute('data-position', i.toString());
         var row = {
           id: parseFloat(prodBox.getAttribute('data-num')),
           title: prodBox.querySelector('div.feature-copy div > h6').innerHTML,
@@ -775,59 +778,38 @@ function () {
         e.preventDefault();
         var num = el.getAttribute('data-num');
         var isSoftware = el.getAttribute('data-is-software');
+        console.log(num);
 
-        var output = _this.items[num].outputOverlay(num);
-
-        _this.modal.openOverlay(output);
-
-        var atcModalBtn = document.getElementById('atcModalBtn');
-
-        if (atcModalBtn != null) {
-          atcModalBtn.addEventListener('click', function (e) {
-            return __awaiter(_this, void 0, void 0, function () {
-              return __generator(this, function (_a) {
-                switch (_a.label) {
-                  case 0:
-                    //Change the modal atc button 
-                    return [4
-                    /*yield*/
-                    , this.addToCartToggle(num, atcModalBtn)];
-
-                  case 1:
-                    //Change the modal atc button 
-                    _a.sent(); //check if item is software, if so toggle the select disable attribute 
-                    //depending on if its on the cart or not
-
-
-                    if (isSoftware) {
-                      alert('Software here'); // this.cart.toggleSoftwareSelects( this.items[num].id );
-
-                      this.cart.toggleSoftwareSelects(this.items[num]['id']);
-                    } else {
-                      alert('Software not here');
-                    } //the cart toggle above only applies the modal add to cart button so...
-                    //once it's been added to cart and the modal cart button has been toggled
-                    //map the cart
-
-
-                    this.cart.mapCart(); //withe the cart mapped by id, we can check for it and update the prod box id appropiately
-
-                    if (this.cart.mappedBasket.includes(this.items[num].id)) {
-                      //the item is on the cart, change the prodbox btn to orange
-                      this.cart.toggleATCbutton(el.getElementsByClassName('atcBtn')[0], true);
-                    } else {
-                      //the item is not on the cart, change the prodbox btn to purple
-                      this.cart.toggleATCbutton(el.getElementsByClassName('atcBtn')[0], false);
-                    }
-
-                    return [2
-                    /*return*/
-                    ];
-                }
-              });
-            });
-          });
-        } //wireup event listener to ATC button 
+        var output = _this.items[num].outputOverlay(num); // this.modal.openOverlay( output );
+        // let atcModalBtn = document.getElementById('atcModalBtn');
+        // if( atcModalBtn != null ){
+        //     atcModalBtn.addEventListener('click', async (e) => {      
+        //         //Change the modal atc button 
+        //         await this.addToCartToggle(num, atcModalBtn);
+        //         //check if item is software, if so toggle the select disable attribute 
+        //         //depending on if its on the cart or not
+        //         if( isSoftware ){    
+        //             alert('Software here');
+        //             // this.cart.toggleSoftwareSelects( this.items[num].id );
+        //             this.cart.toggleSoftwareSelects( this.items[num]['id'] );          
+        //         } else {
+        //             alert('Software not here');
+        //         }
+        //         //the cart toggle above only applies the modal add to cart button so...
+        //         //once it's been added to cart and the modal cart button has been toggled
+        //         //map the cart
+        //         this.cart.mapCart();
+        //         //withe the cart mapped by id, we can check for it and update the prod box id appropiately
+        //         if( this.cart.mappedBasket.includes( this.items[num].id ) ){
+        //             //the item is on the cart, change the prodbox btn to orange
+        //             this.cart.toggleATCbutton( el.getElementsByClassName('atcBtn')[0], true );
+        //         } else {
+        //             //the item is not on the cart, change the prodbox btn to purple
+        //             this.cart.toggleATCbutton( el.getElementsByClassName('atcBtn')[0], false );
+        //         }
+        //     });
+        // }
+        //wireup event listener to ATC button 
 
       });
     }; //add event listener to all product item feature boxes
@@ -838,6 +820,10 @@ function () {
 
       _loop_3(el);
     }
+  };
+
+  Store.prototype.wireUpAddToCartClicksOld = function () {
+    var _this = this;
 
     var _loop_4 = function _loop_4(elBtn) {
       elBtn.addEventListener('click', function (e) {
@@ -865,15 +851,15 @@ function () {
     }; //atc buttons on page (not modal)
 
 
-    for (var _b = 0, _c = document.getElementsByClassName('atcBtn'); _b < _c.length; _b++) {
-      var elBtn = _c[_b];
+    for (var _i = 0, _a = document.getElementsByClassName('atcBtn'); _i < _a.length; _i++) {
+      var elBtn = _a[_i];
 
       _loop_4(elBtn);
     } //add software select addEventListner, and stop event propagation 
 
 
-    for (var _d = 0, _e = document.getElementsByClassName('renewInput'); _d < _e.length; _d++) {
-      var elrenew = _e[_d]; // elrenew.addEventListener('click', (e) => {
+    for (var _b = 0, _c = document.getElementsByClassName('renewInput'); _b < _c.length; _b++) {
+      var elrenew = _c[_b]; // elrenew.addEventListener('click', (e) => {
       //     let selectVal = elrenew.options[filterOS.selectedIndex].value;
       //     e.preventDefault();
       //     e.stopPropagation();
