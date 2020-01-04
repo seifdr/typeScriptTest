@@ -715,9 +715,10 @@ function () {
     this.softwareCookie = softwareCookie;
     this.cart = cart;
     this.containerEL = document.getElementById(containerID); // this.stockTheShelves();
-    // this.wireUpAddToCartClicks();
+    //load all the products that are present on the page
 
-    this.loadProducts();
+    this.loadProducts(); // wire up the add to cart buttons
+    // this.wireUpAddToCartClicks();
   }
 
   Store.prototype.loadProducts = function () {
@@ -737,10 +738,9 @@ function () {
           price: parseFloat(prodBox.getAttribute('data-price')),
           desc: prodBox.querySelector('div.feature-copy div.hiddenProdSpecs').innerHTML
         };
-        console.log(prodBox.querySelector('div.img-container > img'));
 
         if (prodBox.querySelector('div.img-container > img')) {
-          row.image = prodBox.querySelector('div.img-container > img')['src'];
+          row.image = prodBox.querySelector('div.img-container > img').getAttribute('src');
         } else {
           row.image = '';
         }

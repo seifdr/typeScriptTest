@@ -616,8 +616,12 @@ class Store {
         this.cart = cart;
         this.containerEL = document.getElementById( containerID );
         // this.stockTheShelves();
-        // this.wireUpAddToCartClicks();
+        
+        //load all the products that are present on the page
         this.loadProducts();
+        
+        // wire up the add to cart buttons
+        // this.wireUpAddToCartClicks();
     }
 
     loadProducts() {
@@ -649,10 +653,8 @@ class Store {
                     // renew: boolean;
                 };
 
-                console.log( prodBox.querySelector('div.img-container > img') );
-
                 if( prodBox.querySelector('div.img-container > img') ){
-                    row.image = prodBox.querySelector('div.img-container > img')['src'];
+                    row.image = prodBox.querySelector('div.img-container > img').getAttribute('src');
                 } else {
                     row.image = '';
                 }
