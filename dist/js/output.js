@@ -780,9 +780,12 @@ function () {
         var position = el.getAttribute('data-position');
         var isSoftware = el.getAttribute('data-is-software');
 
-        var output = _this.items[position].outputOverlay(num); // this.modal.openOverlay( output );
-        // let atcModalBtn = document.getElementById('atcModalBtn');
-        // if( atcModalBtn != null ){
+        var output = _this.items[position].outputOverlay(num);
+
+        _this.modal.openOverlay(output);
+
+        var atcModalBtn = document.getElementById('atcModalBtn');
+        console.log(atcModalBtn); // if( atcModalBtn != null ){
         //     atcModalBtn.addEventListener('click', async (e) => {      
         //         //Change the modal atc button 
         //         await this.addToCartToggle(num, atcModalBtn);
@@ -810,7 +813,6 @@ function () {
         //     });
         // }
         //wireup event listener to ATC button 
-
       });
     }; //add event listener to all product item feature boxes
 

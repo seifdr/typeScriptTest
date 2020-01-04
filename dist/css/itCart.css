@@ -1234,7 +1234,8 @@ section.shelves article.prodBox {
   cursor: pointer;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  position: relative; }
+  position: relative;
+  width: 100%; }
   section.shelves article.prodBox div.img-container {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -1262,6 +1263,8 @@ section.shelves article.prodBox {
         -ms-flex-direction: column;
             flex-direction: column;
     height: 100%; }
+    section.shelves article.prodBox div.feature-copy .hiddenProdSpecs {
+      display: none; }
     section.shelves article.prodBox div.feature-copy div {
       -webkit-box-flex: 1 1 0;
           -ms-flex-positive: 1 1 0;

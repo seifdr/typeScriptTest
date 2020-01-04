@@ -292,7 +292,7 @@ section.shelves {
         margin-right: -30px;
     }
 
-    div.pbc {
+    div.pbc { 
         display: flex;
         padding-bottom: 15px;
     }
@@ -303,6 +303,7 @@ section.shelves {
         cursor: pointer;
         box-sizing: border-box;
         position: relative;
+        width: 100%;
  
         div.img-container {
             @media screen and (min-width: $break-medium) {
@@ -325,6 +326,10 @@ section.shelves {
             display: flex;
             flex-direction: column;
             height: 100%;
+
+            .hiddenProdSpecs {
+                display: none;
+            }
 
             div {
                 flex-grow: 1 1 0;

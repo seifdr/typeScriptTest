@@ -696,10 +696,11 @@ class Store {
 
                     let output = this.items[position].outputOverlay(num);
 
-                    // this.modal.openOverlay( output );
+                    this.modal.openOverlay( output );
 
-                    // let atcModalBtn = document.getElementById('atcModalBtn');
+                    let atcModalBtn = document.getElementById('atcModalBtn');
 
+                    console.log( atcModalBtn );
                     // if( atcModalBtn != null ){
                     //     atcModalBtn.addEventListener('click', async (e) => {      
                             

@@ -21,13 +21,15 @@
 
     <!-- BEGIN CSS_COMMON --><link href="//deptcommon.fsm.northwestern.edu/_fw/styles/NM-dept-responsive.css" rel="stylesheet" type="text/css"/>
     
-     <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" type="text/css"/> END CSS_COMMON -->
+     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" type="text/css"/> END CSS_COMMON
     
     <!-- BEGIN CSS_EXTRA --><link href="//deptcommon.fsm.northwestern.edu/_fw/styles/nu-fw-landing-page-style.css" rel="stylesheet" type="text/css"/>
     
     <link href="//deptcommon.fsm.northwestern.edu/_fw/styles/nu-fw-fsm.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Open+Sans:300,700" rel="stylesheet" type="text/css"/><link href="//deptcommon.fsm.northwestern.edu/_fw/scripts/slick/slick-theme.css" rel="stylesheet" type="text/css"/><link href="//deptcommon.fsm.northwestern.edu/_fw/styles/new-header.css" rel="stylesheet" type="text/css"/><link href="//deptcommon.fsm.northwestern.edu/_fw/styles/announcements.css" rel="stylesheet" type="text/css"/><link href="//deptcommon.fsm.northwestern.edu/_fw/styles/mobile-exp.css" rel="stylesheet" type="text/css"/><!-- END CSS_EXTRA -->
-    <!-- BEGIN CSS_LOCAL --><link href="dist/css/v2.0.css" rel="stylesheet" type="text/css"/>
-                            <link href="dist/css/itCart.css" rel="stylesheet" type="text/css"/><!-- END CSS_LOCAL -->
+    <!-- BEGIN CSS_LOCAL -->
+        <link href="dist/css/v2.0.css" rel="stylesheet" type="text/css"/>
+        <link href="dist/css/itCart.css" rel="stylesheet" type="text/css"/>
+    <!-- END CSS_LOCAL -->
    
 
     <!--[if lt IE 9]>
