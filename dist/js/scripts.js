@@ -109,7 +109,7 @@ class Item implements product {
         this.element = item.element;
         this.renewElement = item.renewElement;
         this.type = item.type;
-        this.software = false;
+        this.software = item.software;
 
         let tempPrice = removeSpecialChars( item.price );
 
@@ -643,6 +643,7 @@ class Store {
                     renewElement: prodBox.getAttribute('data-renewElement'),
                     price: parseFloat( prodBox.getAttribute('data-price') ),
                     desc: prodBox.querySelector('div.feature-copy div.hiddenProdSpecs').innerHTML,
+                    software: ( prodBox.getAttribute('data-is-software') === '1' ),
                     // element;
                     // renewElement;
                     // type;
