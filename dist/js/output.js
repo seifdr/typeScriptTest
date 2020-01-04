@@ -208,6 +208,7 @@ var Item =
 /** @class */
 function () {
   function Item(item) {
+    this.position = item.position;
     this.id = item.id;
     this.title = item.title;
     this.element = item.element;
@@ -228,9 +229,9 @@ function () {
     this.renew = item.renew ? true : false;
   }
 
-  Item.prototype.outputOverlay = function (num) {
-    if (num === void 0) {
-      num = null;
+  Item.prototype.outputOverlay = function (position) {
+    if (position === void 0) {
+      position = null;
     } // <img src="assets/png/300x200.png" />
 
 
@@ -281,7 +282,7 @@ function () {
         output += "</div>";
       }
 
-      output += "<a id=\"atcModalBtn\" href=\"#\" \n                            class=\"button " + optClass + "\" \n                            data-num=\"" + num + "\" \n                            data-id=\"" + this.id + "\"\n                            data-is-software=\"{" + this.software + "}\"   \n                        >" + btnText + "</a>";
+      output += "<a id=\"atcModalBtn\" href=\"#\" \n                            class=\"button " + optClass + "\" \n                            data-position=\"" + position + "\" \n                            data-id=\"" + this.id + "\"\n                            data-is-software=\"{" + this.software + "}\"   \n                        >" + btnText + "</a>";
     }
 
     output += "</div>\n            </div>\n            </div>\n            </div>\n        </div>";
@@ -733,6 +734,7 @@ function () {
         var prodBox = result[i]; //add a position attr to prodBoxes. Makes it easier to find them by index val in this.items
 
         prodBox.setAttribute('data-position', i.toString());
+        prodBox.querySelector('a.atcBtn').setAttribute('data-position', i.toString());
         var row = {
           id: parseFloat(prodBox.getAttribute('data-num')),
           title: prodBox.querySelector('div.feature-copy div > h6').innerHTML,
@@ -778,41 +780,61 @@ function () {
         e.preventDefault();
         var num = el.getAttribute('data-num');
         var position = el.getAttribute('data-position');
-        var isSoftware = el.getAttribute('data-is-software');
+        var isSoftware = el.getAttribute('data-is-software') == '1';
 
         var output = _this.items[position].outputOverlay(num);
 
         _this.modal.openOverlay(output);
 
         var atcModalBtn = document.getElementById('atcModalBtn');
-        console.log(atcModalBtn); // if( atcModalBtn != null ){
-        //     atcModalBtn.addEventListener('click', async (e) => {      
-        //         //Change the modal atc button 
-        //         await this.addToCartToggle(num, atcModalBtn);
-        //         //check if item is software, if so toggle the select disable attribute 
-        //         //depending on if its on the cart or not
-        //         if( isSoftware ){    
-        //             alert('Software here');
-        //             // this.cart.toggleSoftwareSelects( this.items[num].id );
-        //             this.cart.toggleSoftwareSelects( this.items[num]['id'] );          
-        //         } else {
-        //             alert('Software not here');
-        //         }
-        //         //the cart toggle above only applies the modal add to cart button so...
-        //         //once it's been added to cart and the modal cart button has been toggled
-        //         //map the cart
-        //         this.cart.mapCart();
-        //         //withe the cart mapped by id, we can check for it and update the prod box id appropiately
-        //         if( this.cart.mappedBasket.includes( this.items[num].id ) ){
-        //             //the item is on the cart, change the prodbox btn to orange
-        //             this.cart.toggleATCbutton( el.getElementsByClassName('atcBtn')[0], true );
-        //         } else {
-        //             //the item is not on the cart, change the prodbox btn to purple
-        //             this.cart.toggleATCbutton( el.getElementsByClassName('atcBtn')[0], false );
-        //         }
-        //     });
-        // }
-        //wireup event listener to ATC button 
+
+        if (atcModalBtn != null) {
+          atcModalBtn.addEventListener('click', function (e) {
+            return __awaiter(_this, void 0, void 0, function () {
+              return __generator(this, function (_a) {
+                switch (_a.label) {
+                  case 0:
+                    //Change the modal atc button 
+                    return [4
+                    /*yield*/
+                    , this.addToCartToggle(num, atcModalBtn)];
+
+                  case 1:
+                    //Change the modal atc button 
+                    _a.sent(); //check if item is software, if so toggle the select disable attribute 
+                    //depending on if its on the cart or not
+
+
+                    if (isSoftware) {
+                      alert('Software here'); // this.cart.toggleSoftwareSelects( this.items[num].id );
+
+                      this.cart.toggleSoftwareSelects(this.items[position]['id']);
+                    } else {
+                      alert('Software not here');
+                    } //the cart toggle above only applies the modal add to cart button so...
+                    //once it's been added to cart and the modal cart button has been toggled
+                    //map the cart
+
+
+                    this.cart.mapCart(); //withe the cart mapped by id, we can check for it and update the prod box id appropiately
+
+                    if (this.cart.mappedBasket.includes(this.items[position].id)) {
+                      //the item is on the cart, change the prodbox btn to orange
+                      this.cart.toggleATCbutton(el.getElementsByClassName('atcBtn')[0], true);
+                    } else {
+                      //the item is not on the cart, change the prodbox btn to purple
+                      this.cart.toggleATCbutton(el.getElementsByClassName('atcBtn')[0], false);
+                    }
+
+                    return [2
+                    /*return*/
+                    ];
+                }
+              });
+            });
+          });
+        } //wireup event listener to ATC button 
+
       });
     }; //add event listener to all product item feature boxes
 
@@ -822,16 +844,54 @@ function () {
 
       _loop_3(el);
     }
-  };
-
-  Store.prototype.wireUpAddToCartClicksOld = function () {
-    var _this = this;
 
     var _loop_4 = function _loop_4(elBtn) {
       elBtn.addEventListener('click', function (e) {
         var num = elBtn.getAttribute('data-num');
+        var position = elBtn.getAttribute('data-position');
         var isSoftware = elBtn.getAttribute('data-is-software');
-        console.log('Items here: ', _this.items); // if( this.items[num].price != '0.00' ){
+        console.log(position);
+
+        if (_this.items[position].price != '0.00') {
+          //check if it's software
+          if (_this.items[position].isSoftware) {
+            //it is software, check selector value, and set the item.renew property
+            var selectInput = document.querySelector('article[data-id="' + _this.items[position].id + '"] select.renewInput');
+            var selectVal = selectInput.options[selectInput.selectedIndex].value;
+            _this.items[position].renew = selectVal == 'renew' ? true : false;
+          } //come back here
+          // this.addToCartToggle(num, elBtn);
+
+
+          _this.addToCartToggle(position, elBtn);
+
+          e.preventDefault();
+          e.stopPropagation();
+        } else {
+          var theeItem = _this.items[position];
+          var output = theeItem.outputOverlay(position);
+
+          _this.modal.openOverlay(output);
+
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      });
+    }; //atc buttons on page (not modal)
+
+
+    for (var _b = 0, _c = document.getElementsByClassName('atcBtn'); _b < _c.length; _b++) {
+      var elBtn = _c[_b];
+
+      _loop_4(elBtn);
+    }
+  };
+
+  Store.prototype.wireUpAddToCartClicksOld = function () {
+    var _loop_5 = function _loop_5(elBtn) {
+      elBtn.addEventListener('click', function (e) {
+        var num = elBtn.getAttribute('data-num');
+        var isSoftware = elBtn.getAttribute('data-is-software'); // if( this.items[num].price != '0.00' ){
         //     //check if it's software
         //     if( this.items[num].categories.value.includes('software') ){
         //         //it is software, check selector value, and set the item.renew property
@@ -856,7 +916,7 @@ function () {
     for (var _i = 0, _a = document.getElementsByClassName('atcBtn'); _i < _a.length; _i++) {
       var elBtn = _a[_i];
 
-      _loop_4(elBtn);
+      _loop_5(elBtn);
     } //add software select addEventListner, and stop event propagation 
 
 

@@ -71,6 +71,7 @@ function removeSpecialChars( inputVal ){
 // var pmg = document.body.querySelector('g#Layer_1');
 // var svg = document.getElementById('prevMedJewel');
 interface product {
+    position: number;
     id: number;
     title: string;
     element: string;
@@ -88,6 +89,7 @@ interface product {
 }
 
 class Item implements product {
+    position;
     id;
     title;
     element;
@@ -104,6 +106,7 @@ class Item implements product {
     catStr: string;
 
     constructor( item:product ){
+        this.position = item.position;
         this.id = item.id;
         this.title = item.title;
         this.element = item.element;
@@ -127,7 +130,7 @@ class Item implements product {
         this.renew = ( item.renew )? true : false;
     }
 
-    outputOverlay( num = null ){
+    outputOverlay( position = null ){
         // <img src="assets/png/300x200.png" />
         const btnText = ( this.onCart )? 'Remove From Cart' : 'Add To Cart';
         const optClass = (this.onCart)? 'onCart':'';
@@ -195,7 +198,7 @@ class Item implements product {
 
             output += `<a id="atcModalBtn" href="#" 
                             class="button ${optClass}" 
-                            data-num="${num}" 
+                            data-position="${position}" 
                             data-id="${this.id}"
                             data-is-software="{${this.software}}"   
                         >${ btnText }</a>`;
@@ -638,6 +641,7 @@ class Store {
 
                 //add a position attr to prodBoxes. Makes it easier to find them by index val in this.items
                 prodBox.setAttribute( 'data-position', i.toString() );
+                prodBox.querySelector('a.atcBtn').setAttribute( 'data-position', i.toString() );
 
                 let row:product = {
                     id: parseFloat( prodBox.getAttribute('data-num') ),
@@ -692,7 +696,7 @@ class Store {
                     e.preventDefault();
                     let num = el.getAttribute('data-num');
                     let position = el.getAttribute('data-position');
-                    let isSoftware = el.getAttribute('data-is-software');
+                    let isSoftware = ( el.getAttribute('data-is-software') == '1' ) ;
 
                     let output = this.items[position].outputOverlay(num);
 
@@ -700,42 +704,75 @@ class Store {
 
                     let atcModalBtn = document.getElementById('atcModalBtn');
 
-                    console.log( atcModalBtn );
-                    // if( atcModalBtn != null ){
-                    //     atcModalBtn.addEventListener('click', async (e) => {      
+                    if( atcModalBtn != null ){
+                        atcModalBtn.addEventListener('click', async (e) => {      
                             
-                    //         //Change the modal atc button 
-                    //         await this.addToCartToggle(num, atcModalBtn);
+                            //Change the modal atc button 
+                            await this.addToCartToggle(num, atcModalBtn);
 
-                    //         //check if item is software, if so toggle the select disable attribute 
-                    //         //depending on if its on the cart or not
-                    //         if( isSoftware ){    
-                    //             alert('Software here');
-                    //             // this.cart.toggleSoftwareSelects( this.items[num].id );
-                    //             this.cart.toggleSoftwareSelects( this.items[num]['id'] );          
-                    //         } else {
-                    //             alert('Software not here');
-                    //         }
+                            //check if item is software, if so toggle the select disable attribute 
+                            //depending on if its on the cart or not
+                            if( isSoftware ){    
+                                alert('Software here');
+                                // this.cart.toggleSoftwareSelects( this.items[num].id );
+                                this.cart.toggleSoftwareSelects( this.items[position]['id'] );          
+                            } else {
+                                alert('Software not here');
+                            }
 
-                    //         //the cart toggle above only applies the modal add to cart button so...
-                    //         //once it's been added to cart and the modal cart button has been toggled
-                    //         //map the cart
-                    //         this.cart.mapCart();
+                            //the cart toggle above only applies the modal add to cart button so...
+                            //once it's been added to cart and the modal cart button has been toggled
+                            //map the cart
+                            this.cart.mapCart();
 
-                        
-                    //         //withe the cart mapped by id, we can check for it and update the prod box id appropiately
-                    //         if( this.cart.mappedBasket.includes( this.items[num].id ) ){
-                    //             //the item is on the cart, change the prodbox btn to orange
-                    //             this.cart.toggleATCbutton( el.getElementsByClassName('atcBtn')[0], true );
-                    //         } else {
-                    //             //the item is not on the cart, change the prodbox btn to purple
-                    //             this.cart.toggleATCbutton( el.getElementsByClassName('atcBtn')[0], false );
-                    //         }
-                    //     });
-                    // }
+                            //withe the cart mapped by id, we can check for it and update the prod box id appropiately
+                            if( this.cart.mappedBasket.includes( this.items[position].id ) ){
+                                //the item is on the cart, change the prodbox btn to orange
+                                this.cart.toggleATCbutton( el.getElementsByClassName('atcBtn')[0], true );
+                            } else {
+                                //the item is not on the cart, change the prodbox btn to purple
+                                this.cart.toggleATCbutton( el.getElementsByClassName('atcBtn')[0], false );
+                            }
+                        });
+                    }
                     //wireup event listener to ATC button 
             });
         }
+
+        //atc buttons on page (not modal)
+        for( let elBtn of document.getElementsByClassName('atcBtn') ){
+            elBtn.addEventListener('click', (e) => {
+
+                let num = elBtn.getAttribute('data-num');
+                let position = elBtn.getAttribute('data-position');
+                let isSoftware = elBtn.getAttribute('data-is-software');
+            
+                console.log(position);
+
+                if( this.items[position].price != '0.00' ){
+
+                    //check if it's software
+                    if( this.items[position].isSoftware ){
+                        //it is software, check selector value, and set the item.renew property
+                        const selectInput = document.querySelector('article[data-id="'+ this.items[position].id +'"] select.renewInput' );
+                        const selectVal = selectInput.options[selectInput.selectedIndex].value;
+                        this.items[position].renew = ( selectVal == 'renew' )? true : false;
+                    }
+
+                    //come back here
+                    // this.addToCartToggle(num, elBtn);
+                    this.addToCartToggle(position, elBtn);
+                    e.preventDefault();
+                    e.stopPropagation();
+                } else {
+                    let theeItem = <Item>this.items[position]; 
+                    let output = theeItem.outputOverlay(position);
+                    this.modal.openOverlay( output );
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            });
+        }   
 
 
     }
@@ -750,8 +787,6 @@ class Store {
                 let num = elBtn.getAttribute('data-num');
                 let isSoftware = elBtn.getAttribute('data-is-software');
             
-                console.log( 'Items here: ', this.items );
-
                 // if( this.items[num].price != '0.00' ){
 
                 //     //check if it's software
