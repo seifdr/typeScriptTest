@@ -591,7 +591,7 @@ class Cart {
 
             for (let i = 0; i < this.basket.length; i++) {
                 
-                if( this.basket[i].catStr.includes('software') ){
+                if( this.basket[i].software ){
                     if(this.basket[i].renew ){
                         url += this.basket[i].renewElement + '=1';
                     } else {
