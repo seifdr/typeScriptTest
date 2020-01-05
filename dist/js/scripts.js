@@ -771,10 +771,12 @@ class Store {
                 if( this.items[position].price != '0.00' ){
 
                     //check if it's software
-                    if( this.items[position].isSoftware ){
+                    if( this.items[position].software ){
                         //it is software, check selector value, and set the item.renew property
-                        const selectInput = document.querySelector('article[data-id="'+ this.items[position].id +'"] select.renewInput' );
+                        const selectInput = document.querySelector('article[data-num="'+ this.items[position].id +'"] select.renewInput' );
+                        
                         const selectVal = selectInput.options[selectInput.selectedIndex].value;
+
                         this.items[position].renew = ( selectVal == 'renew' )? true : false;
                     }
 
@@ -794,7 +796,8 @@ class Store {
         //add software select addEventListner, and stop event propagation 
         for( let elrenew of document.getElementsByClassName('renewInput') ){
             elrenew.addEventListener('click', (e) => {
-                let selectVal = elrenew.options[filterOS.selectedIndex].value;
+                //not sure if the selectVal below 
+                // let selectVal = elrenew.options[filterOS.selectedIndex].value;
                 e.preventDefault();
                 e.stopPropagation();
             });                

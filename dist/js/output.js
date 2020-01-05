@@ -865,9 +865,9 @@ function () {
 
         if (_this.items[position].price != '0.00') {
           //check if it's software
-          if (_this.items[position].isSoftware) {
+          if (_this.items[position].software) {
             //it is software, check selector value, and set the item.renew property
-            var selectInput = document.querySelector('article[data-id="' + _this.items[position].id + '"] select.renewInput');
+            var selectInput = document.querySelector('article[data-num="' + _this.items[position].id + '"] select.renewInput');
             var selectVal = selectInput.options[selectInput.selectedIndex].value;
             _this.items[position].renew = selectVal == 'renew' ? true : false;
           }
@@ -893,21 +893,17 @@ function () {
       var elBtn = _c[_b];
 
       _loop_4(elBtn);
-    }
-
-    var _loop_5 = function _loop_5(elrenew) {
-      elrenew.addEventListener('click', function (e) {
-        var selectVal = elrenew.options[filterOS.selectedIndex].value;
-        e.preventDefault();
-        e.stopPropagation();
-      });
-    }; //add software select addEventListner, and stop event propagation 
+    } //add software select addEventListner, and stop event propagation 
 
 
     for (var _d = 0, _e = document.getElementsByClassName('renewInput'); _d < _e.length; _d++) {
       var elrenew = _e[_d];
-
-      _loop_5(elrenew);
+      elrenew.addEventListener('click', function (e) {
+        //not sure if the selectVal below 
+        // let selectVal = elrenew.options[filterOS.selectedIndex].value;
+        e.preventDefault();
+        e.stopPropagation();
+      });
     }
   };
 
