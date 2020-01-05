@@ -341,8 +341,14 @@ class Cart {
 
     //if item is within the basket then it disables the select box(es), if not, it enables the selects
     toggleSoftwareSelects( id ){
+
+        console.log("ID here: ", id);
+
         if( id ){
-            const selectDropDowns = document.querySelectorAll('select[data-id="'+ id +'"]');
+            //COME BACK
+            const selectDropDowns = document.querySelectorAll('select[data-num="'+ id +'"]');
+
+            console.log("Select Dropdowns: ", selectDropDowns );
 
             if( this.inBasket(id) != -1 ){
                 selectDropDowns.forEach( selectEl => {
@@ -655,9 +661,14 @@ class Store {
                 //add a position attr to prodBoxes. Makes it easier to find them by index val in this.items
                 prodBox.setAttribute( 'data-position', i.toString() );
                 prodBox.querySelector('a.atcBtn').setAttribute( 'data-position', i.toString() );
-                
+
                 //get the data-num property
                 let dataNum = parseFloat( prodBox.getAttribute('data-num') );
+
+                //add data-num attr to the software select boxes
+                if( prodBox.getAttribute('data-is-software') === '1' ){
+                    prodBox.querySelector('select.renewInput').setAttribute( 'data-num', dataNum.toString() );
+                }
 
                 let row:product = {
                     id: dataNum,

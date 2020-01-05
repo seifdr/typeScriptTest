@@ -404,8 +404,12 @@ function () {
 
 
   Cart.prototype.toggleSoftwareSelects = function (id) {
+    console.log("ID here: ", id);
+
     if (id) {
-      var selectDropDowns = document.querySelectorAll('select[data-id="' + id + '"]');
+      //COME BACK
+      var selectDropDowns = document.querySelectorAll('select[data-num="' + id + '"]');
+      console.log("Select Dropdowns: ", selectDropDowns);
 
       if (this.inBasket(id) != -1) {
         selectDropDowns.forEach(function (selectEl) {
@@ -744,7 +748,12 @@ function () {
         prodBox.setAttribute('data-position', i.toString());
         prodBox.querySelector('a.atcBtn').setAttribute('data-position', i.toString()); //get the data-num property
 
-        var dataNum = parseFloat(prodBox.getAttribute('data-num'));
+        var dataNum = parseFloat(prodBox.getAttribute('data-num')); //add data-num attr to the software select boxes
+
+        if (prodBox.getAttribute('data-is-software') === '1') {
+          prodBox.querySelector('select.renewInput').setAttribute('data-num', dataNum.toString());
+        }
+
         var row = {
           id: dataNum,
           title: prodBox.querySelector('div.feature-copy div > h6').innerHTML,
