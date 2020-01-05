@@ -353,10 +353,14 @@ function () {
         if (basketItem.id === item.id) {
           positionInBasket = i;
         }
-      });
+      }); //get a reference to the ATC button from the items prodbox were dealing with
+
+      var prodBoxAtcBtn = document.querySelector('article.prodBox[data-num="' + item.id + '"] > a.atcBtn');
 
       if (positionInBasket === -1 || positionInBasket === undefined) {
-        var result = this.addToBasket(item); //update the disable software select for software items only
+        var result = this.addToBasket(item); // make sure the atcBTN on the prodBox is toggled on
+
+        this.toggleATCbutton(prodBoxAtcBtn, true); //update the disable software select for software items only
 
         if (result) {
           // this.disableSoftwareSelect(item);
@@ -366,7 +370,9 @@ function () {
         this.updateCartTotalAndCount();
         return result;
       } else {
-        var deletedItem = this.removeFromBasket(positionInBasket)[0];
+        var deletedItem = this.removeFromBasket(positionInBasket)[0]; // make sure the atcBTN on the prodBox is toggled off
+
+        this.toggleATCbutton(prodBoxAtcBtn, false);
         var atcBtns = document.getElementsByClassName('atcBtn');
 
         for (var i = 0; i < atcBtns.length; i++) {
@@ -581,7 +587,8 @@ function () {
 
             _this.modal.updateOverlayContent(_this.listCart());
 
-            _this.wireUpCartDeletes();
+            _this.wireUpCartDeletes(); //finish me!
+
 
             e.preventDefault();
           });

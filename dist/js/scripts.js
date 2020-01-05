@@ -285,9 +285,15 @@ class Cart {
                 }
             });
 
+            //get a reference to the ATC button from the items prodbox were dealing with
+            let prodBoxAtcBtn = document.querySelector('article.prodBox[data-num="'+ item.id +'"] > a.atcBtn');
+
             if( positionInBasket === -1 || positionInBasket === undefined ){
                 let result = this.addToBasket(item);
 
+                // make sure the atcBTN on the prodBox is toggled on
+                this.toggleATCbutton( prodBoxAtcBtn, true );
+                
                 //update the disable software select for software items only
                 if( result ){
                     // this.disableSoftwareSelect(item);
@@ -299,6 +305,9 @@ class Cart {
             } else {
                 const deletedItem = this.removeFromBasket( positionInBasket )[0];
                 
+                // make sure the atcBTN on the prodBox is toggled off
+                this.toggleATCbutton( prodBoxAtcBtn, false );
+
                 let atcBtns = document.getElementsByClassName('atcBtn');
 
                 for (let i = 0; i < atcBtns.length; i++) {
@@ -480,6 +489,7 @@ class Cart {
                         this.addOrRemoveFromCart( this.basket[positionInBasket] );
                         this.modal.updateOverlayContent( this.listCart() );
                         this.wireUpCartDeletes();
+                        //finish me!
                         e.preventDefault();
                     });
                 }
