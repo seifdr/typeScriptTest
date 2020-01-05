@@ -376,12 +376,12 @@ function () {
         var atcBtns = document.getElementsByClassName('atcBtn');
 
         for (var i = 0; i < atcBtns.length; i++) {
-          var dataId = atcBtns[i].getAttribute('data-id');
+          var dataNum = atcBtns[i].getAttribute('data-num');
 
-          if (deletedItem['id'] == dataId) {
+          if (deletedItem['id'] == dataNum) {
             this.toggleATCbutton(atcBtns[i], false); //this.unRenewSelect( dataId );
 
-            this.toggleSoftwareSelects(dataId);
+            this.toggleSoftwareSelects(dataNum);
           }
         }
 
@@ -737,7 +737,6 @@ function () {
   Store.prototype.loadProducts = function () {
     var existingItemsInCookie = this.cookie.getJSONfromCookieAsArray();
     var softwareRenewIds = this.softwareCookie.getJSONfromCookieAsArray();
-    console.log("ecIIC: ", existingItemsInCookie);
     var result = document.getElementsByClassName('prodBox');
 
     if (result.length > 0) {
@@ -748,7 +747,9 @@ function () {
         prodBox.setAttribute('data-position', i.toString());
         prodBox.querySelector('a.atcBtn').setAttribute('data-position', i.toString()); //get the data-num property
 
-        var dataNum = parseFloat(prodBox.getAttribute('data-num')); //add data-num attr to the software select boxes
+        var dataNum = parseFloat(prodBox.getAttribute('data-num')); //add data-num property to atcBtns
+
+        prodBox.querySelector('a.atcBtn').setAttribute('data-num', dataNum.toString()); //add data-num attr to the software select boxes
 
         if (prodBox.getAttribute('data-is-software') === '1') {
           prodBox.querySelector('select.renewInput').setAttribute('data-num', dataNum.toString());

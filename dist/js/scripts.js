@@ -311,13 +311,13 @@ class Cart {
                 let atcBtns = document.getElementsByClassName('atcBtn');
 
                 for (let i = 0; i < atcBtns.length; i++) {
-                    let dataId = atcBtns[i].getAttribute('data-id');
+                    let dataNum = atcBtns[i].getAttribute('data-num');
 
-                    if( deletedItem['id'] == dataId ){
+                    if( deletedItem['id'] == dataNum ){
                         this.toggleATCbutton( atcBtns[i], false );
     
                         //this.unRenewSelect( dataId );
-                        this.toggleSoftwareSelects(dataId);
+                        this.toggleSoftwareSelects(dataNum);
                     }
                 }
                 this.updateCartTotalAndCount();
@@ -648,8 +648,6 @@ class Store {
         const existingItemsInCookie = <number[]> this.cookie.getJSONfromCookieAsArray();
         const softwareRenewIds = this.softwareCookie.getJSONfromCookieAsArray();
 
-        console.log("ecIIC: ", existingItemsInCookie );
-
         let result = document.getElementsByClassName('prodBox');
 
         if(result.length > 0){
@@ -664,6 +662,9 @@ class Store {
 
                 //get the data-num property
                 let dataNum = parseFloat( prodBox.getAttribute('data-num') );
+
+                //add data-num property to atcBtns
+                prodBox.querySelector('a.atcBtn').setAttribute( 'data-num', dataNum.toString() );
 
                 //add data-num attr to the software select boxes
                 if( prodBox.getAttribute('data-is-software') === '1' ){
