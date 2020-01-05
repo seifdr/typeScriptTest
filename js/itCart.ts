@@ -277,8 +277,9 @@ class Cart {
         let positionInBasket:number;
 
         if( this.basket.length > 0 ){
-    
+
             this.basket.forEach( (basketItem, i ) => {
+                
                 if ( basketItem.id === item.id ){
                     positionInBasket = i; 
                 }
@@ -356,11 +357,11 @@ class Cart {
     }
 
     inBasket( incomingID ){
-        let result = -1;
-        
+        let result:number = -1;
+
         this.basket.forEach( (basketItem, i ) => {
             if( basketItem.id === incomingID ){
-                result = i; 
+                result = i;
             }
         });
 
@@ -631,6 +632,8 @@ class Store {
         const existingItemsInCookie = <number[]> this.cookie.getJSONfromCookieAsArray();
         const softwareRenewIds = this.softwareCookie.getJSONfromCookieAsArray();
 
+        console.log("ecIIC: ", existingItemsInCookie );
+
         let result = document.getElementsByClassName('prodBox');
 
         if(result.length > 0){
@@ -642,9 +645,12 @@ class Store {
                 //add a position attr to prodBoxes. Makes it easier to find them by index val in this.items
                 prodBox.setAttribute( 'data-position', i.toString() );
                 prodBox.querySelector('a.atcBtn').setAttribute( 'data-position', i.toString() );
+                
+                //get the data-num property
+                let dataNum = parseFloat( prodBox.getAttribute('data-num') );
 
                 let row:product = {
-                    id: parseFloat( prodBox.getAttribute('data-num') ),
+                    id: dataNum,
                     title: prodBox.querySelector('div.feature-copy div > h6').innerHTML,
                     element: prodBox.getAttribute('data-element'),
                     renewElement: prodBox.getAttribute('data-renewElement'),
@@ -668,8 +674,13 @@ class Store {
                 }
 
                 if( existingItemsInCookie.length > 0 ){
+                    
                     if( existingItemsInCookie.includes( row.id ) ){
                         row.onCart = true;
+
+                        //if item is on cart already make sure to turn the btn orange and change the text
+                        let onCartBtn = document.querySelector('article.prodBox[data-num="'+ row.id +'"] a.atcBtn');
+                        this.cart.toggleATCbutton( onCartBtn, true );
 
                         if( softwareRenewIds.includes( row.id ) ){
                             row.renew = true;

@@ -726,6 +726,7 @@ function () {
   Store.prototype.loadProducts = function () {
     var existingItemsInCookie = this.cookie.getJSONfromCookieAsArray();
     var softwareRenewIds = this.softwareCookie.getJSONfromCookieAsArray();
+    console.log("ecIIC: ", existingItemsInCookie);
     var result = document.getElementsByClassName('prodBox');
 
     if (result.length > 0) {
@@ -734,9 +735,11 @@ function () {
         var prodBox = result[i]; //add a position attr to prodBoxes. Makes it easier to find them by index val in this.items
 
         prodBox.setAttribute('data-position', i.toString());
-        prodBox.querySelector('a.atcBtn').setAttribute('data-position', i.toString());
+        prodBox.querySelector('a.atcBtn').setAttribute('data-position', i.toString()); //get the data-num property
+
+        var dataNum = parseFloat(prodBox.getAttribute('data-num'));
         var row = {
-          id: parseFloat(prodBox.getAttribute('data-num')),
+          id: dataNum,
           title: prodBox.querySelector('div.feature-copy div > h6').innerHTML,
           element: prodBox.getAttribute('data-element'),
           renewElement: prodBox.getAttribute('data-renewElement'),
@@ -753,7 +756,10 @@ function () {
 
         if (existingItemsInCookie.length > 0) {
           if (existingItemsInCookie.includes(row.id)) {
-            row.onCart = true;
+            row.onCart = true; //if item is on cart already make sure to turn the btn orange and change the text
+
+            var onCartBtn = document.querySelector('article.prodBox[data-num="' + row.id + '"] a.atcBtn');
+            this.cart.toggleATCbutton(onCartBtn, true);
 
             if (softwareRenewIds.includes(row.id)) {
               row.renew = true;
