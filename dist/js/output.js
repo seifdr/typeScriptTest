@@ -699,7 +699,6 @@ function () {
       for (var i = 0; i < this.basket.length; i++) {
         if (this.basket[i].software) {
           if (this.basket[i].renew) {
-            alert('Renew El' + this.basket[i].renewElement);
             url += this.basket[i].renewElement + '=1';
           } else {
             url += this.basket[i].element + '=1';
@@ -713,7 +712,6 @@ function () {
         }
       }
 
-      alert(url);
       return url;
     } else {
       return null;
