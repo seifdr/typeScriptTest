@@ -143,9 +143,13 @@ class Item implements product {
 
                 if( this.image != '/' ){   
                     output += `<div class="col-12 col-lg-6 overlayImg">
-                        <div>
-                            <img src="${this.image}" /> 
-                        </div>
+                        <div>`;
+                            if( this.image && this.image != '' ){
+                                output += `<img src="${this.image}" />`; 
+                            } else {
+                                output += `&nbsp;`; 
+                            }
+                        output += `</div>
                     </div>`; 
                 }     
         output += `<div class="col-12 col-lg-6 overlayText">
@@ -526,7 +530,7 @@ class Cart {
                 cartlistOutput += `<div class="cartRow">
                     <div class="crImg">`
 
-                    if( row.image != '/' ){
+                    if( row.image != '/' && row.image != '' ){
                         cartlistOutput += `<img src="${row.image}" alt="${row.title}-image" />`;
                     }
         

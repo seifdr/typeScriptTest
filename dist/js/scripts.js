@@ -143,9 +143,13 @@ class Item implements product {
 
                 if( this.image != '/' ){   
                     output += `<div class="col-12 col-lg-6 overlayImg">
-                        <div>
-                            <img src="https://feinberg-dev.fsm.northwestern.edu/it-new/${this.image}" />
-                        </div>
+                        <div>`;
+                            if( this.image && this.image != '' ){
+                                output += `<img src="${this.image}" />`; 
+                            } else {
+                                output += `&nbsp;`; 
+                            }
+                        output += `</div>
                     </div>`; 
                 }     
         output += `<div class="col-12 col-lg-6 overlayText">
@@ -526,8 +530,8 @@ class Cart {
                 cartlistOutput += `<div class="cartRow">
                     <div class="crImg">`
 
-                    if( row.image != '/' ){
-                        cartlistOutput += `<img src="https://feinberg-dev.fsm.northwestern.edu/it-new/${row.image}" alt="${row.title}-image" />`;
+                    if( row.image != '/' && row.image != '' ){
+                        cartlistOutput += `<img src="${row.image}" alt="${row.title}-image" />`;
                     }
         
                 cartlistOutput += `</div>

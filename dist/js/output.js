@@ -241,7 +241,15 @@ function () {
     var output = "<div id=\"overlayPad\" data-id=\"" + this.id + "\" >\n        <div class=\"bootstrap-wrapper\">\n    <div class=\"container\">\n    <div class=\"row\">";
 
     if (this.image != '/') {
-      output += "<div class=\"col-12 col-lg-6 overlayImg\">\n                        <div>\n                            <img src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + this.image + "\" />\n                        </div>\n                    </div>";
+      output += "<div class=\"col-12 col-lg-6 overlayImg\">\n                        <div>";
+
+      if (this.image && this.image != '') {
+        output += "<img src=\"" + this.image + "\" />";
+      } else {
+        output += "&nbsp;";
+      }
+
+      output += "</div>\n                    </div>";
     }
 
     output += "<div class=\"col-12 col-lg-6 overlayText\">\n                        \n                            <h3>" + this.title;
@@ -640,8 +648,8 @@ function () {
       this.basket.forEach(function (row, i) {
         cartlistOutput_1 += "<div class=\"cartRow\">\n                    <div class=\"crImg\">";
 
-        if (row.image != '/') {
-          cartlistOutput_1 += "<img src=\"https://feinberg-dev.fsm.northwestern.edu/it-new/" + row.image + "\" alt=\"" + row.title + "-image\" />";
+        if (row.image != '/' && row.image != '') {
+          cartlistOutput_1 += "<img src=\"" + row.image + "\" alt=\"" + row.title + "-image\" />";
         }
 
         cartlistOutput_1 += "</div>\n                    <div class=\"crDesc\">\n                        <p>" + row.title;
