@@ -414,7 +414,6 @@ function () {
 
   Cart.prototype.toggleSoftwareSelects = function (id) {
     if (id) {
-      //COME BACK
       var selectDropDowns = document.querySelectorAll('select[data-num="' + id + '"]');
 
       if (this.inBasket(id) != -1) {
@@ -700,6 +699,7 @@ function () {
       for (var i = 0; i < this.basket.length; i++) {
         if (this.basket[i].software) {
           if (this.basket[i].renew) {
+            alert('Renew El' + this.basket[i].renewElement);
             url += this.basket[i].renewElement + '=1';
           } else {
             url += this.basket[i].element + '=1';
@@ -713,6 +713,7 @@ function () {
         }
       }
 
+      alert(url);
       return url;
     } else {
       return null;
@@ -765,7 +766,7 @@ function () {
           id: dataNum,
           title: prodBox.querySelector('div.feature-copy div > h6').innerHTML,
           element: prodBox.getAttribute('data-element'),
-          renewElement: prodBox.getAttribute('data-renewElement'),
+          renewElement: prodBox.getAttribute('data-elementrenew'),
           price: parseFloat(prodBox.getAttribute('data-price')),
           desc: prodBox.querySelector('div.feature-copy div.hiddenProdSpecs').innerHTML,
           software: prodBox.getAttribute('data-is-software') === '1'

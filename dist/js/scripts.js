@@ -346,9 +346,7 @@ class Cart {
 
     //if item is within the basket then it disables the select box(es), if not, it enables the selects
     toggleSoftwareSelects( id ){
-
         if( id ){
-            //COME BACK
             const selectDropDowns = document.querySelectorAll('select[data-num="'+ id +'"]');
 
             if( this.inBasket(id) != -1 ){
@@ -600,6 +598,7 @@ class Cart {
                 
                 if( this.basket[i].software ){
                     if(this.basket[i].renew ){
+                        alert( 'Renew El' + this.basket[i].renewElement );
                         url += this.basket[i].renewElement + '=1';
                     } else {
                         url += this.basket[i].element + '=1';
@@ -607,12 +606,12 @@ class Cart {
                 } else {
                     url += this.basket[i].element + '=1';
                 }
-               
 
                 if( (i + 1) < this.basket.length ){
                     url += '&'
                 }
             }
+            alert( url );
             return url;
         } else {
             return null;
@@ -676,7 +675,7 @@ class Store {
                     id: dataNum,
                     title: prodBox.querySelector('div.feature-copy div > h6').innerHTML,
                     element: prodBox.getAttribute('data-element'),
-                    renewElement: prodBox.getAttribute('data-renewElement'),
+                    renewElement: prodBox.getAttribute('data-elementrenew'),
                     price: parseFloat( prodBox.getAttribute('data-price') ),
                     desc: prodBox.querySelector('div.feature-copy div.hiddenProdSpecs').innerHTML,
                     software: ( prodBox.getAttribute('data-is-software') === '1' ),
@@ -695,6 +694,8 @@ class Store {
                 } else {
                     row.image = '';
                 }
+
+                
 
                 if( existingItemsInCookie.length > 0 ){
                     
