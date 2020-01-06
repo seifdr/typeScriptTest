@@ -343,13 +343,9 @@ class Cart {
     //if item is within the basket then it disables the select box(es), if not, it enables the selects
     toggleSoftwareSelects( id ){
 
-        console.log("ID here: ", id);
-
         if( id ){
             //COME BACK
             const selectDropDowns = document.querySelectorAll('select[data-num="'+ id +'"]');
-
-            console.log("Select Dropdowns: ", selectDropDowns );
 
             if( this.inBasket(id) != -1 ){
                 selectDropDowns.forEach( selectEl => {
@@ -696,8 +692,6 @@ class Store {
                     row.image = '';
                 }
 
-                console.log('Thee Row: ', row );
-
                 if( existingItemsInCookie.length > 0 ){
                     
                     if( existingItemsInCookie.includes( row.id ) ){
@@ -720,7 +714,7 @@ class Store {
                 this.items[i] = new Item( row );
             }
     
-            console.log( this.items );
+            // console.log( this.items );
         }
     }
 
@@ -926,7 +920,6 @@ class itAlert {
             alertBox += `</div>  
                 </div>`;
 
-            console.log('inside:', alertBox );
         return alertBox;
     }
 
@@ -954,9 +947,6 @@ class itAlert {
 
             this.baseEL.insertAdjacentHTML('afterbegin', alertBox ); 
         } else {
-
-            console.log('Before: ', this.alerts['purchasingAlert']);
-
             const alertBox = this.buildBox( <alert>this.alerts['purchasingAlert'] ); 
 
             if( this.alerts['purchasingAlert']['modal'] != '' ){

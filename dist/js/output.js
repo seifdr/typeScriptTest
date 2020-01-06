@@ -405,12 +405,9 @@ function () {
 
 
   Cart.prototype.toggleSoftwareSelects = function (id) {
-    console.log("ID here: ", id);
-
     if (id) {
       //COME BACK
       var selectDropDowns = document.querySelectorAll('select[data-num="' + id + '"]');
-      console.log("Select Dropdowns: ", selectDropDowns);
 
       if (this.inBasket(id) != -1) {
         selectDropDowns.forEach(function (selectEl) {
@@ -772,8 +769,6 @@ function () {
           row.image = '';
         }
 
-        console.log('Thee Row: ', row);
-
         if (existingItemsInCookie.length > 0) {
           if (existingItemsInCookie.includes(row.id)) {
             row.onCart = true; //if item is on cart already make sure to turn the btn orange and change the text
@@ -792,9 +787,8 @@ function () {
         }
 
         this.items[i] = new Item(row);
-      }
+      } // console.log( this.items );
 
-      console.log(this.items);
     }
   };
 
@@ -1010,7 +1004,6 @@ function () {
     }
 
     alertBox += "</div>  \n                </div>";
-    console.log('inside:', alertBox);
     return alertBox;
   };
 
@@ -1031,7 +1024,6 @@ function () {
 
       this.baseEL.insertAdjacentHTML('afterbegin', alertBox);
     } else {
-      console.log('Before: ', this.alerts['purchasingAlert']);
       var alertBox = this.buildBox(this.alerts['purchasingAlert']);
 
       if (this.alerts['purchasingAlert']['modal'] != '') {
