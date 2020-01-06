@@ -123,7 +123,7 @@ class Item implements product {
             this.price = removeSpecialChars( tempPrice );
         }
         
-        this.image = item.image['path'];
+        this.image = item.image;
         this.desc = item.desc;
 
         this.onCart = ( item.onCart )? true : false; 
@@ -695,6 +695,8 @@ class Store {
                 } else {
                     row.image = '';
                 }
+
+                console.log('Thee Row: ', row );
 
                 if( existingItemsInCookie.length > 0 ){
                     

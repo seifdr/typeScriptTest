@@ -224,7 +224,7 @@ function () {
       this.price = removeSpecialChars(tempPrice);
     }
 
-    this.image = item.image['path'];
+    this.image = item.image;
     this.desc = item.desc;
     this.onCart = item.onCart ? true : false;
     this.renew = item.renew ? true : false;
@@ -771,6 +771,8 @@ function () {
         } else {
           row.image = '';
         }
+
+        console.log('Thee Row: ', row);
 
         if (existingItemsInCookie.length > 0) {
           if (existingItemsInCookie.includes(row.id)) {
