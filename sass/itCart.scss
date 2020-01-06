@@ -35,6 +35,7 @@ $break-xlarge: 1145px;
 
 
 $fsmPurple:            #514689;
+$fsmPurpleHover:       #B6ACD1;
 $fsmLightPurple:       #6357a0;
 $fsmOrange:            #df6426;
 $fsmOrangeHover:       #daa88f; 
@@ -153,6 +154,69 @@ div#cartList {
     overflow-y: scroll;
     max-height: 600px;
     width: 100%;
+
+    a.crDeleteBtn {
+        font-weight: bold;
+        color: $fsmPurple;
+    }
+
+    a.button {  
+        padding: .8em; 
+        min-width: 200px;
+        background-color: $fsmPurple;
+        color: #fff;
+        text-align: center;
+        text-transform: uppercase;
+        font-weight: bold;
+
+        cursor: pointer;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        display: inline-block;
+        vertical-align: middle;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        -moz-osx-font-smoothing: grayscale;
+        position: relative;
+        -webkit-transition-property: color;
+        transition-property: color;
+        -webkit-transition-duration: 0.2s;
+        transition-duration: 0.2s;
+        min-width: 165px;
+        border: none;     
+        
+        &:hover {
+            text-decoration: none;
+        }
+
+        &:before {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: $fsmPurpleHover;
+            -webkit-transform: scaleX(0);
+            transform: scaleX(0);
+            -webkit-transform-origin: 0 50%;
+            transform-origin: 0 50%;
+            -webkit-transition-property: transform;
+            transition-property: transform;
+            -webkit-transition-duration: 0.2s;
+            transition-duration: 0.2s;
+            -webkit-transition-timing-function: ease-out;
+            transition-timing-function: ease-out
+        }
+
+        &:hover:before {
+            -webkit-transform: scaleX(1);
+            transform: scaleX(1)
+        }
+    }
 }
 
 div#cartList div.cartRow > div {
