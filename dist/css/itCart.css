@@ -1312,6 +1312,21 @@ div#overlayGuts {
       div#overlayGuts div#overlayPad div.renewModalSelect select {
         margin-top: .25em;
         padding-top: .25em; }
+  div#overlayGuts h3 {
+    color: #514689;
+    font-family: Calibri,Helvetica,Arial,sans-serif;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.2em;
+    padding-top: 0;
+    padding-bottom: 10px;
+    margin: 0;
+    font-size: 20px; }
+  div#overlayGuts h6 {
+    font-size: 18px;
+    color: #716c6b;
+    margin-bottom: 1rem; }
   div#overlayGuts a {
     font-weight: bold;
     color: #514689; }
@@ -1377,3 +1392,14 @@ body.modal-open {
   /*prevents scrolling on all screens*/
   overflow: hidden;
   position: fixed; }
+
+section#jumpers {
+  width: 100%;
+  margin-bottom: 1em !important; }
+  section#jumpers div.jumper {
+    float: left;
+    padding: .5em .75em; }
+    section#jumpers div.jumper a {
+      text-transform: uppercase; }
+  section#jumpers div.clrflt {
+    clear: both; }

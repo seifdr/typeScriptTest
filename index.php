@@ -98,11 +98,29 @@
           <!--startindex-->
             
           
-          <main class="content-full" id="main-content"><h1>Hardware Purchasing</h1><p>The devices below comprise the standard hardware available through Feinberg IT. These items have been tested and selected to meet our environment and security standards. All devices using FSM funds must be purchased through Feinberg IT.&nbsp;</p>
+          <main class="content-full" id="main-content">
+        
+<h1>Hardware Purchasing</h1><p>The devices below comprise the standard hardware available through Feinberg IT. These items have been tested and selected to meet our environment and security standards. All devices using FSM funds must be purchased through Feinberg IT.&nbsp;</p>
 <p>If you have any questions, visit our<span>&nbsp;</span><a href="https://www.feinberg.northwestern.edu/it/FAQ/index.html" title="Feinberg IT FAQ">Frequently Asked Questions</a><span>&nbsp;</span>page to help find answers to our most commonly asked questions about the ordering process. You can also contact Feinberg IT directly at&nbsp;<a href="mailto:fsmhelp@northwestern.edu">fsmhelp@northwestern.edu</a>.</p>
 <h2>Shopping Cart</h2>
 <p>To submit your IT Hardware Request Order Form, simply add items to your shopping cart by clicking the 'Add To Cart' button below.&nbsp; Once you are finished shopping, you will be prompted to complete the form.<span>&nbsp;</span><strong>You will not be charged or asked to provide any payment information</strong>.&nbsp;</p>
-<section id="shopping-cart"></section><div class="blockWrapper"><div><h2>Bundles</h2><div class="bootstrap-wrapper"><div class="container-fluid"><section class="shelves"><div class="row"><div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc"><article class="feature-box prodBox" data-element="element_1_2" data-id="d8134d018169772408fdc3013aebec81-1" data-is-software="0" data-num="1.1" data-price="2224.47"><div class="img-container"><img alt="site://FSM-IT-NEW/images/hardware-procurement/laptops/standard_laptop_t440bundle.jpg image" class="img-fluid" src="../images/hardware-procurement/laptops/standard_laptop_t440bundle.jpg"></div><div class="feature-copy"><div><h6>Laptop Bundle</h6><p>$2224.47</p><a class="specs" data-id="d8134d018169772408fdc3013aebec81-1">
+<section id="shopping-cart"></section>
+
+<section id="jumpers">
+    <div class="jumper"><a href="#Bundles">Bundles</a></div>
+    <div class="jumper"><a href="#Desktops">Desktops</a></div>
+    <div class="jumper"><a href="#Laptops">Laptops</a></div>
+    <div class="jumper"><a href="#Monitors">Monitors</a></div>
+    <div class="jumper"><a href="#Apple Desktops">Apple Desktops</a></div>
+    <div class="jumper"><a href="#Ipads">Ipads</a></div>
+    <div class="jumper"><a href="#Tablets">Tablets</a></div>
+    <div class="jumper"><a href="#Printers">Printers</a></div>
+    <div class="jumper"><a href="#Peripheral Accessories">Peripheral Accessories</a></div>
+    <div class="jumper"><a href="#Software">Software</a></div>
+    <div class="clrflt"></div>
+</section>
+
+<div class="blockWrapper"><div><h2>Bundles</h2><div class="bootstrap-wrapper"><div class="container-fluid"><section class="shelves"><div class="row"><div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 pbc"><article class="feature-box prodBox" data-element="element_1_2" data-id="d8134d018169772408fdc3013aebec81-1" data-is-software="0" data-num="1.1" data-price="2224.47"><div class="img-container"><img alt="site://FSM-IT-NEW/images/hardware-procurement/laptops/standard_laptop_t440bundle.jpg image" class="img-fluid" src="../images/hardware-procurement/laptops/standard_laptop_t440bundle.jpg"></div><div class="feature-copy"><div><h6>Laptop Bundle</h6><p>$2224.47</p><a class="specs" data-id="d8134d018169772408fdc3013aebec81-1">
                         Read product specs</a><div class="hiddenProdSpecs"><ul>
 <li>3 year warranty</li>
 <li>15.6" T590 ThinkPad</li>
