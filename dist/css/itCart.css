@@ -1261,8 +1261,7 @@ section.shelves article.prodBox {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
         -ms-flex-direction: column;
-            flex-direction: column;
-    height: 100%; }
+            flex-direction: column; }
     section.shelves article.prodBox div.feature-copy .hiddenProdSpecs {
       display: none; }
     section.shelves article.prodBox div.feature-copy div {
