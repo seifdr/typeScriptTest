@@ -776,12 +776,13 @@ function () {
           row.image = '';
         }
 
+        var cartBtn = document.querySelector('article.prodBox[data-num="' + row.id + '"] a.atcBtn');
+
         if (existingItemsInCookie.length > 0) {
           if (existingItemsInCookie.includes(row.id)) {
             row.onCart = true; //if item is on cart already make sure to turn the btn orange and change the text
 
-            var onCartBtn = document.querySelector('article.prodBox[data-num="' + row.id + '"] a.atcBtn');
-            this.cart.toggleATCbutton(onCartBtn, true);
+            this.cart.toggleATCbutton(cartBtn, true);
 
             if (softwareRenewIds.includes(row.id)) {
               row.renew = true;
@@ -789,7 +790,22 @@ function () {
 
             this.cart.addOrRemoveFromCart(new Item(row));
           } else {
+            // make sure the atcBTN on the prodBox is toggled on
+            this.cart.toggleATCbutton(cartBtn, false); //if software item reset the select value to new.
+
+            if (row.software) {
+              var softwareSelectBox = document.querySelector('article.prodBox[data-num="' + row.id + '"] select.renewInput');
+              softwareSelectBox['value'] = 'new';
+            }
+
             row.onCart = false;
+          }
+        } else {
+          this.cart.toggleATCbutton(cartBtn, false); //if software item reset the select value to new.
+
+          if (row.software) {
+            var softwareSelectBox = document.querySelector('article.prodBox[data-num="' + row.id + '"] select.renewInput');
+            softwareSelectBox['value'] = 'new';
           }
         }
 
