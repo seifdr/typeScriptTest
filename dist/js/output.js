@@ -512,7 +512,7 @@ function () {
 
     document.getElementById('checkoutNow').addEventListener('click', function (e) {
       return __awaiter(_this, void 0, void 0, function () {
-        var checkoutURL, allATCbtns, i;
+        var checkoutURL, allATCbtns, i, allSoftwareSelectBoxes, i;
         return __generator(this, function (_a) {
           switch (_a.label) {
             case 0:
@@ -554,6 +554,12 @@ function () {
 
               for (i = 0; i < allATCbtns.length; i++) {
                 allATCbtns[i].classList.remove('onCart');
+              }
+
+              allSoftwareSelectBoxes = document.getElementsByClassName('renewInput');
+
+              for (i = 0; i < allSoftwareSelectBoxes.length; i++) {
+                allSoftwareSelectBoxes[i]['value'] = 'new';
               }
 
               if (!this.modal.isOpen) return [3

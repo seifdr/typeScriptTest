@@ -471,6 +471,13 @@ class Cart {
             for (let i = 0; i < allATCbtns.length; i++) { 
                 allATCbtns[i].classList.remove('onCart');
             }
+
+            // reset all software selects to new which is the default value 
+            const allSoftwareSelectBoxes = document.getElementsByClassName('renewInput');
+
+            for (let i = 0; i < allSoftwareSelectBoxes.length; i++) {
+                allSoftwareSelectBoxes[i]['value'] = 'new';
+            }
             
             if( this.modal.isOpen ){
                 await this.modal.closeOverlay( document.getElementById(this.modal.overlayContainerGuts), document.getElementById(this.modal.overlayContainerID), window.scrollY );
