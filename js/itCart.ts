@@ -164,8 +164,7 @@ class Item implements product {
                             output += `</h3>
                         `;
                         
-
-                    if( this.price != '0.00' ){
+                    if( this.price != '0.00' && this.price != '0' && this.price != '' ){
                         output += `<h6>$${ this.numberWithCommas( this.price ) }</h6>`;
                     }
 
@@ -176,7 +175,7 @@ class Item implements product {
                     }
                     
         
-        if( this.price != '0.00' ){
+        if( this.price != '0.00' && this.price != '0' && this.price != '' ){
             
             // COME BACK
             if( this.software ){
@@ -584,7 +583,16 @@ class Cart {
             elRef.textContent = this.cartBtnTxt.Remove;
         } else {
             elRef.classList.remove('onCart');
-            elRef.textContent = this.cartBtnTxt.Add;
+
+            const elPrice = elRef.getAttribute('data-price');
+
+            //If price is 0.00 or empty then display "More Info" instead of "Add to Cart"
+            if( elPrice != '0.00' && elPrice != '' ){
+                elRef.textContent = this.cartBtnTxt.Add;
+            } else {
+                elRef.textContent = 'More Info';
+            }
+            
         }
         elRef.blur();
     }
@@ -807,7 +815,8 @@ class Store {
                 let position = elBtn.getAttribute('data-position');
                 let isSoftware = elBtn.getAttribute('data-is-software');
             
-                if( this.items[position].price != '0.00' ){
+                //Check for 0 or missing price, if found don't add to cart, just show modal info
+                if( this.items[position].price != '0.00' && this.items[position].price != '0' && this.items[position].price != '' ){
 
                     //check if it's software
                     if( this.items[position].software ){

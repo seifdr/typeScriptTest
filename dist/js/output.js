@@ -262,7 +262,7 @@ function () {
 
     output += "</h3>\n                        ";
 
-    if (this.price != '0.00') {
+    if (this.price != '0.00' && this.price != '0' && this.price != '') {
       output += "<h6>$" + this.numberWithCommas(this.price) + "</h6>";
     }
 
@@ -272,7 +272,7 @@ function () {
       output += "<br />";
     }
 
-    if (this.price != '0.00') {
+    if (this.price != '0.00' && this.price != '0' && this.price != '') {
       // COME BACK
       if (this.software) {
         output += "<div class=\"renewModalSelect\">\n                    <label>Purchase or Renew\n                    Software Licence: </label>\n                    <select class=\"renewModalInput\" data-id=\"" + this.id + "\" ";
@@ -680,7 +680,13 @@ function () {
       elRef.textContent = this.cartBtnTxt.Remove;
     } else {
       elRef.classList.remove('onCart');
-      elRef.textContent = this.cartBtnTxt.Add;
+      var elPrice = elRef.getAttribute('data-price'); //If price is 0.00 or empty then display "More Info" instead of "Add to Cart"
+
+      if (elPrice != '0.00' && elPrice != '') {
+        elRef.textContent = this.cartBtnTxt.Add;
+      } else {
+        elRef.textContent = 'More Info';
+      }
     }
 
     elRef.blur();
@@ -899,9 +905,9 @@ function () {
       elBtn.addEventListener('click', function (e) {
         var num = elBtn.getAttribute('data-num');
         var position = elBtn.getAttribute('data-position');
-        var isSoftware = elBtn.getAttribute('data-is-software');
+        var isSoftware = elBtn.getAttribute('data-is-software'); //Check for 0 or missing price, if found don't add to cart, just show modal info
 
-        if (_this.items[position].price != '0.00') {
+        if (_this.items[position].price != '0.00' && _this.items[position].price != '0' && _this.items[position].price != '') {
           //check if it's software
           if (_this.items[position].software) {
             //it is software, check selector value, and set the item.renew property
