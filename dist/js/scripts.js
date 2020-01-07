@@ -681,6 +681,14 @@ class Store {
             for (let i = 0; i < result.length; i++) {
                 const prodBox = result[i];
 
+                //change HTML display of price to include commas
+                const visPrice = prodBox.querySelector('p.visiblePrice');
+
+                if( visPrice ){
+                    const visPriceVal = visPrice.innerHTML;
+                    visPrice.innerHTML = '$' + this.numberWithCommas( visPriceVal );
+                }
+
                 //add a position attr to prodBoxes. Makes it easier to find them by index val in this.items
                 prodBox.setAttribute( 'data-position', i.toString() );
                 prodBox.querySelector('a.atcBtn').setAttribute( 'data-position', i.toString() );
