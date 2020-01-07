@@ -553,7 +553,7 @@ function () {
               allATCbtns = document.getElementsByClassName('atcBtn');
 
               for (i = 0; i < allATCbtns.length; i++) {
-                allATCbtns[i].classList.remove('onCart');
+                this.toggleATCbutton(allATCbtns[i], false);
               }
 
               allSoftwareSelectBoxes = document.getElementsByClassName('renewInput');

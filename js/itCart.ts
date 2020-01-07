@@ -459,7 +459,7 @@ class Cart {
             this.basket = [];
             await this.mapCart();
             //clear the cookie
-            await this.cookie.deleteCookie();
+            await this.cookie.deleteCookie(); 
 
             //make sure cart feature at bottom of page is gone
             await this.updateCartTotalAndCount();
@@ -468,7 +468,7 @@ class Cart {
             const allATCbtns = document.getElementsByClassName('atcBtn');
             
             for (let i = 0; i < allATCbtns.length; i++) { 
-                allATCbtns[i].classList.remove('onCart');
+                this.toggleATCbutton( allATCbtns[i], false );
             }
 
             // reset all software selects to new which is the default value 
