@@ -737,12 +737,14 @@ function () {
     this.cookie = cookie;
     this.softwareCookie = softwareCookie;
     this.cart = cart;
-    this.containerEL = document.getElementById(containerID); // this.stockTheShelves();
-    //load all the products that are present on the page
+    this.containerEL = document.getElementById(containerID); //load all the products that are present on the page
 
     this.loadProducts(); // wire up the add to cart buttons
 
-    this.wireUpAddToCartClicks();
+    this.wireUpAddToCartClicks(); //Fix positioning for catgory jumper/anchor bar items
+
+    this.fixJump();
+    this.setJumpers();
   }
 
   Store.prototype.loadProducts = function () {
@@ -959,6 +961,34 @@ function () {
 
   Store.prototype.numberWithCommas = function (x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  Store.prototype.fixJump = function () {
+    var incomingHash = decodeURI(window.location.hash.substr(1));
+
+    if (incomingHash) {
+      var hashPosition = document.getElementById(incomingHash).offsetTop;
+      var adjust = hashPosition - 140;
+      window.scrollTo(0, adjust);
+    }
+  };
+
+  Store.prototype.setJumpers = function () {
+    var _loop_5 = function _loop_5(jumperAnchor) {
+      jumperAnchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        var jumperVal = jumperAnchor.getAttribute('href').split('#')[1];
+        var jumperPosition = document.getElementById(jumperVal).offsetTop;
+        var adjustPosition = jumperPosition - 140;
+        window.scrollTo(0, adjustPosition);
+      });
+    };
+
+    for (var _i = 0, _a = document.querySelectorAll('div.jumper > a'); _i < _a.length; _i++) {
+      var jumperAnchor = _a[_i];
+
+      _loop_5(jumperAnchor);
+    }
   };
 
   return Store;

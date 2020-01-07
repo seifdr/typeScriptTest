@@ -640,13 +640,16 @@ class Store {
         this.softwareCookie = softwareCookie;
         this.cart = cart;
         this.containerEL = document.getElementById( containerID );
-        // this.stockTheShelves();
         
         //load all the products that are present on the page
         this.loadProducts();
         
         // wire up the add to cart buttons
         this.wireUpAddToCartClicks();
+
+        //Fix positioning for catgory jumper/anchor bar items
+        this.fixJump();
+        this.setJumpers();
     }
 
     loadProducts() {
@@ -857,6 +860,32 @@ class Store {
 
     numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    fixJump(){  
+       
+        const incomingHash =  decodeURI( window.location.hash.substr(1) );
+       
+        if( incomingHash ){
+                const hashPosition =  document.getElementById( incomingHash ).offsetTop;
+                const adjust = hashPosition - 140;
+                window.scrollTo( 0, adjust );
+        }            
+    }
+
+    setJumpers(){
+
+        for( let jumperAnchor of document.querySelectorAll('div.jumper > a') ){
+            jumperAnchor.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                const jumperVal = jumperAnchor.getAttribute('href').split('#')[1]
+
+                const jumperPosition =  document.getElementById( jumperVal ).offsetTop;
+                const adjustPosition = jumperPosition - 140;
+                window.scrollTo( 0, adjustPosition );                
+            });
+        }
     }
 }
 
