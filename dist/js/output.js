@@ -230,14 +230,20 @@ function () {
     this.renew = item.renew ? true : false;
   }
 
-  Item.prototype.outputOverlay = function (position) {
+  Item.prototype.outputOverlay = function (position, onCart) {
+    // Old Way --> causing problems because item has no visbility of cart, when I checkout I need to reset all ATC buttons, but item.onCart reference couldn't do that
+    // const btnText = ( this.onCart )? 'Remove From Cart' : 'Add To Cart';
+    // const optClass = (this.onCart)? 'onCart':'';
     if (position === void 0) {
       position = null;
-    } // <img src="assets/png/300x200.png" />
+    }
 
+    if (onCart === void 0) {
+      onCart = false;
+    }
 
-    var btnText = this.onCart ? 'Remove From Cart' : 'Add To Cart';
-    var optClass = this.onCart ? 'onCart' : '';
+    var btnText = onCart ? 'Remove From Cart' : 'Add To Cart';
+    var optClass = onCart ? 'onCart' : '';
     var output = "<div id=\"overlayPad\" data-id=\"" + this.id + "\" >\n        <div class=\"bootstrap-wrapper\">\n    <div class=\"container\">\n    <div class=\"row\">";
 
     if (this.image != '/') {
@@ -435,6 +441,12 @@ function () {
 
   Cart.prototype.removeFromBasket = function (positionInBasket) {
     return this.basket.splice(positionInBasket, 1);
+  }; //maps the cart by ID, checks to see if incoming number/id is on the cart
+
+
+  Cart.prototype.itemInBasket = function (incomingID) {
+    this.mapCart();
+    return this.mappedBasket.includes(incomingID);
   };
 
   Cart.prototype.inBasket = function (incomingID) {
@@ -839,7 +851,9 @@ function () {
         var position = el.getAttribute('data-position');
         var isSoftware = el.getAttribute('data-is-software') == '1';
 
-        var output = _this.items[position].outputOverlay(num);
+        var onTheCart = _this.cart.itemInBasket(parseFloat(num));
+
+        var output = _this.items[position].outputOverlay(num, onTheCart);
 
         _this.modal.openOverlay(output);
 
@@ -922,7 +936,7 @@ function () {
           e.stopPropagation();
         } else {
           var theeItem = _this.items[position];
-          var output = theeItem.outputOverlay(position);
+          var output = theeItem.outputOverlay(position, false);
 
           _this.modal.openOverlay(output);
 

@@ -131,10 +131,13 @@ class Item implements product {
         this.renew = ( item.renew )? true : false;
     }
 
-    outputOverlay( position = null ){
-        // <img src="assets/png/300x200.png" />
-        const btnText = ( this.onCart )? 'Remove From Cart' : 'Add To Cart';
-        const optClass = (this.onCart)? 'onCart':'';
+    outputOverlay( position = null, onCart = false ){
+        // Old Way --> causing problems because item has no visbility of cart, when I checkout I need to reset all ATC buttons, but item.onCart reference couldn't do that
+        // const btnText = ( this.onCart )? 'Remove From Cart' : 'Add To Cart';
+        // const optClass = (this.onCart)? 'onCart':'';
+
+        const btnText = ( onCart )? 'Remove From Cart' : 'Add To Cart';
+        const optClass = ( onCart )? 'onCart':'';
  
         let output:string = `<div id="overlayPad" data-id="${this.id}" >
         <div class="bootstrap-wrapper">
@@ -367,6 +370,12 @@ class Cart {
 
     removeFromBasket( positionInBasket ){
         return this.basket.splice(positionInBasket, 1);
+    }
+
+    //maps the cart by ID, checks to see if incoming number/id is on the cart
+    itemInBasket( incomingID:number ){
+        this.mapCart();
+        return this.mappedBasket.includes( incomingID );
     }
 
     inBasket( incomingID ){
@@ -764,9 +773,11 @@ class Store {
                     e.preventDefault();
                     let num = el.getAttribute('data-num');
                     let position = el.getAttribute('data-position');
-                    let isSoftware = ( el.getAttribute('data-is-software') == '1' ) ;
+                    let isSoftware = ( el.getAttribute('data-is-software') == '1' );
 
-                    let output = this.items[position].outputOverlay(num);
+                    const onTheCart = this.cart.itemInBasket( parseFloat(num) );
+
+                    let output = this.items[position].outputOverlay(num, onTheCart);
 
                     this.modal.openOverlay( output );
 
@@ -833,7 +844,7 @@ class Store {
                     e.stopPropagation();
                 } else {
                     let theeItem = <Item>this.items[position]; 
-                    let output = theeItem.outputOverlay(position);
+                    let output = theeItem.outputOverlay(position, false);
                     this.modal.openOverlay( output );
                     e.preventDefault();
                     e.stopPropagation();
