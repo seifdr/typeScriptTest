@@ -104,8 +104,7 @@ class itAlert {
     buildBox( alert ){
         let alertBox = `<div class="contain-1440 fsmAlert ${ this.chooseColor( alert.color ) }">
                     <div class="contain-1120">
-                    <!-- <i class="fa fa-exclamation-triangle fa-2x">&nbsp;</i>  -->
-                    <p>${alert.blurb}</p>`;
+                    <div class="alertMsg">${alert.blurb}</div>`;
 
                     if( typeof alert.modal !== 'undefined' ){
                         alertBox += `<p><a id="alertTrigger" href="#">Read more</a></p>`;
