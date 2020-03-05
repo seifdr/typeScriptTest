@@ -202,38 +202,28 @@ function () {
 var itAlert =
 /** @class */
 function () {
-  function itAlert(modal, type) {
-    this.hasAlerts = {
-      'either': false,
-      'homepageAlert': false,
-      'purchasingAlert': false
-    };
+  function itAlert(modal) {
     this.modal = modal;
-    this.getAlerts();
-
-    if (type == 'purchasing') {
-      //purchasing page
-      this.baseEL = document.getElementById('main-content');
-      this.type = 'purchasing';
-    } else {
-      //hompage
-      this.baseEL = document.getElementById('homepageContent');
-      this.type = 'homepage';
-    }
+    this.getAlert();
+    this.baseEL = document.getElementsByTagName('BODY')[0];
   }
 
   itAlert.prototype.chooseColor = function (color) {
     if (color == "Red") {
-      return ' itDanger ';
+      return ' redFsmAlert ';
     } else {
-      return ' itPrimary ';
+      if (color == "Blue") {
+        return ' blueFsmAlert ';
+      } else {
+        return ' yellowFsmAlert ';
+      }
     }
   };
 
   itAlert.prototype.buildBox = function (alert) {
-    var alertBox = "<div class=\"contain-1440 itAlert " + this.chooseColor(alert.color) + " \">\n                    <div class=\"contain-1120\">\n                    <!-- <i class=\"fa fa-exclamation-triangle fa-2x\">&nbsp;</i> -->\n                    <h3>" + alert.title + "</h3>\n                    <p>" + alert.blurb + "</p>";
+    var alertBox = "<div class=\"contain-1440 fsmAlert " + this.chooseColor(alert.color) + "\">\n                    <div class=\"contain-1120\">\n                    <!-- <i class=\"fa fa-exclamation-triangle fa-2x\">&nbsp;</i>  -->\n                    <p>" + alert.blurb + "</p>";
 
-    if (alert.modal != '') {
+    if (typeof alert.modal !== 'undefined') {
       alertBox += "<p><a id=\"alertTrigger\" href=\"#\">Read more</a></p>";
     }
 
@@ -242,32 +232,28 @@ function () {
     return alertBox;
   };
 
-  itAlert.prototype.buildModalGuts = function (alert) {
-    return "<div class=\"bootstrap-wrapper\"> \n                    <div class=\"container\">\n                        <div class=\"row alertRow\">\n                            <div class=\"col-12\">" + alert.modal + "</div>\n                        </div>\n                    </div>\n                </div>";
+  itAlert.prototype.buildModalGuts = function (alert, type) {
+    if (type === void 0) {
+      type = 'v2';
+    }
+
+    if (type == 'v4') {
+      return "<div class=\"bootstrap-wrapper\"> \n                        <div class=\"container\">\n                            <div class=\"row alertRow\">\n                                <div class=\"col-12\">" + alert.modal + "</div>\n                            </div>\n                        </div>\n                    </div>";
+    } else {
+      return "<div class=\"alert-wrapper\"> \n                        <div class=\"alert-container\">" + alert.modal + "</div>\n                    </div>";
+    }
   };
 
   itAlert.prototype.addAlertBoxToPage = function () {
     var _modalClass = this.modal;
     var modalBox = '';
+    var alertBox = this.buildBox(this.alerts['fsmAlert']);
 
-    if (this.type == 'homepage') {
-      var alertBox = this.buildBox(this.alerts['homepageAlert']);
-
-      if (this.alerts['homepageAlert']['modal'] != '') {
-        modalBox = this.buildModalGuts(this.alerts['homepageAlert']);
-      }
-
-      this.baseEL.insertAdjacentHTML('afterbegin', alertBox);
-    } else {
-      console.log('Before: ', this.alerts['purchasingAlert']);
-      var alertBox = this.buildBox(this.alerts['purchasingAlert']);
-
-      if (this.alerts['purchasingAlert']['modal'] != '') {
-        modalBox = this.buildModalGuts(this.alerts['purchasingAlert']);
-      }
-
-      this.baseEL.querySelector('h1:first-of-type').insertAdjacentHTML('afterend', '<section>' + alertBox + '</section>');
+    if (this.alerts['fsmAlert']['modal'] != '') {
+      modalBox = this.buildModalGuts(this.alerts['fsmAlert']);
     }
+
+    this.baseEL.insertAdjacentHTML('afterbegin', alertBox);
 
     if (modalBox != '') {
       if (document.getElementById('alertTrigger')) {
@@ -281,7 +267,7 @@ function () {
     }
   };
 
-  itAlert.prototype.getAlerts = function () {
+  itAlert.prototype.getAlert = function () {
     return __awaiter(this, void 0, void 0, function () {
       var results;
       return __generator(this, function (_a) {
@@ -289,7 +275,7 @@ function () {
           case 0:
             return [4
             /*yield*/
-            , fetch('https://feinberg-dev.fsm.northwestern.edu/it-new/ws/json-api.php?type=alerts').then(function (response) {
+            , fetch('https://www.feinberg.northwestern.edu/ws/alert-json-api.php').then(function (response) {
               return response.json();
             }).then(function (results) {
               return results;
@@ -298,20 +284,10 @@ function () {
           case 1:
             results = _a.sent();
 
-            if (results['homepageAlert']) {
-              this.hasAlerts.either = this.hasAlerts.homepageAlert = true;
-            }
-
-            if (results['purchasingAlert']) {
-              this.hasAlerts.either = this.hasAlerts.purchasingAlert = true;
-            }
-
-            if (this.hasAlerts) {
+            if (results['fsmAlert']) {
+              this.hasAlerts = true;
               this.alerts = results;
-
-              if (this.hasAlerts.either) {
-                this.addAlertBoxToPage();
-              }
+              this.addAlertBoxToPage();
             }
 
             return [2
@@ -327,5 +303,5 @@ function () {
 
 window.onload = function () {
   var modal = new Modal();
-  var alert = new itAlert(modal, 'homepage');
+  var alert = new itAlert(modal);
 };
