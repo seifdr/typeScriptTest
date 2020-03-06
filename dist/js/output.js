@@ -215,7 +215,7 @@ var itAlert =
 function () {
   function itAlert() {
     if (this.getAlert()) {
-      this.baseEL = document.getElementsByTagName('BODY')[0];
+      this.baseEL = document.getElementsByTagName('BODY')[0]; // this.addAlertBoxToPage();
     }
   }
 

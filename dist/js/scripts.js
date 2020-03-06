@@ -92,6 +92,7 @@ class itAlert {
     constructor(){
         if( this.getAlert() ){
             this.baseEL = document.getElementsByTagName('BODY')[0];
+            // this.addAlertBoxToPage();
         }
     }
 
