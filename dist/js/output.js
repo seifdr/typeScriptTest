@@ -151,7 +151,18 @@ function () {
 
   Modal.prototype.addOverlay = function () {
     var overlay = "<div id='overlay'><div id='overlay-content'><a class='closebtn'><i class='fa fa-times'></i></a><div id='overlayGuts' class='col1of1 responsive-container'></div></div></div>";
-    document.getElementById('main-content').insertAdjacentHTML('beforeend', overlay);
+
+    if (document.getElementById('main-content')) {
+      //for fw
+      document.getElementById('main-content').insertAdjacentHTML('beforeend', overlay);
+    } else {
+      if (document.getElementById('mainContent')) {
+        //for left-nav
+        document.getElementById('mainContent').insertAdjacentHTML('beforeend', overlay);
+      } else {//for rwd
+        // document.getElementById('homepageContent').insertAdjacentHTML('beforeend', overlay);
+      }
+    }
   };
 
   Modal.prototype.updateOverlayContent = function (output) {
@@ -221,7 +232,7 @@ function () {
   };
 
   itAlert.prototype.buildBox = function (alert) {
-    var alertBox = "<div class=\"contain-1440 fsmAlert " + this.chooseColor(alert.color) + "\">\n                    <div class=\"contain-1120\">\n                    <div class=\"alertMsg\">" + alert.blurb + "</div>";
+    var alertBox = "<div class=\"fsmAlert " + this.chooseColor(alert.color) + "\">\n                    <div class=\"contain-1440\">\n                    <div class=\"alertMsg\">" + alert.blurb + "</div>";
 
     if (typeof alert.modal !== 'undefined') {
       alertBox += "<p><a id=\"alertTrigger\" href=\"#\">Read more</a></p>";

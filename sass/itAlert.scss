@@ -1,3 +1,7 @@
+$cautionColor:       #000000;
+$cautionBackground:  #fec359;
+$cautionBorder:      #fec359;
+
 $dangerColor:       #950515;
 $dangerBackground:  #f8d7da;
 $dangerBorder:      #f5c6cb;
@@ -6,37 +10,29 @@ $primaryColor:      #004085;
 $primaryBackground: #cce5ff;
 $primaryBorder:     #b8daff;
 
-div.alertRow {
-    margin: 1em 0 !important;
-}
-
-#main-content div.itAlert { 
+body div.fsmAlert { 
     margin-top: 0;
     margin-bottom: 0;
-    padding: 1em;
+    padding: .1em;
     box-sizing: border-box;
-
-    h1, h2, h3, h4, h5, a {
-        text-transform: uppercase; 
-    }
-    
-    h3 {
-        font-size: 34px;
-        font-weight: bold;
-    }
 
     a {
         font-weight: bold;
     }
 
-    h1:before, h2:before, h3:before, h4:before, h5:before {
-        font-family: FontAwesome; 
-        content:"\f071";
-        padding-right: .25em;
+    div.alertMsg {
+        padding-left: 15px;
+        padding-top: 15px;
     }
+
+    // div.alertMsg > p:first-of-type:before {
+    //     font-family: FontAwesome; 
+    //     content:"\f071";
+    //     padding-right: .25em;
+    // }
 }
 
-#main-content div.itDanger {
+body div.redFsmAlert {
     color: $dangerColor !important;
     background-color:$dangerBackground !important;
     border-color:$dangerBorder !important;
@@ -46,7 +42,7 @@ div.alertRow {
     }
 } 
 
-#main-content div.itPrimary {
+body div.BlueFsmAlert {
     color: $primaryColor !important;
     background-color: $primaryBackground !important;
     border-color: $primaryBorder !important;   
@@ -55,3 +51,17 @@ div.alertRow {
         color: $primaryColor !important;
     }
 }
+
+body div.yellowFsmAlert {
+    color: $cautionColor !important;
+    background-color: $cautionBackground !important;
+    border-color: $cautionBorder !important;   
+
+    h1, h2, h3, h4, h5, a, p {
+        color: $cautionColor !important;
+    }
+}
+
+// section#homepageContent div.overlay {
+//     display: none;
+// }
