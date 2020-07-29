@@ -139,84 +139,11 @@ var __generator = void 0 && (void 0).__generator || function (thisArg, body) {
   }
 };
 
-var Modal =
-/** @class */
-function () {
-  function Modal() {
-    this.overlayContainerID = 'overlay';
-    this.overlayContainerGuts = 'overlayGuts';
-    this.isOpen = false;
-    this.addOverlay();
-  }
-
-  Modal.prototype.addOverlay = function () {
-    var overlay = "<div id='overlay'><div id='overlay-content'><a class='closebtn'><i class='fa fa-times'></i></a><div id='overlayGuts' class='col1of1 responsive-container'></div></div></div>";
-
-    if (document.getElementById('main-content')) {
-      //for fw
-      document.getElementById('main-content').insertAdjacentHTML('beforeend', overlay);
-    } else {
-      if (document.getElementById('mainContent')) {
-        //for left-nav
-        document.getElementById('mainContent').insertAdjacentHTML('beforeend', overlay);
-      } else {//for rwd
-        // document.getElementById('homepageContent').insertAdjacentHTML('beforeend', overlay);
-      }
-    }
-  };
-
-  Modal.prototype.updateOverlayContent = function (output) {
-    var el = document.getElementById(this.overlayContainerGuts);
-    el.innerHTML = output;
-  };
-
-  Modal.prototype.openOverlay = function (output) {
-    var _this = this;
-
-    var scrollPos = window.scrollY;
-    window.scroll(0, scrollPos);
-    var oel = document.getElementById(this.overlayContainerID);
-    var el = document.getElementById(this.overlayContainerGuts);
-    this.updateOverlayContent(output);
-    oel.style.height = "100%";
-    oel.style.display = "block";
-    document.body.classList.add('modal-open'); // Close modal when X btn is clicked
-
-    oel.getElementsByClassName('closebtn')[0].addEventListener('click', function (e) {
-      _this.closeOverlay(el, oel, scrollPos);
-
-      e.preventDefault();
-    }); // Close modal on ESC 
-
-    document.addEventListener('keydown', function (e) {
-      if (e.key === "Escape") {
-        _this.closeOverlay(el, oel, scrollPos);
-
-        e.preventDefault();
-      }
-    });
-    this.isOpen = true;
-  };
-
-  Modal.prototype.closeOverlay = function (el, oel, scrollPos) {
-    el.innerHTML = "";
-    oel.style.height = "0%";
-    oel.style.display = "none";
-    document.body.classList.remove('modal-open');
-    window.scroll(0, scrollPos);
-    this.isOpen = false;
-  };
-
-  return Modal;
-}();
-
 var itAlert =
 /** @class */
 function () {
   function itAlert() {
-    if (this.getAlert()) {
-      this.baseEL = document.getElementsByTagName('BODY')[0]; // this.addAlertBoxToPage();
-    }
+    var alert = this.getAlert();
   }
 
   itAlert.prototype.chooseColor = function (color) {
@@ -235,6 +162,11 @@ function () {
     var alertBox = "<div class=\"fsmAlert " + this.chooseColor(alert.color) + "\">\n                    <div class=\"contain-1440\">\n                        <div class=\"alertMsg\">" + alert.blurb + "</div>";
     alertBox += "</div>  \n                </div>";
     return alertBox;
+  };
+
+  itAlert.prototype.addAlertBoxToPage = function () {
+    var alertBox = this.buildBox(this.alert);
+    this.baseEL.insertAdjacentHTML('afterbegin', alertBox);
   };
 
   itAlert.prototype.getAlert = function () {
@@ -262,14 +194,16 @@ function () {
 
             if (results['fsmAlert']) {
               this.hasAlerts = true;
-              this.alerts = results;
+              this.alert = results['fsmAlert']; //if toggle is not yes, dont show.
+
+              if (this.alert.showAlerts == 'Yes') {
+                this.baseEL = document.getElementsByTagName('BODY')[0];
+                this.addAlertBoxToPage();
+              }
+
               return [2
               /*return*/
-              , true];
-            } else {
-              return [2
-              /*return*/
-              , false];
+              , results['fsmAlert']];
             }
 
             return [2
