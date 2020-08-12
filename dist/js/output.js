@@ -154,7 +154,7 @@ function () {
   }
 
   Modal.prototype.addOverlay = function () {
-    var overlay = "<div id='overlay'><div id='overlay-content'><a class='closebtn'><i class='fa fa-times'></i></a><div id='overlayGuts' class='col1of1 responsive-container'></div></div></div>"; //old way -- worked on Chrome and Safari, but not FF --> document.getElementById('main-content').insertAdjacentHTML('beforeend', overlay);
+    var overlay = "<div class=\"modal fade\" id=\"exampleModal\" tabindex=\"-1\" aria-labelledby=\"exampleModalLabel\" aria-hidden=\"true\">\n        <div class=\"modal-dialog\">\n          <div class=\"modal-content\">\n            <div class=\"modal-header\">\n              <h5 class=\"modal-title\" id=\"exampleModalLabel\">New message</h5>\n              <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n                <span aria-hidden=\"true\">&times;</span>\n              </button>\n            </div>\n            <div class=\"modal-body\">\n              <form>\n                <div class=\"form-group\">\n                  <label for=\"recipient-name\" class=\"col-form-label\">Recipient:</label>\n                  <input type=\"text\" class=\"form-control\" id=\"recipient-name\">\n                </div>\n                <div class=\"form-group\">\n                  <label for=\"message-text\" class=\"col-form-label\">Message:</label>\n                  <textarea class=\"form-control\" id=\"message-text\"></textarea>\n                </div>\n              </form>\n            </div>\n            <div class=\"modal-footer\">\n              <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>\n              <button type=\"button\" class=\"btn btn-primary\">Send message</button>\n            </div>\n          </div>\n        </div>\n      </div>"; //old way -- worked on Chrome and Safari, but not FF --> document.getElementById('main-content').insertAdjacentHTML('beforeend', overlay);
 
     document.body.insertAdjacentHTML('beforeend', overlay);
   };
@@ -262,7 +262,7 @@ function () {
       output += "</div>\n                    </div>";
     }
 
-    output += "<div class=\"col-12 col-lg-6 overlayText\">\n                        \n                            <h3>" + this.title;
+    output += "<div class=\"col-12 col-lg-6 overlayText\">\n                        \n                            <h3>{this.title}";
 
     if (this.software) {
       if (this.renew) {
