@@ -273,7 +273,7 @@ function () {
     output += "</h3>\n                        ";
 
     if (this.price != '0.00' && this.price != '0' && this.price != '') {
-      output += "<h6>$" + this.numberWithCommas(this.price) + "</h6>";
+      output += "<h6>" + this.numberWithCommas(this.price) + "</h6>";
     }
 
     if (typeof this.desc == "string") {
@@ -783,7 +783,7 @@ function () {
 
         if (visPrice) {
           var visPriceVal = visPrice.innerHTML;
-          visPrice.innerHTML = '$' + this.numberWithCommas(visPriceVal);
+          visPrice.innerHTML = this.numberWithCommas(visPriceVal);
         } //add a position attr to prodBoxes. Makes it easier to find them by index val in this.items
 
 
