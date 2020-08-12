@@ -154,51 +154,25 @@ function () {
   }
 
   Modal.prototype.addOverlay = function () {
-    var overlay = "<div class=\"modal fade\" id=\"exampleModal\" tabindex=\"-1\" aria-labelledby=\"exampleModalLabel\" aria-hidden=\"true\">\n        <div class=\"modal-dialog\">\n          <div class=\"modal-content\">\n            <div class=\"modal-header\">\n              <h5 class=\"modal-title\" id=\"exampleModalLabel\">New message</h5>\n              <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n                <span aria-hidden=\"true\">&times;</span>\n              </button>\n            </div>\n            <div class=\"modal-body\">\n              <form>\n                <div class=\"form-group\">\n                  <label for=\"recipient-name\" class=\"col-form-label\">Recipient:</label>\n                  <input type=\"text\" class=\"form-control\" id=\"recipient-name\">\n                </div>\n                <div class=\"form-group\">\n                  <label for=\"message-text\" class=\"col-form-label\">Message:</label>\n                  <textarea class=\"form-control\" id=\"message-text\"></textarea>\n                </div>\n              </form>\n            </div>\n            <div class=\"modal-footer\">\n              <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>\n              <button type=\"button\" class=\"btn btn-primary\">Send message</button>\n            </div>\n          </div>\n        </div>\n      </div>"; //old way -- worked on Chrome and Safari, but not FF --> document.getElementById('main-content').insertAdjacentHTML('beforeend', overlay);
+    var overlay = "<div class=\"modal fade\" id=\"itModal\" tabindex=\"-1\" aria-labelledby=\"itModalLabel\" aria-hidden=\"true\">\n        <div class=\"modal-dialog\">\n          <div class=\"modal-content\">\n            <div class=\"modal-header\">\n              <h5 class=\"modal-title\" id=\"exampleModalLabel\">New message</h5>\n              <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n                <span aria-hidden=\"true\">&times;</span>\n              </button>\n            </div>\n            <div class=\"modal-body\">\n              <form>\n                <div class=\"form-group\">\n                  <label for=\"recipient-name\" class=\"col-form-label\">Recipient:</label>\n                  <input type=\"text\" class=\"form-control\" id=\"recipient-name\">\n                </div>\n                <div class=\"form-group\">\n                  <label for=\"message-text\" class=\"col-form-label\">Message:</label>\n                  <textarea class=\"form-control\" id=\"message-text\"></textarea>\n                </div>\n              </form>\n            </div>\n            <div class=\"modal-footer\">\n              <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>\n              <button type=\"button\" class=\"btn btn-primary\">Send message</button>\n            </div>\n          </div>\n        </div>\n      </div>"; //old way -- worked on Chrome and Safari, but not FF --> document.getElementById('main-content').insertAdjacentHTML('beforeend', overlay);
 
     document.body.insertAdjacentHTML('beforeend', overlay);
-  };
+  }; // updateOverlayContent( output ){
+  //     let el = document.getElementById( this.overlayContainerGuts );
+  //     el.innerHTML = output;
+  // }
 
-  Modal.prototype.updateOverlayContent = function (output) {
-    var el = document.getElementById(this.overlayContainerGuts);
-    el.innerHTML = output;
-  };
 
   Modal.prototype.openOverlay = function (output) {
-    var _this = this;
-
-    var scrollPos = window.scrollY;
-    window.scroll(0, scrollPos);
-    var oel = document.getElementById(this.overlayContainerID);
-    var el = document.getElementById(this.overlayContainerGuts);
-    this.updateOverlayContent(output);
-    oel.style.height = "100%";
-    oel.style.display = "block";
-    document.body.classList.add('modal-open'); // Close modal when X btn is clicked
-
-    oel.getElementsByClassName('closebtn')[0].addEventListener('click', function (e) {
-      _this.closeOverlay(el, oel, scrollPos);
-
-      e.preventDefault();
-    }); // Close modal on ESC 
-
-    document.addEventListener('keydown', function (e) {
-      if (e.key === "Escape") {
-        _this.closeOverlay(el, oel, scrollPos);
-
-        e.preventDefault();
-      }
-    });
-    this.isOpen = true;
-  };
-
-  Modal.prototype.closeOverlay = function (el, oel, scrollPos) {
-    el.innerHTML = "";
-    oel.style.height = "0%";
-    oel.style.display = "none";
-    document.body.classList.remove('modal-open');
-    window.scroll(0, scrollPos);
-    this.isOpen = false;
+    var modal = document.getElementById('itModal');
+    console.log(modal.classList);
+    modal.classList.add('show');
+    modal.style.cssText = "padding-right: 15px; display: block;";
+    var theBody = document.querySelector('body');
+    theBody.classList.add('modal-open');
+    theBody.style.cssText = 'padding-right: 15px'; // console.log( modal.classList );
+    // modal.show();
+    // modal.classList.remove('hidden');
   };
 
   return Modal;

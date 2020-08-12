@@ -9,7 +9,7 @@ class Modal {
     }
 
     addOverlay() {
-        let overlay = `<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        let overlay = `<div class="modal fade" id="itModal" tabindex="-1" aria-labelledby="itModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -42,52 +42,72 @@ class Modal {
         document.body.insertAdjacentHTML('beforeend', overlay);
     }
 
-    updateOverlayContent( output ){
-        let el = document.getElementById( this.overlayContainerGuts );
-        el.innerHTML = output;
-    }
+    // updateOverlayContent( output ){
+    //     let el = document.getElementById( this.overlayContainerGuts );
+    //     el.innerHTML = output;
+    // }
 
     openOverlay( output ){
+        var modal = document.getElementById('itModal');
 
-        const scrollPos = window.scrollY;
-        window.scroll(0, scrollPos);
+        console.log( modal.classList ); 
 
-        let oel = document.getElementById( this.overlayContainerID );
-        let el = document.getElementById( this.overlayContainerGuts );
+        modal.classList.add('show');
+        modal.style.cssText = "padding-right: 15px; display: block;";
 
-        this.updateOverlayContent( output );
+        var theBody = document.querySelector('body');
+        theBody.classList.add('modal-open');
+        theBody.style.cssText = 'padding-right: 15px';
+        
+        
 
-        oel.style.height = "100%";
-        oel.style.display = "block";
+        // console.log( modal.classList );
 
-        document.body.classList.add('modal-open');
-
-        // Close modal when X btn is clicked
-        oel.getElementsByClassName('closebtn')[0].addEventListener('click', (e) => {
-            this.closeOverlay(el, oel, scrollPos);
-            e.preventDefault();
-        });
-
-        // Close modal on ESC 
-        document.addEventListener('keydown', (e) => {
-            if(e.key === "Escape") {
-                this.closeOverlay(el, oel, scrollPos);
-                e.preventDefault();
-            }
-        });
-
-        this.isOpen = true;
+        // modal.show();
+        // modal.classList.remove('hidden');
 
     }
+    // openOverlay( output ){
 
-    closeOverlay(el, oel, scrollPos){
-        el.innerHTML = "";
-        oel.style.height = "0%";
-        oel.style.display = "none";
-        document.body.classList.remove('modal-open');
-        window.scroll(0, scrollPos);
-        this.isOpen = false;
-    }
+    //     const scrollPos = window.scrollY;
+    //     window.scroll(0, scrollPos);
+
+    //     let oel = document.getElementById( this.overlayContainerID );
+    //     let el = document.getElementById( this.overlayContainerGuts );
+
+    //     this.updateOverlayContent( output );
+
+    //     oel.style.height = "100%";
+    //     oel.style.display = "block";
+
+    //     document.body.classList.add('modal-open');
+
+    //     // Close modal when X btn is clicked
+    //     oel.getElementsByClassName('closebtn')[0].addEventListener('click', (e) => {
+    //         this.closeOverlay(el, oel, scrollPos);
+    //         e.preventDefault();
+    //     });
+
+    //     // Close modal on ESC 
+    //     document.addEventListener('keydown', (e) => {
+    //         if(e.key === "Escape") {
+    //             this.closeOverlay(el, oel, scrollPos);
+    //             e.preventDefault();
+    //         }
+    //     });
+
+    //     this.isOpen = true;
+
+    // }
+
+    // closeOverlay(el, oel, scrollPos){
+    //     el.innerHTML = "";
+    //     oel.style.height = "0%";
+    //     oel.style.display = "none";
+    //     document.body.classList.remove('modal-open');
+    //     window.scroll(0, scrollPos);
+    //     this.isOpen = false;
+    // }
 
 }
 

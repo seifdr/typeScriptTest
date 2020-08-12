@@ -706,8 +706,7 @@ This device is not expandable after order, please let us know during the orderin
           <script crossorigin="anonymous" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" type="text/javascript"></script>
           <script crossorigin="anonymous" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" type="text/javascript"></script>
           <script src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js" type="text/javascript"></script>
-          <script src="//deptcommon.fsm.northwestern.edu/_fw/v4.0/scripts/common.js?v1596051985898" type="text/javascript"></script>
-          
+          <script src="//deptcommon.fsm.northwestern.edu/_fw/v4.0/scripts/common.js?v1597258472417" type="text/javascript"></script>
   
 <!-- END JS_COMMON -->
         <script type="text/javascript" src="dist/js/output.js" ></script>
