@@ -52,6 +52,11 @@ class Modal {
 
         console.log( modal.classList ); 
 
+        //make backdrop appear
+        var modalBackDrop = '<div class="modal-backdrop fade show"></div>';
+        document.body.insertAdjacentHTML('beforeend', modalBackDrop);
+        
+        //made modal appear
         modal.classList.add('show');
         modal.style.cssText = "padding-right: 15px; display: block;";
 

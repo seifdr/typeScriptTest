@@ -165,7 +165,11 @@ function () {
 
   Modal.prototype.openOverlay = function (output) {
     var modal = document.getElementById('itModal');
-    console.log(modal.classList);
+    console.log(modal.classList); //make backdrop appear
+
+    var modalBackDrop = '<div class="modal-backdrop fade show"></div>';
+    document.body.insertAdjacentHTML('beforeend', modalBackDrop); //made modal appear
+
     modal.classList.add('show');
     modal.style.cssText = "padding-right: 15px; display: block;";
     var theBody = document.querySelector('body');
