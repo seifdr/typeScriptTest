@@ -1,6 +1,12 @@
 "use strict";
 
 var __awaiter = void 0 && (void 0).__awaiter || function (thisArg, _arguments, P, generator) {
+  function adopt(value) {
+    return value instanceof P ? value : new P(function (resolve) {
+      resolve(value);
+    });
+  }
+
   return new (P || (P = Promise))(function (resolve, reject) {
     function fulfilled(value) {
       try {
@@ -19,9 +25,7 @@ var __awaiter = void 0 && (void 0).__awaiter || function (thisArg, _arguments, P
     }
 
     function step(result) {
-      result.done ? resolve(result.value) : new P(function (resolve) {
-        resolve(result.value);
-      }).then(fulfilled, rejected);
+      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
     }
 
     step((generator = generator.apply(thisArg, _arguments || [])).next());
@@ -888,8 +892,8 @@ function () {
                       // alert('Software here');
                       // this.cart.toggleSoftwareSelects( this.items[num].id );
                       this.cart.toggleSoftwareSelects(this.items[position]['id']);
-                    } else {} // alert('Software not here');
-                    //the cart toggle above only applies the modal add to cart button so...
+                    } else {// alert('Software not here');
+                    } //the cart toggle above only applies the modal add to cart button so...
                     //once it's been added to cart and the modal cart button has been toggled
                     //map the cart
 

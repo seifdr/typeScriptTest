@@ -1087,6 +1087,7 @@ class itAlert {
 }
 
 window.onload=function() {
+
     const shoppingCookie = new Cookie( 'fsmITPurchasing' );
     const softwareCookie = new Cookie( 'fsmITPurchasingSoftware' );
 
