@@ -164,19 +164,46 @@ function () {
 
 
   Modal.prototype.openOverlay = function (output) {
-    var modal = document.getElementById('itModal');
-    console.log(modal.classList); //make backdrop appear
+    var _this = this;
 
-    var modalBackDrop = '<div class="modal-backdrop fade show"></div>';
+    var modal = document.getElementById('itModal'); //make backdrop appear
+
+    var modalBackDrop = '<div id="itBackdrop" class="modal-backdrop fade show"></div>';
     document.body.insertAdjacentHTML('beforeend', modalBackDrop); //made modal appear
 
     modal.classList.add('show');
     modal.style.cssText = "padding-right: 15px; display: block;";
     var theBody = document.querySelector('body');
     theBody.classList.add('modal-open');
-    theBody.style.cssText = 'padding-right: 15px'; // console.log( modal.classList );
-    // modal.show();
-    // modal.classList.remove('hidden');
+    theBody.style.cssText = 'padding-right: 15px'; // Close modal on ESC 
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === "Escape") {
+        _this.closeOverlay(modal);
+
+        e.preventDefault();
+      }
+    });
+    var dismissBtns = modal.querySelectorAll('[data-dismiss]');
+    dismissBtns.forEach(function (el) {
+      el.addEventListener('click', function (e) {
+        _this.closeOverlay(modal);
+
+        e.preventDefault();
+      });
+    });
+    this.isOpen = true;
+  };
+
+  Modal.prototype.closeOverlay = function (modalRef) {
+    modalRef.classList.remove('show');
+    modalRef.style.cssText = "padding-right: 0; display: none;";
+    var theBody = document.querySelector('body');
+    theBody.classList.remove('modal-open');
+    theBody.style.cssText = 'padding-right: 0';
+    var backdrop = document.getElementById('itBackdrop');
+    backdrop.remove();
+    this.isOpen = false;
   };
 
   return Modal;

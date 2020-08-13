@@ -50,10 +50,8 @@ class Modal {
     openOverlay( output ){
         var modal = document.getElementById('itModal');
 
-        console.log( modal.classList ); 
-
         //make backdrop appear
-        var modalBackDrop = '<div class="modal-backdrop fade show"></div>';
+        var modalBackDrop = '<div id="itBackdrop" class="modal-backdrop fade show"></div>';
         document.body.insertAdjacentHTML('beforeend', modalBackDrop);
         
         //made modal appear
@@ -64,14 +62,42 @@ class Modal {
         theBody.classList.add('modal-open');
         theBody.style.cssText = 'padding-right: 15px';
         
-        
+        // Close modal on ESC 
+        document.addEventListener('keydown', (e) => {
+            if(e.key === "Escape") {
+                this.closeOverlay( modal );
+                e.preventDefault();
+            }
+        });
 
-        // console.log( modal.classList );
+        let dismissBtns = modal.querySelectorAll('[data-dismiss]');
 
-        // modal.show();
-        // modal.classList.remove('hidden');
+        dismissBtns.forEach( el => {
+            el.addEventListener('click', (e)=> {
+                this.closeOverlay( modal );
+                e.preventDefault();
+            });
+        });
 
+
+    
+        this.isOpen = true;
     }
+
+    closeOverlay( modalRef ){
+        modalRef.classList.remove('show');
+        modalRef.style.cssText = "padding-right: 0; display: none;";
+
+        var theBody = document.querySelector('body');
+        theBody.classList.remove('modal-open');
+        theBody.style.cssText = 'padding-right: 0';
+
+        var backdrop = document.getElementById('itBackdrop');
+        backdrop.remove();
+ 
+        this.isOpen = false;
+    }
+
     // openOverlay( output ){
 
     //     const scrollPos = window.scrollY;
