@@ -182,31 +182,16 @@
 <p>Visit our<span>&nbsp;</span><a href="https://www.feinberg.northwestern.edu/it/FAQ/index.html" title="Feinberg IT FAQ">Frequently Asked Questions</a><span>&nbsp;</span>page to help find answers to our most commonly asked questions about the ordering process. You can also contact Feinberg IT directly at&nbsp;<a href="mailto:fsmhelp@northwestern.edu">fsmhelp@northwestern.edu</a>.</p>
 <h2>Shopping Cart</h2>
 <p>To submit your IT Hardware Request Order Form, simply add items to your shopping cart by clicking the "Add to Cart" button below. Once you are finished shopping, you will be prompted to complete the form.<span>&nbsp;</span><strong>You will not be charged or asked to provide any payment information</strong>.&nbsp;</p>
-<section id="shopping-cart"></section></div><div class="blockWrapper"><nav class="nav nav-pills nav-justified mb-4" id="jumpers"><a class="nav-link jumper" href="#Bundles">Bundles</a><a class="nav-link jumper" href="#Desktops">Desktops</a><a class="nav-link jumper" href="#Laptops">Laptops</a><a class="nav-link jumper" href="#Monitors">Monitors</a><a class="nav-link jumper" href="#Apple Desktops">Apple Desktops</a><a class="nav-link jumper" href="#Apple Laptops">Apple Laptops</a><a class="nav-link jumper" href="#Ipads">Ipads</a><a class="nav-link jumper" href="#Tablets">Tablets</a><a class="nav-link jumper" href="#Printers">Printers</a><a class="nav-link jumper" href="#Peripheral Accessories">Peripherals</a><a class="nav-link jumper" href="#Software">Software</a></nav><div><h2 id="Bundles">Bundles</h2><section class="shelves">
-
-<div class="row">
-    <article class="feature-box prodBox col-12 col-sm-6 col-md-3" data-element="element_1_1" data-id="d8134d018169772408fdc3013aebec81-1" data-is-software="0" data-num="1.1" data-price="1516.71">
-        <div class="feature-img">
-            <img alt="https://feinberg-dev.fsm.northwestern.edu/it-new/images/hardware-procurement/desktops/lv_tc_m910_standard_bundle.jpg image" class="img-fluid" src="https://feinberg-dev.fsm.northwestern.edu/it-new/images/hardware-procurement/desktops/lv_tc_m910_standard_bundle.jpg"></div>
-                <div class="feature-copy">
-                    <div>
-                        <h6>Tower Desktop Bundle</h6>
-                        <p class="visiblePrice">$1,517</p>
-                        <a class="specs" data-id="d8134d018169772408fdc3013aebec81-1">Read product specs</a>
-                    <div class="hiddenProdSpecs">
-                        <ul>
-                            <li>4 year warranty</li>
-                            <li>Lenovo M920 Tower</li>
-                            <li>Lenovo P24q 23.8" monitor</li>
-                            <li>Lenovo Soundbar, Keyboard and mouse</li>
-                        </ul>
-                    </div>
-                </div>
-        </div>
-        <a class="btn btn-primary w-100 atcBtn" data-id="d8134d018169772408fdc3013aebec81-1" data-is-software="0" data-iscartbtn="true" data-num="0" data-price="1516.71" href="#">Add To Cart</a>
-    </article>
-    
-    <article class="feature-box prodBox col-12 col-sm-6 col-md-3" data-element="element_1_2" data-id="d8134d018169772408fdc3013aebec81-2" data-is-software="0" data-num="1.2" data-price="2224.47"><div class="feature-img"><img alt="site://FSM-IT-V4/images/hardware-procurement/laptops/standard_laptop_t440bundle.jpg image" class="img-fluid" src="../images/hardware-procurement/laptops/standard_laptop_t440bundle.jpg"></div><div class="feature-copy"><div><h6>Laptop Bundle</h6><p class="visiblePrice">$2,224</p><a class="specs" data-id="d8134d018169772408fdc3013aebec81-2">
+<section id="shopping-cart"></section></div><div class="blockWrapper"><nav class="nav nav-pills nav-justified mb-4" id="jumpers"><a class="nav-link jumper" href="#Bundles">Bundles</a><a class="nav-link jumper" href="#Desktops">Desktops</a><a class="nav-link jumper" href="#Laptops">Laptops</a><a class="nav-link jumper" href="#Monitors">Monitors</a><a class="nav-link jumper" href="#Apple Desktops">Apple Desktops</a><a class="nav-link jumper" href="#Apple Laptops">Apple Laptops</a><a class="nav-link jumper" href="#Ipads">Ipads</a><a class="nav-link jumper" href="#Tablets">Tablets</a><a class="nav-link jumper" href="#Printers">Printers</a><a class="nav-link jumper" href="#Peripheral Accessories">Peripherals</a><a class="nav-link jumper" href="#Software">Software</a></nav><div><h2 id="Bundles">Bundles</h2><section class="shelves"><div class="row"><article class="feature-box prodBox col-12 col-sm-6 col-md-3" data-element="element_1_1" data-id="d8134d018169772408fdc3013aebec81-1" data-is-software="0" data-num="1.1" data-price="1516.71"><div class="feature-img"><img alt="site://FSM-IT-V4/images/hardware-procurement/desktops/lv_tc_m910_standard_bundle.jpg image" class="img-fluid" src="../images/hardware-procurement/desktops/lv_tc_m910_standard_bundle.jpg"></div><div class="feature-copy"><div><h6>Tower Desktop Bundle</h6><p class="visiblePrice">$1,517</p><a class="specs" data-id="d8134d018169772408fdc3013aebec81-1">
+                        Read product specs
+						</a><div class="hiddenProdSpecs"><ul>
+<li>4 year warranty</li>
+<li>Lenovo M920 Tower</li>
+<li>Lenovo P24q 23.8" monitor</li>
+<li>Lenovo Soundbar, Keyboard and mouse</li>
+</ul></div></div></div><a class="btn btn-primary w-100 atcBtn" data-id="d8134d018169772408fdc3013aebec81-1" data-is-software="0" data-iscartbtn="true" data-num="0" data-price="1516.71" href="#">
+                            Add To Cart
+                        </a></article><article class="feature-box prodBox col-12 col-sm-6 col-md-3" data-element="element_1_2" data-id="d8134d018169772408fdc3013aebec81-2" data-is-software="0" data-num="1.2" data-price="2224.47"><div class="feature-img"><img alt="site://FSM-IT-V4/images/hardware-procurement/laptops/standard_laptop_t440bundle.jpg image" class="img-fluid" src="../images/hardware-procurement/laptops/standard_laptop_t440bundle.jpg"></div><div class="feature-copy"><div><h6>Laptop Bundle</h6><p class="visiblePrice">$2,224</p><a class="specs" data-id="d8134d018169772408fdc3013aebec81-2">
                         Read product specs
 						</a><div class="hiddenProdSpecs"><ul>
 <li>3 year warranty</li>

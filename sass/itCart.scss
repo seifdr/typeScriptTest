@@ -1,2 +1,14 @@
-@import "bs-grid/bootstrap-grid.scss";
+// @import "bs-grid/bootstrap-grid.scss";
 @import "itAlert.scss";
+
+.standard-page .feature-box.prodBox {
+    max-width: none !important;
+    border: 1px solid red;
+}
+.standard-page .feature-box.prodBox .feature-img img {
+    min-width: initial !important;
+    border: 1px solid blue;
+}
+.standard-page .feature-box.prodBox .hiddenProdSpecs {
+    display: none;
+}
