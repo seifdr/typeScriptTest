@@ -678,7 +678,24 @@ This device is not expandable after order, please let us know during the orderin
             </div>
             <div class="smooth-scroll" id="btnTop" style="">
                 <a class="btn-floating bg-fsm" href="#"><i class="fas fa-arrow-up"></i></a>
-            </div>  
+            </div>
+
+                    <div class="modal fade" id="itModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <!-- <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5> -->
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                            <div class="modal-body">
+                            ...
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
         </main>
         
         <!-- Footer -->
@@ -687,14 +704,12 @@ This device is not expandable after order, please let us know during the orderin
             <div class="clearfix"><footer class="bg-fsm p-3"><div class="footerWrapper max-w-1440 px-3 p-lg-0"><div class="row"><div class="col-md-6 col-lg-3 order-lg-10" id="footerLinks"><ul><li><a href="/it-new/services/index.html">Services</a></li><li><a href="/it-new/purchasing/index.html">Purchasing</a></li><li><a href="/it-new/policies/index.html">Policies</a></li><li><a href="/it-new/faq/index.html">FAQ</a></li><li><a href="/it-new/about/index.html">About Us</a></li></ul></div><div class="col-md-6 col-lg-3 order-lg-7" id="deptInfo"><a href="https://www.feinberg.northwestern.edu/it-new/">Feinberg Information Technology</a><address class="pt-3"><p><i class="fas fa-map-marker-alt"></i>710 N. Lake Shore Dr.<br/>Abbott Hall, 4th Floor<br/>Chicago, IL 60611<br/></p><p><i class="fas fa-mobile-alt"></i>1-HELP (Option 5)</p><p><i class="fas fa-paper-plane"></i><a href="mailto:fsmhelp@northwestern.edu">Email Us</a></p></address><br/><address class="pt-3"></address></div><div class="col-md-6 col-lg-3 order-lg-4" id="footerMisc"><p><a href="https://www.feinberg.northwestern.edu">Northwestern University<br/> Feinberg School of Medicine</a></p><p><a href="https://www.feinberg.northwestern.edu/giving/">Giving</a></p><span>Social Media Center</span><div class="container"><div class="row social-icons"><a aria-label="Feinberg Facebook" class="icon fab fa-facebook-f" data-original-title="Facebook" href="https://www.facebook.com/NorthwesternFeinberg/"><span class="sr-only">Facebook</span></a><a aria-label="Feinberg Twitter" class="icon fab fa-twitter" data-original-title="Twitter" href="http://twitter.com/NUFeinbergMed"><span class="sr-only">Twitter</span></a><a aria-label="Feinberg LinkedIn" class="icon fab fa-linkedin" data-original-title="LinkedIn" href="https://www.linkedin.com/company/524724"><span class="sr-only">LinkedIn</span></a><a aria-label="Feinberg Flickr" class="icon fab fa-flickr" data-original-title="Flickr" href="https://www.flickr.com/photos/feinbergschoolofmedicine/"><span class="sr-only">Flickr</span></a><a aria-label="Feinberg YouTube" class="icon fab fa-youtube" data-original-title="YouTube" href="https://www.youtube.com/user/NUFeinbergMed"><span class="sr-only">YouTube</span></a><a aria-label="Feinberg Instagram" class="icon fab fa-instagram" data-original-title="Instagram" href="https://instagram.com/nufeinbergmed/"><span class="sr-only">Instagram</span></a><a aria-label="Feinberg Podcast" class="icon podcast" data-original-title="Podcast" href="https://itunes.apple.com/us/podcast/breakthroughs/id1353116119"><span class="sr-only">Podcast</span></a></div></div></div><div class="col-md-6 col-lg-3 order-lg-1" id="nuFooterNew"><div id="nuBrand"><p><a data-ga-region="footer" href="https://www.northwestern.edu" id="NU-Home"><img alt="Northwestern University logo" src="https://deptcommon.fsm.northwestern.edu/_fw/v4.0/images/Northwestern_horizontal_white-trimmed.svg"/></a></p><p>&#169; 2019 Northwestern University</p></div><div id="nuLinks"><ul><li><a data-ga-region="footer" href="https://www.northwestern.edu/contact.html">Contact Northwestern University</a></li><li><a data-ga-region="footer" href="https://www.northwestern.edu/hr/careers/">Careers</a></li><li><a data-ga-region="footer" href="https://www.northwestern.edu/disclaimer.html">Disclaimer</a></li><li><a data-ga-region="footer" href="https://www.northwestern.edu/emergency/index.html">Campus Emergency Information</a></li><li><a data-ga-region="footer" href="https://www.northwestern.edu/policy-statements/index.html">University Policies</a></li></ul></div></div></div></div></footer></div>            
         <!-- Footer -->   
         <!-- BEGIN JS_COMMON -->
-          <script crossorigin="anonymous" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" src="https://code.jquery.com/jquery-3.4.1.min.js" type="text/javascript"></script>
-          <script crossorigin="anonymous" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" type="text/javascript"></script>
-          <script crossorigin="anonymous" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" type="text/javascript"></script>
-          <script src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js" type="text/javascript"></script>
-          <script src="//deptcommon.fsm.northwestern.edu/_fw/v4.0/scripts/common.js?v1597258472417" type="text/javascript"></script>
+          <!-- <script crossorigin="anonymous" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" src="https://code.jquery.com/jquery-3.4.1.min.js" type="text/javascript"></script>
+          <script crossorigin="anonymous" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" type="text/javascript"></script>  -->
+          <!-- <script crossorigin="anonymous" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" type="text/javascript"></script> -->
+         
   
 <!-- END JS_COMMON -->
-        <script type="text/javascript" src="dist/js/output.js" ></script>
-        
+        <script type="text/javascript" src="dist/js/scripts.js" ></script>
     </body>
 </html>

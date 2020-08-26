@@ -1,45 +1,24 @@
+interface modalDisplayPackage {
+    title?: string
+    content?: string
+}
+
 class Modal {
     public overlayContainerID   = 'overlay';
     public overlayContainerGuts = 'overlayGuts'; 
+    public modalID              = 'itModal'
 
     public isOpen = false;
 
     constructor(){
-        this.addOverlay(); 
+        this.addOverlay();   
     }
 
-    addOverlay() {
-        let overlay = `<div class="modal fade" id="itModal" tabindex="-1" aria-labelledby="itModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <form>
-                <div class="form-group">
-                  <label for="recipient-name" class="col-form-label">Recipient:</label>
-                  <input type="text" class="form-control" id="recipient-name">
-                </div>
-                <div class="form-group">
-                  <label for="message-text" class="col-form-label">Message:</label>
-                  <textarea class="form-control" id="message-text"></textarea>
-                </div>
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Send message</button>
-            </div>
-          </div>
-        </div>
-      </div>`;
-        
+    addOverlay( ) {
+        let overlay = ``; 
+
         //old way -- worked on Chrome and Safari, but not FF --> document.getElementById('main-content').insertAdjacentHTML('beforeend', overlay);
-        document.body.insertAdjacentHTML('beforeend', overlay);
+        // document.getElementById('main-content').insertAdjacentHTML( 'beforeend', overlay );
     }
 
     // updateOverlayContent( output ){
@@ -47,56 +26,94 @@ class Modal {
     //     el.innerHTML = output;
     // }
 
-    openOverlay( output ){
-        var modal = document.getElementById('itModal');
+    openOverlay( output:modalDisplayPackage ){
 
-        //make backdrop appear
-        var modalBackDrop = '<div id="itBackdrop" class="modal-backdrop fade show"></div>';
-        document.body.insertAdjacentHTML('beforeend', modalBackDrop);
+        //add modal content
+    //    console.log( document.getElementById(this.modalID).querySelector('div.modal-body') );
+
+        document.getElementById(this.modalID).querySelector('div.modal-body').innerHTML = output.content;
+
+        $('#itModal').modal();
+
+        // // console.log( triggeringEvent.clientY );
+
+        // //find the triggering prodBox 
+        // const theTrigProdBox = triggeringEvent.target.closest('article.prodBox');
+        // const scrollPos = window.scrollY;
+
+        // this.addOverlay( theTrigProdBox );
+
+        // let modal = document.getElementById('itModal');
+
+        // // //make backdrop appear
+        // let modalBackDropHTML   = '<div id="itBackdrop" class="modal-backdrop fade show"></div>';
+        // document.body.insertAdjacentHTML('beforeend', modalBackDropHTML);
+
+        // //made modal appear
+        // // modal.style.top = `1000px`;
+        // modal.classList.add('show');
+        // modal.style.cssText = "padding-right: 15px; display: block;";
+
+        // var theBody = document.querySelector('body');
+        // theBody.classList.add('modal-open');
+        // theBody.style.cssText = 'padding-right: 15px';
+        // theBody.style.position = 'fixed';
+        // theBody.style.left = theBody.style.right = '0px';
+
+        // window.scroll(0, scrollPos);
+        // // theBody.style.top = `${scrollPos}px`;
         
-        //made modal appear
-        modal.classList.add('show');
-        modal.style.cssText = "padding-right: 15px; display: block;";
+        // // // Close modal on ESC 
+        // document.addEventListener('keydown', (e) => {
+        //     if(e.key === "Escape") {
+        //         this.closeOverlay( modal, scrollPos );
+        //         e.preventDefault();
+        //     }
+        // });
 
-        var theBody = document.querySelector('body');
-        theBody.classList.add('modal-open');
-        theBody.style.cssText = 'padding-right: 15px';
-        
-        // Close modal on ESC 
-        document.addEventListener('keydown', (e) => {
-            if(e.key === "Escape") {
-                this.closeOverlay( modal );
-                e.preventDefault();
-            }
-        });
+        // let dismissBtns = modal.querySelectorAll('[data-dismiss]');
 
-        let dismissBtns = modal.querySelectorAll('[data-dismiss]');
-
-        dismissBtns.forEach( el => {
-            el.addEventListener('click', (e)=> {
-                this.closeOverlay( modal );
-                e.preventDefault();
-            });
-        });
-
-
+        // dismissBtns.forEach( el => {
+        //     el.addEventListener('click', (e)=> {
+        //         this.closeOverlay( modal, scrollPos );
+        //         e.preventDefault();
+        //     });
+        // });
     
-        this.isOpen = true;
+        // this.isOpen = true;
     }
 
-    closeOverlay( modalRef ){
+    closeOverlay( modalRef, scrollPos ){
+
         modalRef.classList.remove('show');
         modalRef.style.cssText = "padding-right: 0; display: none;";
 
         var theBody = document.querySelector('body');
         theBody.classList.remove('modal-open');
         theBody.style.cssText = 'padding-right: 0';
+        theBody.style.position = '';
+        theBody.style.top = '';
+        theBody.style.left = '';
+        theBody.style.right = '';
 
         var backdrop = document.getElementById('itBackdrop');
         backdrop.remove();
  
         this.isOpen = false;
+
+        window.scroll(0, scrollPos);
     }
+
+
+        // closeOverlay(el, oel, scrollPos){
+    //     el.innerHTML = "";
+    //     oel.style.height = "0%";
+    //     oel.style.display = "none";
+    //     document.body.classList.remove('modal-open');
+    //     window.scroll(0, scrollPos);
+    //     this.isOpen = false;
+    // }
+
 
     // openOverlay( output ){
 
@@ -235,7 +252,7 @@ class Item implements product {
                 }     
         output += `<div class="col-12 col-lg-6 overlayText">
                         
-                            <h3>{this.title}`;
+                            <h3>${this.title}`;
 
                             if( this.software ){
                                 if( this.renew ){
@@ -246,7 +263,7 @@ class Item implements product {
                         `;
                         
                     if( this.price != '0.00' && this.price != '0' && this.price != '' ){
-                        output += `<h6>${ this.numberWithCommas( this.price ) }</h6>`;
+                        output += `<h6>$${ this.numberWithCommas( this.price ) }</h6>`;
                     }
 
                     if( typeof this.desc == "string" ){
@@ -282,7 +299,7 @@ class Item implements product {
             }
 
             output += `<a id="atcModalBtn" href="#" 
-                            class="button ${optClass}" 
+                            class="btn btn-primary ${optClass}" 
                             data-position="${position}" 
                             data-id="${this.id}"
                             data-is-software="{${this.software}}"   
@@ -527,8 +544,10 @@ class Cart {
         document.getElementById('viewCart').addEventListener( 'click', (e) => {
             let cartList = this.listCart();
             
+            let modalOutput:modalDisplayPackage = { content: cartList };
+            
             if( this.cartTotal > 0 ){
-                this.modal.openOverlay( cartList );         
+                this.modal.openOverlay( modalOutput, e );         
                 this.wireUpCartDeletes();
                 this.wireUpCartCheckoutBtn();
                 e.preventDefault();
@@ -865,7 +884,9 @@ class Store {
 
                     let output = this.items[position].outputOverlay(num, onTheCart);
 
-                    this.modal.openOverlay( output );
+                    let modalOutput:modalDisplayPackage = { content: output };
+
+                    this.modal.openOverlay( modalOutput, e );
 
                     let atcModalBtn = document.getElementById('atcModalBtn');
 
@@ -931,7 +952,8 @@ class Store {
                 } else {
                     let theeItem = <Item>this.items[position]; 
                     let output = theeItem.outputOverlay(position, false);
-                    this.modal.openOverlay( output );
+                    let modalOutput:modalDisplayPackage = { content: output };
+                    this.modal.openOverlay( modalOutput, e );
                     e.preventDefault();
                     e.stopPropagation();
                 }
@@ -1124,7 +1146,8 @@ class itAlert {
                 this.trigger = document.getElementById('alertTrigger');
     
                 this.trigger.addEventListener('click', function( e ){
-                    _modalClass.openOverlay( modalBox );
+                    let modalOutput:modalDisplayPackage = { content: modalBox };
+                    _modalClass.openOverlay( modalOutput, e );
                     e.preventDefault(); 
                 });
             }

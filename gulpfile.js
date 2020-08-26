@@ -1,6 +1,7 @@
 var gulp        = require('gulp');
 var ts          = require('gulp-typescript');
 var browserSync = require('browser-sync').create();
+var concat      = require('gulp-concat');
 var sass        = require('gulp-sass');
 var uglify      = require('gulp-uglify');
 var jshint      = require( 'gulp-jshint' );
@@ -25,19 +26,24 @@ gulp.task( 'jshint', function() {
 // Concatenates all files that it finds in the manifest
 // and creates two versions: normal and minified.
 // It's dependent on the jshint task to succeed.
+
 gulp.task( 'scripts', ['jshint'], function() {
-    return gulp.src( './js/manifest.js' )
-      .pipe( include() )
-      .pipe( rename( { basename: 'scripts' } ) )
+    return gulp.src( [
+      'node_modules/jquery/dist/jquery.js',
+      'node_modules/bootstrap/dist/js/bootstrap.js',
+      'dist/js/tsOutput.js'
+      ])
+      .pipe( concat( 'scripts.js' ) )
+
       .pipe( gulp.dest( './dist/js' ) )
       // Normal done, time to create the minified javascript (scripts.min.js)
       // remove the following 3 lines if you don't want it
-      .pipe(babel({
-        presets: ['@babel/env']
-      }))
-      .pipe( uglify() )
-      .pipe( rename( { suffix: '.min' } ) )
-      .pipe( gulp.dest( './dist/js' ) )
+      // .pipe(babel({
+      //   presets: ['@babel/env']
+      // }))
+      // .pipe( uglify() )
+      // .pipe( rename( { suffix: '.min' } ) )
+      // .pipe( gulp.dest( './dist/js' ) )
       .pipe(browserSync.reload({stream: true}))
       .pipe( notify({ message: 'scripts task complete' }));
   } );
@@ -47,7 +53,7 @@ gulp.task( 'scripts', ['jshint'], function() {
     return gulp.src('js/**/*.ts')
         .pipe(ts({
             noImplicitAny: true,
-            outFile: 'output.js'
+            outFile: 'tsOutput.js'
         }))
         .pipe(babel({
           presets: ['@babel/env']
@@ -57,9 +63,8 @@ gulp.task( 'scripts', ['jshint'], function() {
         .pipe( rename( { suffix: '.min' } ) )
         .pipe( gulp.dest( 'dist/js' ) )
         .pipe(browserSync.reload({stream: true}))
-        .pipe( notify({ message: 'ts min task complete' }));
+        .pipe( notify({ message: 'ts task complete' }));
 });
-
 
 // automatically reloads the page when files changed
 var browserSyncWatchFiles = [
@@ -136,8 +141,8 @@ gulp.task('sass-min', function() {
 gulp.task( 'watch', function() {
  
   // don't listen to whole js folder, it'll create an infinite loop
-  gulp.watch( [ './js/**/*.ts' ], [ 'typeScripts' ] );
-  gulp.watch( [ './dist/js/*.js' ], [ 'scripts' ] );
+  gulp.watch( [ './js/**/*.ts' ], [ 'typeScripts', 'scripts' ] );
+  // gulp.watch( [ './dist/js/*.js' ], [ 'scripts' ] );
 
   // gulp.watch( './js/**/*.*' ).on('change', browserSync.reload);
 
