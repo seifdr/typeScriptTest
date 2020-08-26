@@ -31,6 +31,10 @@ class Modal {
         //add modal content
     //    console.log( document.getElementById(this.modalID).querySelector('div.modal-body') );
 
+        if( output.title !== '' ){
+            document.getElementById(this.modalID).querySelector('h5.modal-title').innerHTML = output.title ;
+        }
+
         document.getElementById(this.modalID).querySelector('div.modal-body').innerHTML = output.content;
 
         $('#itModal').modal();
@@ -544,7 +548,7 @@ class Cart {
         document.getElementById('viewCart').addEventListener( 'click', (e) => {
             let cartList = this.listCart();
             
-            let modalOutput:modalDisplayPackage = { content: cartList };
+            let modalOutput:modalDisplayPackage = { title: 'Shopping Cart', content: cartList };
             
             if( this.cartTotal > 0 ){
                 this.modal.openOverlay( modalOutput, e );         
@@ -671,7 +675,7 @@ class Cart {
                 </div>
                 <div class="cartRow">
                     <div class="checkoutRow">
-                        <a id="checkoutNow" href="#" class="button">Checkout Now</a> 
+                        <a id="checkoutNow" href="#" class="btn btn-primary">Checkout Now</a> 
                     </div>
                 </div>
             `;

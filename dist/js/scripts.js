@@ -15450,6 +15450,10 @@ function () {
   Modal.prototype.openOverlay = function (output) {
     //add modal content
     //    console.log( document.getElementById(this.modalID).querySelector('div.modal-body') );
+    if (output.title !== '') {
+      document.getElementById(this.modalID).querySelector('h5.modal-title').innerHTML = output.title;
+    }
+
     document.getElementById(this.modalID).querySelector('div.modal-body').innerHTML = output.content;
     $('#itModal').modal(); // // console.log( triggeringEvent.clientY );
     // //find the triggering prodBox 
@@ -15813,6 +15817,7 @@ function () {
       var cartList = _this.listCart();
 
       var modalOutput = {
+        title: 'Shopping Cart',
         content: cartList
       };
 
@@ -15990,7 +15995,7 @@ function () {
 
         cartlistOutput_1 += "</p>\n                        <a class=\"crDeleteEmbed\" data-basket-position=\"" + i + "\" >Delete</a>\n                    </div>\n                    <div class=\"crDelete\"> \n                        <p><a class=\"crDeleteBtn\" data-basket-position=\"" + i + "\" href=\"\">Delete</a></p>\n                    </div>\n                    <div><p>$" + _this.numberWithCommas(row.price, false) + "</p></div>\n                </div>";
       });
-      cartlistOutput_1 += "\n                <div class=\"cartRow\">\n                    <div class=\"crImg\">&nbsp;</div>\n                    <div class=\"crDesc\">&nbsp;</div>\n                    <div class=\"crDelete\">Total:</div>\n                    <div>$" + this.numberWithCommas(this.totalCart(), true) + "</div>\n                </div>\n                <div class=\"cartRow\">\n                    <div class=\"checkoutRow\">\n                        <a id=\"checkoutNow\" href=\"#\" class=\"button\">Checkout Now</a> \n                    </div>\n                </div>\n            ";
+      cartlistOutput_1 += "\n                <div class=\"cartRow\">\n                    <div class=\"crImg\">&nbsp;</div>\n                    <div class=\"crDesc\">&nbsp;</div>\n                    <div class=\"crDelete\">Total:</div>\n                    <div>$" + this.numberWithCommas(this.totalCart(), true) + "</div>\n                </div>\n                <div class=\"cartRow\">\n                    <div class=\"checkoutRow\">\n                        <a id=\"checkoutNow\" href=\"#\" class=\"btn btn-primary\">Checkout Now</a> \n                    </div>\n                </div>\n            ";
       cartlistOutput_1 += '</div>';
       return cartlistOutput_1;
     } //list cart items for modal here.
