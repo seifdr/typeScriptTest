@@ -15450,7 +15450,7 @@ function () {
   Modal.prototype.openOverlay = function (output) {
     //add modal content
     //    console.log( document.getElementById(this.modalID).querySelector('div.modal-body') );
-    if (output.title !== '') {
+    if (output.title) {
       document.getElementById(this.modalID).querySelector('h5.modal-title').innerHTML = output.title;
     }
 
