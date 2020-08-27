@@ -888,7 +888,7 @@ class Store {
 
                     let output = this.items[position].outputOverlay(num, onTheCart);
 
-                    let modalOutput:modalDisplayPackage = { content: output };
+                    let modalOutput:modalDisplayPackage = { title: 'Product Details', content: output };
 
                     this.modal.openOverlay( modalOutput, e );
 

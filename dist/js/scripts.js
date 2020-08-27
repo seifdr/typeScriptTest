@@ -16180,6 +16180,7 @@ function () {
         var output = _this.items[position].outputOverlay(num, onTheCart);
 
         var modalOutput = {
+          title: 'Product Details',
           content: output
         };
 
