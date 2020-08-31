@@ -118,7 +118,7 @@ class Item implements product {
 
                 if( this.image != '/' ){   
                     output += `<div class="col-12 col-lg-6 overlayImg">
-                        <div>`;
+                        <div class="d-flex justify-content-center" >`; 
                             if( this.image && this.image != '' ){
                                 output += `<img src="${this.image}" />`;
                             } else {
