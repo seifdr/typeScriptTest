@@ -963,17 +963,17 @@ class itAlert {
 
     chooseColor( color ){
         if( color == "Red"){
-            return ' itDanger ';
+            return ' alert-danger ';
         } else {
-            return ' itPrimary ';
+            return ' alert-primary ';
         }
     }
 
     buildBox( alert ){
-        let alertBox = `<div class="contain-1440 itAlert ${ this.chooseColor( alert.color ) } ">
+        let alertBox = `<div class="contain-1440 alert ${ this.chooseColor( alert.color ) } " role="alert" >
                     <div class="contain-1120">
                     <!-- <i class="fa fa-exclamation-triangle fa-2x">&nbsp;</i> -->
-                    <h3>${alert.title}</h3>
+                    <h4 class="alert-heading">${alert.title}</h4>
                     <p>${alert.blurb}</p>`;
 
                     if( typeof alert.modal !== 'undefined' ){
