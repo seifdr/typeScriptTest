@@ -113,8 +113,7 @@ class Item implements product {
         const optClass = ( onCart )? 'onCart':'';
  
         let output:string = `<div id="overlayPad" data-id="${this.id}" >
-        <div class="bootstrap-wrapper">
-    <div class="container">
+
     <div class="row">`;
 
                 if( this.image != '/' ){   
@@ -128,7 +127,7 @@ class Item implements product {
                         output += `</div>
                     </div>`; 
                 }   
-                  
+
         output += `<div class="col-12 col-lg-6 overlayText">
                         
                             <h3>${this.title}`;
@@ -186,8 +185,6 @@ class Item implements product {
         }
 
         output += `</div>
-            </div>
-            </div>
             </div>
         </div>`;
         return output;
