@@ -179,7 +179,7 @@ class Item implements product {
             output += `<a id="atcModalBtn" href="#" 
                             class="btn btn-primary ${optClass}" 
                             data-position="${position}" 
-                            data-id="${this.id}"
+                            data-id="${this.id}" 
                             data-is-software="{${this.software}}"   
                         >${ btnText }</a>`;
         }

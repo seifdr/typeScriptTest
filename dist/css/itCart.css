@@ -234,7 +234,7 @@ section#filterChecks > form select.filterOptions {
 
 section.shelves article.prodBox {
   cursor: pointer; }
-  section.shelves article.prodBox div.img-container {
+  section.shelves article.prodBox div.feature-img {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -245,10 +245,10 @@ section.shelves article.prodBox {
         align-content: center;
     padding: 10px; }
     @media screen and (min-width: 550px) {
-      section.shelves article.prodBox div.img-container {
+      section.shelves article.prodBox div.feature-img {
         height: 180px;
         width: auto; } }
-    section.shelves article.prodBox div.img-container img {
+    section.shelves article.prodBox div.feature-img img {
       max-height: 180px; }
   section.shelves article.prodBox div.feature-copy {
     padding: 1rem 1.5rem 1rem 1.5rem;
