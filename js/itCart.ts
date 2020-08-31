@@ -121,13 +121,14 @@ class Item implements product {
                     output += `<div class="col-12 col-lg-6 overlayImg">
                         <div>`;
                             if( this.image && this.image != '' ){
-                                output += `<img src="${this.image}" />`; 
+                                output += `<img src="${this.image}" />`;
                             } else {
                                 output += `&nbsp;`; 
                             }
                         output += `</div>
                     </div>`; 
-                }     
+                }   
+                  
         output += `<div class="col-12 col-lg-6 overlayText">
                         
                             <h3>${this.title}`;
@@ -697,8 +698,8 @@ class Store {
                     // renew: boolean;
                 };
 
-                if( prodBox.querySelector('div.img-container > img') ){
-                    row.image = prodBox.querySelector('div.img-container > img').getAttribute('src');
+                if( prodBox.querySelector('div.feature-img > img') ){
+                    row.image = prodBox.querySelector('div.feature-img > img').getAttribute('src');
                 } else {
                     row.image = '';
                 }

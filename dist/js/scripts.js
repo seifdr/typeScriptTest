@@ -219,9 +219,11 @@ function () {
     var btnText = onCart ? 'Remove From Cart' : 'Add To Cart';
     var optClass = onCart ? 'onCart' : '';
     var output = "<div id=\"overlayPad\" data-id=\"" + this.id + "\" >\n        <div class=\"bootstrap-wrapper\">\n    <div class=\"container\">\n    <div class=\"row\">";
+    console.log('The image: ', this.image);
 
     if (this.image != '/') {
       output += "<div class=\"col-12 col-lg-6 overlayImg\">\n                        <div>";
+      alert(this.image);
 
       if (this.image && this.image != '') {
         output += "<img src=\"" + this.image + "\" />";
@@ -783,8 +785,8 @@ function () {
           software: prodBox.getAttribute('data-is-software') === '1'
         };
 
-        if (prodBox.querySelector('div.img-container > img')) {
-          row.image = prodBox.querySelector('div.img-container > img').getAttribute('src');
+        if (prodBox.querySelector('div.feature-img > img')) {
+          row.image = prodBox.querySelector('div.feature-img > img').getAttribute('src');
         } else {
           row.image = '';
         }
