@@ -961,11 +961,23 @@ class itAlert {
         }        
     }
 
-    chooseColor( color ){
-        if( color == "Red"){
-            return ' alert-danger ';
+        // parameters
+        //   Color
+        //   Type -- button or not?
+    chooseColor( color, button = false ){
+        
+        let returnString = '';
+
+        if( button ){
+            returnString = 'btn-';
         } else {
-            return ' alert-primary ';
+            returnString = 'alert-';
+        }
+
+        if( color == "Red"){
+            return returnString + 'danger ';
+        } else {
+            return returnString + 'primary ';
         }
     }
 
@@ -973,11 +985,11 @@ class itAlert {
         let alertBox = `<div class="contain-1440 alert ${ this.chooseColor( alert.color ) } " role="alert" >
                     <div class="contain-1120">
                     <!-- <i class="fa fa-exclamation-triangle fa-2x">&nbsp;</i> -->
-                    <h4 class="alert-heading">${alert.title}</h4>
+                    <h4 class="alert-heading"><strong>${alert.title}</strong></h4>
                     <p>${alert.blurb}</p>`;
 
                     if( typeof alert.modal !== 'undefined' ){
-                        alertBox += `<p><a id="alertTrigger" href="#">Read more</a></p>`;
+                        alertBox += `<p><a id="alertTrigger" class="btn ${ this.chooseColor( alert.color, true ) }" href="#">Read more</a></p>`;
                     }        
             alertBox += `</div>  
                 </div>`;
@@ -1021,10 +1033,10 @@ class itAlert {
 
         if( modalBox != '' ){
             if( document.getElementById('alertTrigger') ){
-                this.trigger = document.getElementById('alertTrigger');
+                this.trigger = document.getElementById('alertTrigger'); 
     
                 this.trigger.addEventListener('click', function( e ){
-                    let modalOutput:modalDisplayPackage = { content: modalBox };
+                    let modalOutput:modalDisplayPackage = { content: modalBox, title: 'Feinberg IT Alert' };
                     _modalClass.openOverlay( modalOutput, e );
                     e.preventDefault(); 
                 });

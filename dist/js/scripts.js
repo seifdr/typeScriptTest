@@ -1060,21 +1060,36 @@ function () {
       this.baseEL = document.getElementById('homepageContent');
       this.type = 'homepage';
     }
-  }
+  } // parameters
+  //   Color
+  //   Type -- button or not?
 
-  itAlert.prototype.chooseColor = function (color) {
-    if (color == "Red") {
-      return ' alert-danger ';
+
+  itAlert.prototype.chooseColor = function (color, button) {
+    if (button === void 0) {
+      button = false;
+    }
+
+    var returnString = '';
+
+    if (button) {
+      returnString = 'btn-';
     } else {
-      return ' alert-primary ';
+      returnString = 'alert-';
+    }
+
+    if (color == "Red") {
+      return returnString + 'danger ';
+    } else {
+      return returnString + 'primary ';
     }
   };
 
   itAlert.prototype.buildBox = function (alert) {
-    var alertBox = "<div class=\"contain-1440 alert " + this.chooseColor(alert.color) + " \" role=\"alert\" >\n                    <div class=\"contain-1120\">\n                    <!-- <i class=\"fa fa-exclamation-triangle fa-2x\">&nbsp;</i> -->\n                    <h4 class=\"alert-heading\">" + alert.title + "</h4>\n                    <p>" + alert.blurb + "</p>";
+    var alertBox = "<div class=\"contain-1440 alert " + this.chooseColor(alert.color) + " \" role=\"alert\" >\n                    <div class=\"contain-1120\">\n                    <!-- <i class=\"fa fa-exclamation-triangle fa-2x\">&nbsp;</i> -->\n                    <h4 class=\"alert-heading\"><strong>" + alert.title + "</strong></h4>\n                    <p>" + alert.blurb + "</p>";
 
     if (typeof alert.modal !== 'undefined') {
-      alertBox += "<p><a id=\"alertTrigger\" href=\"#\">Read more</a></p>";
+      alertBox += "<p><a id=\"alertTrigger\" class=\"btn " + this.chooseColor(alert.color, true) + "\" href=\"#\">Read more</a></p>";
     }
 
     alertBox += "</div>  \n                </div>";
@@ -1112,7 +1127,8 @@ function () {
         this.trigger = document.getElementById('alertTrigger');
         this.trigger.addEventListener('click', function (e) {
           var modalOutput = {
-            content: modalBox
+            content: modalBox,
+            title: 'Feinberg IT Alert'
           };
 
           _modalClass.openOverlay(modalOutput, e);
