@@ -1,24 +1,9 @@
 // @import "bs-grid/bootstrap-grid.scss";
 @import "itAlert.scss";
 
-.standard-page .feature-box.prodBox {
-    max-width: none !important;
-    border: 1px solid red;
-}
-.standard-page .feature-box.prodBox .feature-img img {
-    min-width: initial !important;
-    border: 1px solid blue;
-}
 .standard-page .feature-box.prodBox .hiddenProdSpecs {
     display: none;
 }
-
-
-
-
-
-
-
 
 section#shopping-cart {
     .fa {  
@@ -35,16 +20,6 @@ div#spinnerContainer {
 
     p {
         margin: .5em 0 !important; 
-    }
-}
-
-div#headerWrapper{
-    *,
-    *::before,
-    *::after {
-        // box-sizing: inherit;
-        // box-sizing: border-box;
-        box-sizing: content-box;
     }
 }
 
@@ -109,77 +84,16 @@ $featureBoxGrey:       #f0f0f0;
             justify-content: center;
         }
 
-        a.button {  
-            padding: .8em; 
-            min-width: 200px;
+        button.btn-electricBlue {
             background-color: $fsmElectricBlue;
             color: #fff;
-            text-align: center;
-            text-transform: uppercase;
-            font-weight: bold;
-
-            cursor: pointer;
-            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-            display: inline-block;
-            vertical-align: middle;
-            -webkit-transform: translateZ(0);
-            transform: translateZ(0);
-            box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            -moz-osx-font-smoothing: grayscale;
-            position: relative;
-            -webkit-transition-property: color;
-            transition-property: color;
-            -webkit-transition-duration: 0.2s;
-            transition-duration: 0.2s;
-            min-width: 165px;
-            border: none;     
-            
-            &:hover {
-                text-decoration: none;
-            }
+            min-width: 200px;
 
             &:before {
-                content: "";
-                position: absolute;
-                z-index: -1;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
                 background: $fsmElectricBlueHover;
-                -webkit-transform: scaleX(0);
-                transform: scaleX(0);
-                -webkit-transform-origin: 0 50%;
-                transform-origin: 0 50%;
-                -webkit-transition-property: transform;
-                transition-property: transform;
-                -webkit-transition-duration: 0.2s;
-                transition-duration: 0.2s;
-                -webkit-transition-timing-function: ease-out;
-                transition-timing-function: ease-out
-            }
-
-            &:hover:before {
-                -webkit-transform: scaleX(1);
-                transform: scaleX(1)
             }
         }
     }
-}
-
-div#cartList {
-    overflow-y: scroll;
-    max-height: 600px;
-    width: 100%;
-}
-
-div#cartList div.cartRow > div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
 }
 
 div#cartList div.cartRow > div.crDesc {
@@ -307,23 +221,8 @@ section#filterChecks > form {
 
 section.shelves {
 
-    // & > div.row {
-    //     margin-left: -30px;
-    //     margin-right: -30px;
-    // }
-
-    // div.pbc { 
-    //     display: flex;
-    //     padding-bottom: 15px;
-    // }
-
     article.prodBox {
-        // flex-grow: 1;
-        background-color: $featureBoxGrey;
         cursor: pointer;
-        // box-sizing: border-box; 
-        // position: relative;
-        // width: 100%;
  
         div.img-container {
             @media screen and (min-width: $break-medium) {
@@ -342,17 +241,13 @@ section.shelves {
 
         div.feature-copy {
             padding: 1rem 1.5rem 1rem 1.5rem;
-            margin-bottom: 46px;
-            display: flex;
-            flex-direction: column;
+            padding-bottom: 46px;
 
             .hiddenProdSpecs {
                 display: none;
             }
 
             div {
-                flex-grow: 1 1 0;
-                justify-self: end;
                 
                 a:hover {
                     text-decoration: none;
@@ -402,126 +297,9 @@ div#overlay-content {
 
 }
 
-div#overlayGuts {
-    // position: relative;
-    height: auto !important;
-    overflow: none !important;
-    padding-bottom: 0 !important;
-    padding-left: 0;
-    background-color: white;
-
-    div#overlayPad {
-        padding: 1em;
-        height: 100%;
-
-        div.renewModalSelect {
-            margin-bottom: 1.5em;
-            
-            label {
-                display: block;
-                width: 100%;
-            }
-
-            select {
-                margin-top: .25em;
-                padding-top: .25em;
-            }
-        }
-    }
-
-    h3 {
-        color: $fsmPurple;
-        font-family: Calibri,Helvetica,Arial,sans-serif;
-        font-size: 30px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 1.2em;
-        padding-top: 0;
-        padding-bottom: 10px;
-        margin: 0;
-        font-size: 20px;
-    }
-
-    h6 {
-        font-size: 18px;
-        color:#716c6b;
-        margin-bottom: 1rem;
-    }
-
-    //overlay is outside the main-content styling therefore we need to mimic the style of btns on the modal
-    a {
-        font-weight: bold;
-        color: $fsmPurple;
-    }
-
-    a.button {  
-        padding: .8em; 
-        min-width: 200px;
-        background-color: $fsmPurple;
-        color: #fff;
-        text-align: center;
-        text-transform: uppercase;
-        font-weight: bold;
-
-        cursor: pointer;
-        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-        display: inline-block;
-        vertical-align: middle;
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0);
-        box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
-        -moz-osx-font-smoothing: grayscale;
-        position: relative;
-        -webkit-transition-property: color;
-        transition-property: color;
-        -webkit-transition-duration: 0.2s;
-        transition-duration: 0.2s;
-        min-width: 165px;
-        border: none;     
-        
-        &:hover {
-            text-decoration: none;
-        }
-
-        &:before {
-            content: "";
-            position: absolute;
-            z-index: -1;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: $fsmPurpleHover;
-            -webkit-transform: scaleX(0);
-            transform: scaleX(0);
-            -webkit-transform-origin: 0 50%;
-            transform-origin: 0 50%;
-            -webkit-transition-property: transform;
-            transition-property: transform;
-            -webkit-transition-duration: 0.2s;
-            transition-duration: 0.2s;
-            -webkit-transition-timing-function: ease-out;
-            transition-timing-function: ease-out
-        }
-
-        &:hover:before {
-            -webkit-transform: scaleX(1);
-            transform: scaleX(1)
-        }
-    }
+div.overlayImg {
+    margin-top: 1.6rem; 
 }
-
-body.modal-open {
-    /*block scroll for mobile;
-    */
-    /*causes underlying page to jump to top;
-    */
-    /*prevents scrolling on all screens*/
-     overflow: hidden;
-     position: fixed;
- }
 
 section#jumpers {
     width: 100%;

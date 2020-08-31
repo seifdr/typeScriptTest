@@ -158,7 +158,7 @@ class Item implements product {
                 output += `<div class="renewModalSelect">
                     <label>Purchase or Renew
                     Software Licence: </label>
-                    <select class="renewModalInput" data-id="${this.id}" `;
+                    <select class="renewModalInput mb-4" data-id="${this.id}" `;
             
                         if( this.onCart ){
                             output += ` disabled `;
@@ -407,7 +407,7 @@ class Cart {
                     <div>
                         <div id="cartLeft"></div>
                         <div id="cartRight">
-                            <a id="viewCart" class="button">View Cart</a>
+                            <button id="viewCart" class="btn btn-primary btn-electricBlue">View Cart</button>
                         </div>
                     </div>
                 </div>`;

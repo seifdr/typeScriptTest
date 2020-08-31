@@ -33,14 +33,6 @@ div.alertRow {
   #main-content div.itPrimary h1, #main-content div.itPrimary h2, #main-content div.itPrimary h3, #main-content div.itPrimary h4, #main-content div.itPrimary h5, #main-content div.itPrimary a, #main-content div.itPrimary p {
     color: #004085 !important; }
 
-.standard-page .feature-box.prodBox {
-  max-width: none !important;
-  border: 1px solid red; }
-
-.standard-page .feature-box.prodBox .feature-img img {
-  min-width: initial !important;
-  border: 1px solid blue; }
-
 .standard-page .feature-box.prodBox .hiddenProdSpecs {
   display: none; }
 
@@ -64,12 +56,6 @@ div#spinnerContainer {
           align-items: center; }
   div#spinnerContainer p {
     margin: .5em 0 !important; }
-
-div#headerWrapper *,
-div#headerWrapper *::before,
-div#headerWrapper *::after {
-  -webkit-box-sizing: content-box;
-          box-sizing: content-box; }
 
 #cart {
   display: block;
@@ -124,75 +110,12 @@ div#headerWrapper *::after {
         -webkit-box-pack: center;
             -ms-flex-pack: center;
                 justify-content: center; } }
-    #cart div#cartRight a.button {
-      padding: .8em;
-      min-width: 200px;
+    #cart div#cartRight button.btn-electricBlue {
       background-color: #0082bf;
       color: #fff;
-      text-align: center;
-      text-transform: uppercase;
-      font-weight: bold;
-      cursor: pointer;
-      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-      display: inline-block;
-      vertical-align: middle;
-      -webkit-transform: translateZ(0);
-      transform: translateZ(0);
-      -webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-              box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      -moz-osx-font-smoothing: grayscale;
-      position: relative;
-      -webkit-transition-property: color;
-      transition-property: color;
-      -webkit-transition-duration: 0.2s;
-      transition-duration: 0.2s;
-      min-width: 165px;
-      border: none; }
-      #cart div#cartRight a.button:hover {
-        text-decoration: none; }
-      #cart div#cartRight a.button:before {
-        content: "";
-        position: absolute;
-        z-index: -1;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: #80c8ea;
-        -webkit-transform: scaleX(0);
-        transform: scaleX(0);
-        -webkit-transform-origin: 0 50%;
-        transform-origin: 0 50%;
-        -webkit-transition-property: transform;
-        -webkit-transition-property: -webkit-transform;
-        transition-property: -webkit-transform;
-        transition-property: transform;
-        transition-property: transform, -webkit-transform;
-        -webkit-transition-duration: 0.2s;
-        transition-duration: 0.2s;
-        -webkit-transition-timing-function: ease-out;
-        transition-timing-function: ease-out; }
-      #cart div#cartRight a.button:hover:before {
-        -webkit-transform: scaleX(1);
-        transform: scaleX(1); }
-
-div#cartList {
-  overflow-y: scroll;
-  max-height: 600px;
-  width: 100%; }
-
-div#cartList div.cartRow > div {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center; }
+      min-width: 200px; }
+      #cart div#cartRight button.btn-electricBlue:before {
+        background: #80c8ea; }
 
 div#cartList div.cartRow > div.crDesc {
   -webkit-box-orient: vertical;
@@ -310,7 +233,6 @@ section#filterChecks > form select.filterOptions {
       min-width: 150px; } }
 
 section.shelves article.prodBox {
-  background-color: #f0f0f0;
   cursor: pointer; }
   section.shelves article.prodBox div.img-container {
     display: -webkit-box;
@@ -330,25 +252,13 @@ section.shelves article.prodBox {
       max-height: 180px; }
   section.shelves article.prodBox div.feature-copy {
     padding: 1rem 1.5rem 1rem 1.5rem;
-    margin-bottom: 46px;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-            flex-direction: column; }
+    padding-bottom: 46px; }
     section.shelves article.prodBox div.feature-copy .hiddenProdSpecs {
       display: none; }
-    section.shelves article.prodBox div.feature-copy div {
-      -webkit-box-flex: 1 1 0;
-          -ms-flex-positive: 1 1 0;
-              flex-grow: 1 1 0;
-      justify-self: end; }
-      section.shelves article.prodBox div.feature-copy div a:hover {
-        text-decoration: none; }
-      section.shelves article.prodBox div.feature-copy div a.specs:hover {
-        text-decoration: underline; }
+    section.shelves article.prodBox div.feature-copy div a:hover {
+      text-decoration: none; }
+    section.shelves article.prodBox div.feature-copy div a.specs:hover {
+      text-decoration: underline; }
   section.shelves article.prodBox div.renewSelect {
     margin-top: 1.5em; }
     section.shelves article.prodBox div.renewSelect label {
@@ -371,103 +281,8 @@ div#overlay-content {
   div#overlay-content a.closebtn i {
     font-style: normal; }
 
-div#overlayGuts {
-  height: auto !important;
-  overflow: none !important;
-  padding-bottom: 0 !important;
-  padding-left: 0;
-  background-color: white; }
-  div#overlayGuts div#overlayPad {
-    padding: 1em;
-    height: 100%; }
-    div#overlayGuts div#overlayPad div.renewModalSelect {
-      margin-bottom: 1.5em; }
-      div#overlayGuts div#overlayPad div.renewModalSelect label {
-        display: block;
-        width: 100%; }
-      div#overlayGuts div#overlayPad div.renewModalSelect select {
-        margin-top: .25em;
-        padding-top: .25em; }
-  div#overlayGuts h3 {
-    color: #514689;
-    font-family: Calibri,Helvetica,Arial,sans-serif;
-    font-size: 30px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 1.2em;
-    padding-top: 0;
-    padding-bottom: 10px;
-    margin: 0;
-    font-size: 20px; }
-  div#overlayGuts h6 {
-    font-size: 18px;
-    color: #716c6b;
-    margin-bottom: 1rem; }
-  div#overlayGuts a {
-    font-weight: bold;
-    color: #514689; }
-  div#overlayGuts a.button {
-    padding: .8em;
-    min-width: 200px;
-    background-color: #514689;
-    color: #fff;
-    text-align: center;
-    text-transform: uppercase;
-    font-weight: bold;
-    cursor: pointer;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    display: inline-block;
-    vertical-align: middle;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-    -webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-            box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    -moz-osx-font-smoothing: grayscale;
-    position: relative;
-    -webkit-transition-property: color;
-    transition-property: color;
-    -webkit-transition-duration: 0.2s;
-    transition-duration: 0.2s;
-    min-width: 165px;
-    border: none; }
-    div#overlayGuts a.button:hover {
-      text-decoration: none; }
-    div#overlayGuts a.button:before {
-      content: "";
-      position: absolute;
-      z-index: -1;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: #B6ACD1;
-      -webkit-transform: scaleX(0);
-      transform: scaleX(0);
-      -webkit-transform-origin: 0 50%;
-      transform-origin: 0 50%;
-      -webkit-transition-property: transform;
-      -webkit-transition-property: -webkit-transform;
-      transition-property: -webkit-transform;
-      transition-property: transform;
-      transition-property: transform, -webkit-transform;
-      -webkit-transition-duration: 0.2s;
-      transition-duration: 0.2s;
-      -webkit-transition-timing-function: ease-out;
-      transition-timing-function: ease-out; }
-    div#overlayGuts a.button:hover:before {
-      -webkit-transform: scaleX(1);
-      transform: scaleX(1); }
-
-body.modal-open {
-  /*block scroll for mobile;
-    */
-  /*causes underlying page to jump to top;
-    */
-  /*prevents scrolling on all screens*/
-  overflow: hidden;
-  position: fixed; }
+div.overlayImg {
+  margin-top: 1.6rem; }
 
 section#jumpers {
   width: 100%;
