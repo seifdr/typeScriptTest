@@ -1103,19 +1103,19 @@ window.onload=function() {
 
     let shoppingModal = new Modal();
 
-    // if( currentURL.includes( purchasingPageURL ) ){
+    if( currentURL.includes( purchasingPageURL ) ){
         let shoppingCart = new Cart( shoppingModal, shoppingCookie, softwareCookie );
 
         let store = new Store('shopping-cart', shoppingCart, shoppingModal, shoppingCookie, softwareCookie );
     
         let alert = new itAlert( shoppingModal, 'purchasing' );
-    // } else {
+    } else {
 
-    //     if( currentURL.includes( homepageURL ) ){
-    //         let alert = new itAlert( shoppingModal, 'homepage' );
-    //     }
+        if( currentURL.includes( homepageURL ) ){
+            let alert = new itAlert( shoppingModal, 'homepage' );
+        }
 
-    // }
+    }
 
 };
 

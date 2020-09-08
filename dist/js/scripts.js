@@ -162,10 +162,10 @@ function () {
 
   Modal.prototype.openOverlay = function (output) {
     if (output.title) {
-      document.getElementById("itModal").querySelector('.modal-title').textContent = output.title;
+      document.getElementById(this.modalID).querySelector('.modal-title').textContent = output.title;
     }
 
-    document.getElementById("itModal").querySelector('div.modal-body').innerHTML = output.content;
+    document.getElementById(this.modalID).querySelector('div.modal-body').innerHTML = output.content;
     $('#' + this.modalID).modal();
   };
 
