@@ -1,22 +1,37 @@
 div.alertRow {
   margin: 1em 0 !important; }
 
+main.landing-page div.itAlert,
 #main-content div.itAlert {
-  margin-top: 0;
-  margin-bottom: 0;
+  margin-top: 1em;
+  margin-bottom: 1em;
   padding: 1em;
   -webkit-box-sizing: border-box;
           box-sizing: border-box; }
-  #main-content div.itAlert h1, #main-content div.itAlert h2, #main-content div.itAlert h3, #main-content div.itAlert h4, #main-content div.itAlert h5, #main-content div.itAlert a {
+  main.landing-page div.itAlert h1, main.landing-page div.itAlert h2, main.landing-page div.itAlert h3, main.landing-page div.itAlert h4, main.landing-page div.itAlert h5, main.landing-page div.itAlert a,
+  #main-content div.itAlert h1,
+  #main-content div.itAlert h2,
+  #main-content div.itAlert h3,
+  #main-content div.itAlert h4,
+  #main-content div.itAlert h5,
+  #main-content div.itAlert a {
     text-transform: uppercase; }
+  main.landing-page div.itAlert h3,
   #main-content div.itAlert h3 {
     font-size: 34px;
     font-weight: bold; }
+  main.landing-page div.itAlert a,
   #main-content div.itAlert a {
     font-weight: bold; }
-  #main-content div.itAlert h1:before, #main-content div.itAlert h2:before, #main-content div.itAlert h3:before, #main-content div.itAlert h4:before, #main-content div.itAlert h5:before {
-    font-family: FontAwesome;
+  main.landing-page div.itAlert h1:before, main.landing-page div.itAlert h2:before, main.landing-page div.itAlert h3:before, main.landing-page div.itAlert h4:before, main.landing-page div.itAlert h5:before,
+  #main-content div.itAlert h1:before,
+  #main-content div.itAlert h2:before,
+  #main-content div.itAlert h3:before,
+  #main-content div.itAlert h4:before,
+  #main-content div.itAlert h5:before {
+    font-family: "Font Awesome 5 Free";
     content: "\f071";
+    font-weight: 900;
     padding-right: .25em; }
 
 #main-content div.itDanger {

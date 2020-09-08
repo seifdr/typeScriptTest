@@ -5,7 +5,8 @@ interface modalDisplayPackage {
 
 class Modal {
     public overlayContainerID   = 'overlay';
-    public overlayContainerGuts = 'overlayGuts'; 
+    // public overlayContainerGuts = 'overlayGuts'; 
+    public overlayContainerGuts = ' div#itModal div.modal-content div.modal-body ';
     public modalID              = 'itModal'
 
     public isOpen = false;
@@ -24,16 +25,22 @@ class Modal {
     openOverlay( output:modalDisplayPackage ){
 
         if( output.title ){
-            document.getElementById("itModal").querySelector('.modal-title').textContent = output.title;
+            document.getElementById( this.modalID ).querySelector('.modal-title').textContent = output.title;
         }
 
-        document.getElementById("itModal").querySelector('div.modal-body').innerHTML = output.content;
+        document.getElementById( this.modalID ).querySelector('div.modal-body').innerHTML = output.content;
 
-        $('#itModal').modal(); 
+        $('#'+ this.modalID ).modal(); 
     }
 
-    closeOverlay( modalRef, scrollPos ){
-        //ç
+    updateOverlayContent( output ){
+        // let el = document.getElementById( this.overlayContainerGuts );
+        let el = document.querySelector( this.overlayContainerGuts );
+        el.innerHTML = output;
+    }
+
+    closeOverlay(){
+        $('#'+ this.modalID ).modal('hide');
     }
 }
 
@@ -478,11 +485,19 @@ class Cart {
             if( crDeleteBtns.length > 0 ){
                 for( let el of crDeleteBtns ){
                     el.addEventListener('click', (e) => {
+
+                        // WORKING HERE // 
                         let positionInBasket = el.getAttribute('data-basket-position');
                         this.addOrRemoveFromCart( this.basket[positionInBasket] );
-                        this.modal.updateOverlayContent( this.listCart() );
-                        this.wireUpCartDeletes();
-                        //finish me!
+
+                        if( this.countCart() > 0 ){
+                            this.modal.updateOverlayContent( this.listCart() );
+                            this.wireUpCartDeletes();
+                            //finish me!
+                        } else {
+                            this.modal.closeOverlay();
+                        }
+
                         e.preventDefault();
                     });
                 }
@@ -954,7 +969,9 @@ class itAlert {
             this.type = 'purchasing';
         } else {
             //hompage
-            this.baseEL = document.getElementById( 'homepageContent' );
+            // this.baseEL = document.getElementById( 'homepageContent' );
+            this.baseEL = document.querySelector( 'main.landing-page > div.container:first-of-type' ); 
+            
             this.type = 'homepage';
         }        
     }
@@ -980,9 +997,8 @@ class itAlert {
     }
 
     buildBox( alert ){
-        let alertBox = `<div class="contain-1440 alert ${ this.chooseColor( alert.color ) } " role="alert" >
+        let alertBox = `<div class="contain-1440 alert ${ this.chooseColor( alert.color ) } itAlert" role="alert" >
                     <div class="contain-1120">
-                    <!-- <i class="fa fa-exclamation-triangle fa-2x">&nbsp;</i> -->
                     <h4 class="alert-heading"><strong>${alert.title}</strong></h4>
                     <p>${alert.blurb}</p>`;
 
@@ -1077,16 +1093,30 @@ class itAlert {
 
 window.onload=function() {
 
+    let homepageURL = 'feinberg-dev.fsm.northwestern.edu/it-new/index.html';
+    let purchasingPageURL = 'feinberg-dev.fsm.northwestern.edu/it-new/purchasing/hardware.html';
+
+    const currentURL = window.location.href;
+
     const shoppingCookie = new Cookie( 'fsmITPurchasing' );
-    const softwareCookie = new Cookie( 'fsmITPurchasingSoftware' );
+    const softwareCookie = new Cookie( 'fsmITPurchasingSoftware' ); 
 
     let shoppingModal = new Modal();
 
-    let shoppingCart = new Cart( shoppingModal, shoppingCookie, softwareCookie );
+    // if( currentURL.includes( purchasingPageURL ) ){
+        let shoppingCart = new Cart( shoppingModal, shoppingCookie, softwareCookie );
 
-    let store = new Store('shopping-cart', shoppingCart, shoppingModal, shoppingCookie, softwareCookie );
+        let store = new Store('shopping-cart', shoppingCart, shoppingModal, shoppingCookie, softwareCookie );
+    
+        let alert = new itAlert( shoppingModal, 'purchasing' );
+    // } else {
 
-    let alert = new itAlert( shoppingModal, 'purchasing' );
+    //     if( currentURL.includes( homepageURL ) ){
+    //         let alert = new itAlert( shoppingModal, 'homepage' );
+    //     }
+
+    // }
+
 };
 
 

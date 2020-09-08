@@ -147,8 +147,9 @@ var Modal =
 /** @class */
 function () {
   function Modal() {
-    this.overlayContainerID = 'overlay';
-    this.overlayContainerGuts = 'overlayGuts';
+    this.overlayContainerID = 'overlay'; // public overlayContainerGuts = 'overlayGuts'; 
+
+    this.overlayContainerGuts = ' div#itModal div.modal-content div.modal-body ';
     this.modalID = 'itModal';
     this.isOpen = false;
     this.addOverlay();
@@ -165,10 +166,17 @@ function () {
     }
 
     document.getElementById("itModal").querySelector('div.modal-body').innerHTML = output.content;
-    $('#itModal').modal();
+    $('#' + this.modalID).modal();
   };
 
-  Modal.prototype.closeOverlay = function (modalRef, scrollPos) {//ç
+  Modal.prototype.updateOverlayContent = function (output) {
+    // let el = document.getElementById( this.overlayContainerGuts );
+    var el = document.querySelector(this.overlayContainerGuts);
+    el.innerHTML = output;
+  };
+
+  Modal.prototype.closeOverlay = function () {
+    $('#' + this.modalID).modal('hide');
   };
 
   return Modal;
@@ -587,14 +595,19 @@ function () {
       if (crDeleteBtns.length > 0) {
         var _loop_1 = function _loop_1(el) {
           el.addEventListener('click', function (e) {
+            // WORKING HERE // 
             var positionInBasket = el.getAttribute('data-basket-position');
 
             _this.addOrRemoveFromCart(_this.basket[positionInBasket]);
 
-            _this.modal.updateOverlayContent(_this.listCart());
+            if (_this.countCart() > 0) {
+              _this.modal.updateOverlayContent(_this.listCart());
 
-            _this.wireUpCartDeletes(); //finish me!
+              _this.wireUpCartDeletes(); //finish me!
 
+            } else {
+              _this.modal.closeOverlay();
+            }
 
             e.preventDefault();
           });
@@ -1057,7 +1070,8 @@ function () {
       this.type = 'purchasing';
     } else {
       //hompage
-      this.baseEL = document.getElementById('homepageContent');
+      // this.baseEL = document.getElementById( 'homepageContent' );
+      this.baseEL = document.querySelector('main.landing-page > div.container:first-of-type');
       this.type = 'homepage';
     }
   } // parameters
@@ -1086,7 +1100,7 @@ function () {
   };
 
   itAlert.prototype.buildBox = function (alert) {
-    var alertBox = "<div class=\"contain-1440 alert " + this.chooseColor(alert.color) + " \" role=\"alert\" >\n                    <div class=\"contain-1120\">\n                    <!-- <i class=\"fa fa-exclamation-triangle fa-2x\">&nbsp;</i> -->\n                    <h4 class=\"alert-heading\"><strong>" + alert.title + "</strong></h4>\n                    <p>" + alert.blurb + "</p>";
+    var alertBox = "<div class=\"contain-1440 alert " + this.chooseColor(alert.color) + " itAlert\" role=\"alert\" >\n                    <div class=\"contain-1120\">\n                    <h4 class=\"alert-heading\"><strong>" + alert.title + "</strong></h4>\n                    <p>" + alert.blurb + "</p>";
 
     if (typeof alert.modal !== 'undefined') {
       alertBox += "<p><a id=\"alertTrigger\" class=\"btn " + this.chooseColor(alert.color, true) + "\" href=\"#\">Read more</a></p>";
@@ -1190,10 +1204,18 @@ function () {
 }();
 
 window.onload = function () {
+  var homepageURL = 'feinberg-dev.fsm.northwestern.edu/it-new/index.html';
+  var purchasingPageURL = 'feinberg-dev.fsm.northwestern.edu/it-new/purchasing/hardware.html';
+  var currentURL = window.location.href;
   var shoppingCookie = new Cookie('fsmITPurchasing');
   var softwareCookie = new Cookie('fsmITPurchasingSoftware');
-  var shoppingModal = new Modal();
+  var shoppingModal = new Modal(); // if( currentURL.includes( purchasingPageURL ) ){
+
   var shoppingCart = new Cart(shoppingModal, shoppingCookie, softwareCookie);
   var store = new Store('shopping-cart', shoppingCart, shoppingModal, shoppingCookie, softwareCookie);
-  var alert = new itAlert(shoppingModal, 'purchasing');
+  var alert = new itAlert(shoppingModal, 'purchasing'); // } else {
+  //     if( currentURL.includes( homepageURL ) ){
+  //         let alert = new itAlert( shoppingModal, 'homepage' );
+  //     }
+  // }
 };
